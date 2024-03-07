@@ -1,20 +1,23 @@
 .App {
   text-align: center;
+  font-family: 'Arial', sans-serif;
 }
 
 .App-logo {
   height: 40vmin;
-  pointer-events: none;
+  animation: App-logo-breathe 3s ease-in-out infinite;
+  border-radius: 50%; /* Make the logo round for a softer look */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add depth with shadow */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.App-intro {
+  margin: 20px 0;
+  font-size: larger;
+  font-weight: bold;
 }
 
 .App-header {
-  background-color: #282c34;
+  background-image: linear-gradient(to right, #15022a 0%, #0c409a 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,17 +25,33 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .App-link {
-  color: #61dafb;
+  color: #0c409a;
+  background-color: #0d0d0d;
+  padding: 10px 20px;
+  border: 2px solid #0c409a;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: large;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.App-link:hover, .App-link:focus {
+  background-color: #FFFFFF;
+  color: #0c409a;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Add hover effect */
+}
+
+
+@keyframes App-logo-breathe {
+  0%, 100% {
+    transform: scale(1);
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    transform: scale(1.05);
   }
 }
