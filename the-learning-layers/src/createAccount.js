@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
+import dark from './images/1.png';
 
 
 function CreateAccount() {
@@ -55,7 +56,7 @@ function CreateAccount() {
         <Container>
           <Nav className="mx-auto">
             <Nav.Link href="#home"><div className="text-center">
-              <img src="shopping.png"
+              <img src={dark}
                 style={{ width: '100px' }} alt="logo" />
             </div></Nav.Link>
           </Nav>
@@ -98,7 +99,7 @@ function CreateAccount() {
           </Form>
 
           <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
-            <a className="login" onClick={() => routeChange('/Login')}><p className="mb-0">Login</p></a>
+            <a className="login" onClick={() => routeChange('/')}><p className="mb-0">Login</p></a>
           </div>
 
         </div>
