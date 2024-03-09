@@ -18,29 +18,29 @@ function CreateAccount() {
       event.stopPropagation();
     }
     else {
-      try {
-        const response = await fetch('http://localhost:3000', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: form.elements.username.value,
-            email: form.elements.email.value,
-            password: form.elements.password.value,
-          }),
-        });
+    //   try {
+    //     const response = await fetch('http://localhost:3000', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({
+    //         username: form.elements.username.value,
+    //         email: form.elements.email.value,
+    //         password: form.elements.password.value,
+    //       }),
+    //     });
 
-        if (response.ok) {
-          console.log('User successfully created');
-          routeChange('/stores');
-        } else {
-          console.error('Error creating user:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error creating user:', error.message);
-      }
-      // routeChange('/stores');
+    //     if (response.ok) {
+    //       console.log('User successfully created');
+    //       routeChange('/stores');
+    //     } else {
+    //       console.error('Error creating user:', response.statusText);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error creating user:', error.message);
+    //   }
+      routeChange('/stores');
     }
 
     setValidated(true);
@@ -69,7 +69,7 @@ function CreateAccount() {
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <h3 style={{ textAlign: "center" }}>Create an account</h3>
             <Form.Group className="mb-4">
-              <Form.Label>Username</Form.Label>
+              <Form.Label >Username</Form.Label>
               <Form.Control type="text" placeholder="Enter username" required />
               <Form.Control.Feedback type='invalid'>Please enter username</Form.Control.Feedback>
             </Form.Group>
