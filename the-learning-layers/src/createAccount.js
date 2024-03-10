@@ -6,6 +6,8 @@ import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import dark from './images/1.png';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 
 function CreateAccount() {
@@ -67,7 +69,28 @@ function CreateAccount() {
 
         <div className="d-flex flex-column ms-5">
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <h3 style={{ textAlign: "center" }}>Create an account</h3>
+            <h3 style={{ textAlign: "center" }}>Create an account</h3><br/>
+            <Row>
+              <Col>
+              <Form.Label>First Name</Form.Label>
+                <Form.Control placeholder="First name" />
+              </Col>
+              <Col>
+              <Form.Label>Last Name</Form.Label>
+                <Form.Control placeholder="Last name" />
+              </Col>
+            </Row>
+            <Form.Group className="mb-4">
+              <Form.Label>ID Number</Form.Label>
+              <Form.Control type="number" placeholder="Enter ID Number" required />
+              <Form.Control.Feedback type='invalid'>Please enter username</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Select aria-label="Default select example">
+              <Form.Label>Position Type</Form.Label>
+              <option>Position Type </option>
+              <option value="1">Student</option>
+              <option value="2">Teacher</option>
+            </Form.Select><br/>
             <Form.Group className="mb-4">
               <Form.Label>Username</Form.Label>
               <Form.Control type="text" placeholder="Enter username" required />
