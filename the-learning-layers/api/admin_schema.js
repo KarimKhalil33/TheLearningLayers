@@ -1,1 +1,1 @@
-//schemas for all signups logins and admin login
+//schemas foradmin login
