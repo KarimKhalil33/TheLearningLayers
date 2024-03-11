@@ -7,7 +7,7 @@
   height: 40vmin;
   animation: App-logo-breathe 3s ease-in-out infinite;
   border-radius: 50%; /* Make the logo round for a softer look */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add depth with shadow */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Add depth with shadow */
 }
 #logo{
   border-radius: 50px;
