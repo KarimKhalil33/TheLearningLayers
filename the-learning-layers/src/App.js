@@ -5,6 +5,7 @@ import CreateAccount from './createAccount';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 import Login from './login'
+import Home from './Home 2'
 
 
 function App() {
@@ -12,7 +13,9 @@ function App() {
     <Router>
       <Routes>
       <Route path="/CreateAccount" element={<CreateAccount />} />
-      <Route path="/" element={<Login/>}/>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/" element={<Home/>}/>
+
       </Routes>
     </Router>
     // <div className="App">

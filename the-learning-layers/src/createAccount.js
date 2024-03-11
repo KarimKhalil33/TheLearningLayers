@@ -99,7 +99,7 @@ function CreateAccount() {
           </Form>
 
           <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
-            <a className="login" onClick={() => routeChange('/')}><p className="mb-0">Login</p></a>
+            <a className="login" onClick={() => routeChange('/login')}><p className="mb-0">Login</p></a>
           </div>
 
         </div>
