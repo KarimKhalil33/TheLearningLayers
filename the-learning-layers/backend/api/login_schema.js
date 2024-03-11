@@ -11,3 +11,5 @@ const loginSchema = new mongoose.Schema({
 const User = mongoose.model('loginUser', loginSchema); //creating that model in our database
 
 module.exports=User; 
+
+
