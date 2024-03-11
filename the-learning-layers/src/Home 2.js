@@ -1,6 +1,11 @@
-import logo from './1.png'
+import logo from './images/1.png'
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  let navigate = useNavigate();
+  const routeChange = (path) => {
+    navigate(path);
+  }
   return (
     <div className="Home">
       <header className="App-header">
@@ -14,6 +19,7 @@ function Home() {
           className="App-link"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => routeChange('/login')}
         >
           Get Started
         </button>
