@@ -30,7 +30,7 @@ function Login() {
       <Container>
       <Nav className="mx-auto">
             <Nav.Link href="#home"><div className="text-center">
-              <img src={dark}
+              <img id="logo" src={dark}
                 style={{ width: '100px' }} alt="logo" />
             </div></Nav.Link>
           </Nav>

@@ -6,6 +6,8 @@ import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import dark from './images/1.png';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 
 function CreateAccount() {
@@ -18,29 +20,29 @@ function CreateAccount() {
       event.stopPropagation();
     }
     else {
-      try {
-        const response = await fetch('http://localhost:3000', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: form.elements.username.value,
-            email: form.elements.email.value,
-            password: form.elements.password.value,
-          }),
-        });
+    //   try {
+    //     const response = await fetch('http://localhost:3000', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({
+    //         username: form.elements.username.value,
+    //         email: form.elements.email.value,
+    //         password: form.elements.password.value,
+    //       }),
+    //     });
 
-        if (response.ok) {
-          console.log('User successfully created');
-          routeChange('/stores');
-        } else {
-          console.error('Error creating user:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error creating user:', error.message);
-      }
-      // routeChange('/stores');
+    //     if (response.ok) {
+    //       console.log('User successfully created');
+    //       routeChange('/stores');
+    //     } else {
+    //       console.error('Error creating user:', response.statusText);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error creating user:', error.message);
+    //   }
+      routeChange('/stores');
     }
 
     setValidated(true);
@@ -56,7 +58,7 @@ function CreateAccount() {
         <Container>
           <Nav className="mx-auto">
             <Nav.Link href="#home"><div className="text-center">
-              <img src={dark}
+              <img id="logo" src={dark}
                 style={{ width: '100px' }} alt="logo" />
             </div></Nav.Link>
           </Nav>
@@ -67,9 +69,30 @@ function CreateAccount() {
 
         <div className="d-flex flex-column ms-5">
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <h3 style={{ textAlign: "center" }}>Create an account</h3>
+            <h3 style={{ textAlign: "center" }}>Create an account</h3><br/>
+            <Row>
+              <Col>
+              <Form.Label>First Name</Form.Label>
+                <Form.Control placeholder="First name" />
+              </Col>
+              <Col>
+              <Form.Label>Last Name</Form.Label>
+                <Form.Control placeholder="Last name" />
+              </Col>
+            </Row>
             <Form.Group className="mb-4">
-              <Form.Label>Username</Form.Label>
+              <Form.Label>ID Number</Form.Label>
+              <Form.Control type="number" placeholder="Enter ID Number" required />
+              <Form.Control.Feedback type='invalid'>Please enter username</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Select aria-label="Default select example">
+              <Form.Label>Position Type</Form.Label>
+              <option>Position Type </option>
+              <option value="1">Student</option>
+              <option value="2">Teacher</option>
+            </Form.Select><br/>
+            <Form.Group className="mb-4">
+              <Form.Label >Username</Form.Label>
               <Form.Control type="text" placeholder="Enter username" required />
               <Form.Control.Feedback type='invalid'>Please enter username</Form.Control.Feedback>
             </Form.Group>
