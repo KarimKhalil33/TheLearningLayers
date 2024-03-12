@@ -121,8 +121,8 @@ function CreateAccount() {
               <Form.Label>Position Type</Form.Label>
               <Form.Select aria-label="Default select example" value={position} onChange={handleSelectChange} required>
                 <option>Position Type </option>
-                <option value="1">Student</option>
-                <option value="2">Teacher</option>
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-4">
