@@ -1,12 +1,15 @@
 const mongoose=require('mongoose'); //use to import MongoDB methods
-// const autoIncrement =require( 'mongoose-auto-increment'); //commented this out because we don't need incremented
 
 //creating the schema for our model
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true }, //we get the username from the frontend and same for other fields
+    firstName: { type: String, required: true }, //we get the username from the frontend and same for other fields
+    lastName: { type: String, required: true },
+    studentNum: { type: Number, required: true },
+    position: {type:String, required:true},
+    username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-});
+}, { collection: 'student' });
 
 const User = mongoose.model('User', userSchema); //creating that model in our database
 

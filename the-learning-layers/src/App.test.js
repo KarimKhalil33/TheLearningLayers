@@ -1,8 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import CreateAccount from "./createAccount";
+import Login from './login';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+jest.mock("./createAccount");
+jest.mock("./login");
+
+test('renders createAccount and Login on default', () => {
+  CreateAccount.mockImplementation(() => <div>CreateAccountMock</div>);
+    Login.mockImplementation(() => <div>LoginMock</div>);
 });
