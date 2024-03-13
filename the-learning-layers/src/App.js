@@ -15,7 +15,7 @@ function App() {
       <Routes>
       <Route path="/CreateAccount" element={<CreateAccount />} />
       <Route path="/login" element={<Login/>}/>
-      <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
+      <Route path = "/createAssignment" element={<CreateAssignment/>}/>
       <Route path="/" element={<Home/>}/>
 
       </Routes>
