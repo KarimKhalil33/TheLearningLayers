@@ -30,6 +30,7 @@ function CreateAccount() {
       event.stopPropagation();
     }
     else {
+
       try {
         const serverURL = 'http://localhost:4000';
         const endpoint = '/user/createAccount';
@@ -72,6 +73,7 @@ function CreateAccount() {
         console.error('Error creating user:', error.message);
       }
 
+
     }; setValidated(true);
   }
 
@@ -89,11 +91,10 @@ function CreateAccount() {
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
           <Nav className="mx-auto">
-            <Nav.Link href="#home">
-              <div className="text-center">
-                <img id="logo" src={dark} style={{ width: '100px' }} alt="logo" />
-              </div>
-            </Nav.Link>
+            <Nav.Link href="#home"><div className="text-center">
+              <img id="logo" src={dark}
+                style={{ width: '100px' }} alt="logo" />
+            </div></Nav.Link>
           </Nav>
         </Container>
       </Navbar>
