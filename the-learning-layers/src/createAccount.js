@@ -87,7 +87,7 @@ function CreateAccount() {
             </Form.Group>
             <Form.Select aria-label="Default select example">
               <Form.Label>Position Type</Form.Label>
-              <option>Position Type </option>
+              <option>I'm a... </option>
               <option value="1">Student</option>
               <option value="2">Teacher</option>
             </Form.Select><br/>
