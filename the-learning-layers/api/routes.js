@@ -73,6 +73,26 @@ router.post('/login', (req, res) => {
           })
         })
     }
-  });
+});
+
+const Course = require("../models/course");
+
+// Route to create a new course
+router.post('/createCourse', (req, res) => {
+    const courseData = req.body;
+
+    // add validation or checks here
+
+    try {
+        const newCourse = new Course(courseData);
+        newCourse.save();
+        res.status(200).send("Course saved to the database");
+    } catch (error) {
+        console.error('Error saving course data:', error);
+        res.status(500).send("Unable to save course to the database");
+    }
+});
+
+// Additional routes for course operations like updating, deleting, enrolling students, etc???
 
 module.exports=router;
