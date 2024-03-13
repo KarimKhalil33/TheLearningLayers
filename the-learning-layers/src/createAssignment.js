@@ -59,6 +59,20 @@ function createAssignment()
                         <Form.Control type="file" multiple />
                     </Form.Group>
                 </Row>
+                <Row>
+                    <Col>
+                        <Form.Group className="mb-4">
+                            <Form.Label>Start Date</Form.Label>
+                            <Form.Control type="Date"  required />
+                            <Form.Control.Feedback type='invalid'>Please enter a date</Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                    <Form.Group className="mb-4">
+                            <Form.Label>End Date</Form.Label>
+                            <Form.Control type="Date" required />
+                            <Form.Control.Feedback type='invalid'>Please enter a date</Form.Control.Feedback>
+                        </Form.Group>
+                </Row>
                 <Button as="input" type="submit" value="Create Assignment" />
             </Form>
             </Container>
