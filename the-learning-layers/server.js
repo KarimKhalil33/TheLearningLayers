@@ -8,7 +8,7 @@ app.use(cors());
 
 const bodyParser=require('express').json;
 
-const userRouter=require('./api/signupRoutes');
+const userRouter=require('./api/routes');
 
  app.use(bodyParser());
  app.use('/user',userRouter)
