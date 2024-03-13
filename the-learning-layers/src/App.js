@@ -21,8 +21,8 @@ function App() {
       <Route path="/studentPage" element={<StudentPage />} />
         
       <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
-      <Route path = "/" element={<CreateCourse/>}/>
-      <Route path="/home" element={<Home/>}/>
+      <Route path = "/createCourse" element={<CreateCourse/>}/>
+      <Route path="/" element={<Home/>}/>
 
       </Routes>
     </Router>
