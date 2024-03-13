@@ -95,7 +95,11 @@ function Login() {
             </Form.Group>
 
             <div className="text-center pt-1 mb-5 pb-1">
-              <Button className="mb-4 w-100 gradient-custom-2" type="submit">Sign in</Button>
+              <Button className="mb-4 w-100 gradient-custom-2" 
+              type="submit"
+              onClick={() => routeChange('/studentPage')}>
+                Sign in
+                </Button>
               <a className="text-muted" href="#!">Forgot password?</a>
             </div>
             </Form>
