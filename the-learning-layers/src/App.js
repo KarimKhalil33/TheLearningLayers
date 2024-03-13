@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 import Login from './login'
 import Home from './Home 2'
+import StudentPage from './studentPage';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
       <Route path="/CreateAccount" element={<CreateAccount />} />
       <Route path="/login" element={<Login/>}/>
+      <Route path="/studentPage" element={<StudentPage />} />
       <Route path="/" element={<Home/>}/>
 
       </Routes>
