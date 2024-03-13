@@ -21,13 +21,15 @@ router.post('/createAccount', async (req, res) => {
     try {
         // Save the user to the 'user' collection
         const newUser = new User(userData);
-        await newUser.save();
+         newUser.save();
+
+         console.log(userData.position);
 
         // Check the user's position and save to the appropriate collection
-        if (userData.position === "Student") {
+        if (userData.position === `Student`) {
             const newStudent = new Student(userData);
              newStudent.save();
-        } else if (userData.position === "Teacher") {
+        } else if (userData.position === `Teacher`) {
             const newTeacher = new Teacher(userData);
              newTeacher.save();
         }
@@ -93,7 +95,7 @@ router.post('/login', (req, res) => {
   }
 });
 
-const Course = require("../models/course");
+const Course = require("../models/courses");
 
 // Route to create a new course
 router.post('/createCourse', (req, res) => {
