@@ -16,6 +16,7 @@ function CreateCourse()
     const [courseName, setCourseName] = useState("");
     const [courseId, setCourseId] = useState("");
     const [description, setDescription] = useState("");
+    const [teacher, setTeacher]=useState("");
 
     const handleSubmit = async (e) => {
         const form = e.currentTarget;
@@ -37,7 +38,8 @@ function CreateCourse()
                 },
                 body: JSON.stringify({
                   name: courseName,
-                  courseId: courseId,
+                  courseId,
+                  teacher,
                   description
                 }),
               });
@@ -98,6 +100,13 @@ function CreateCourse()
                         </Form.Group>
                     </Col>
 
+                </Row>
+                <Row>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Teacher</Form.Label>
+                        <Form.Control type="text" placeholder="Enter Teacher Name"  value={teacher} onChange={(e) => setTeacher(e.target.value)} />
+                        <Form.Control.Feedback type='invalid'>Enter Teacher Name</Form.Control.Feedback>
+                    </Form.Group>
                 </Row>
                 <Row>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
