@@ -5,7 +5,7 @@ const courseSchema = new mongoose.Schema({
     courseId: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     description: {type: String, required: true },
-    teacher: { type: String, default: "TBA" },
+    teacher: { type: String, default: 'TBA' },
     students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 }, { collection: 'course' });
 
