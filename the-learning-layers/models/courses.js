@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 // Creating a schema for course model
 const courseSchema = new mongoose.Schema({
-    courseId: { type: String, required: true, unique: true },
+    courseNo: { type: String, required: true },
     name: { type: String, required: true },
     description: {type: String, required: true },
-    teacher: { type: String, default: 'TBA' },
+    teacher: { type: String},
     students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 }, { collection: 'course' });
 

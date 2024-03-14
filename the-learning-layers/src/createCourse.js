@@ -14,7 +14,7 @@ function CreateCourse()
     const [validated, setValidated] = useState(false);
     // State variables for form inputs
     const [courseName, setCourseName] = useState("");
-    const [courseId, setCourseId] = useState("");
+    const [courseNo, setCourseNo] = useState("");
     const [description, setDescription] = useState("");
     const [teacher, setTeacher]=useState("");
 
@@ -38,7 +38,7 @@ function CreateCourse()
                 },
                 body: JSON.stringify({
                   name: courseName,
-                  courseId,
+                  courseNo,
                   teacher,
                   description
                 }),
@@ -95,7 +95,7 @@ function CreateCourse()
                     <Col>
                         <Form.Group className="mb-4">
                             <Form.Label>Course Number</Form.Label>
-                            <Form.Control type="number" placeholder="000"  value={courseId} onChange={(e) => setCourseId(e.target.value)}required />
+                            <Form.Control type="number" placeholder="000"  value={courseNo} onChange={(e) => setCourseNo(e.target.value)}required />
                             <Form.Control.Feedback type='invalid'>Please enter Course Number</Form.Control.Feedback>
                         </Form.Group>
                     </Col>
