@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -10,6 +10,7 @@ import Col from 'react-bootstrap/Col';
 
 function StudentPage() {
   // Placeholder data for courses, this would likely be fetched from a database in a real application.
+  /*
   const courses = [
     { title: 'Introduction to Programming', id: 1 },
     { title: 'Advanced Programming', id: 2 },
@@ -26,6 +27,24 @@ function StudentPage() {
     { title: 'Machine Architecture', id: 3 },
     
   ];
+  */
+
+  const [courses, setCourses] = useState([]); // State to hold courses
+
+  useEffect(() => {
+    // Function to fetch courses
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/courses'); // Adjust the endpoint as needed
+        const data = await response.json();
+        setCourses(data); // Update state with fetched courses
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+
+    fetchCourses(); // Call the fetch function
+  }, []);
 
   return (
     <>
@@ -53,12 +72,12 @@ function StudentPage() {
         </p>
         <div class="cards">
         <Row xs={1} md={2} lg={3} className="g-4">
-          {courses.map((course) => (
-            <Col key={course.id}>
+          {courses.map((course, index) => ( // Using index as the key
+            <Col key={index}>
               <div className="course-card p-3 shadow-sm">
-                <h3 style={{ color: 'white' }} className="text-center my-3">{course.title}</h3>
-                <div  className="text-center">
-                  <Button variant="primary" className="button">View Course</Button>
+                <h3 style={{ color: 'white' }} className="text-center my-3">{course.name}</h3>
+                <div className="text-center">
+                  <Button variant="primary">View Course</Button>
                 </div>
               </div>
             </Col>

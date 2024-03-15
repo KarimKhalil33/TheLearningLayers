@@ -114,4 +114,14 @@ router.post('/createCourse', (req, res) => {
 });
 
 
+router.get('http://localhost:4000/courses', async (req, res) => {
+  try {
+    const courses = await Course.find(); // Fetch all courses from the database
+    res.json(courses); // Send the courses as a response
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching courses', error: error });
+  }
+});
+
+
 module.exports = router;
