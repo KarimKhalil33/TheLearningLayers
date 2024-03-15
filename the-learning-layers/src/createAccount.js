@@ -101,49 +101,49 @@ function CreateAccount() {
       <br />
       <Container>
         <div className="d-flex flex-column ms-5">
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} role="form">
             <h3 style={{ textAlign: "center" }}>Create an account</h3><br />
             <Row>
               <Col>
-                <Form.Label>First Name</Form.Label>
-                <Form.Control placeholder="First name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                <Form.Label htmlFor="First Name">First Name</Form.Label>
+                <Form.Control id="First Name" placeholder="First name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
               </Col>
               <Col>
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control placeholder="Last name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                <Form.Label htmlFor="Last Name">Last Name</Form.Label>
+                <Form.Control placeholder="Last name" id="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
               </Col>
             </Row>
             <Form.Group className="mb-4">
-              <Form.Label>ID Number</Form.Label>
-              <Form.Control type="number" placeholder="Enter ID Number" value={studentNum} onChange={(e) => setStudentNum(e.target.value)} required />
+              <Form.Label htmlFor='ID Number'>ID Number</Form.Label>
+              <Form.Control id="ID Number" type="number" placeholder="Enter ID Number" value={studentNum} onChange={(e) => setStudentNum(e.target.value)} required />
               <Form.Control.Feedback type='invalid'>Please enter ID Number</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label>Position Type</Form.Label>
-              <Form.Select aria-label="Default select example" value={position} onChange={handleSelectChange} required>
+              <Form.Label htmlFor='Position Type'>Position Type</Form.Label>
+              <Form.Select id="Position Type" aria-label="Default select example" value={position} onChange={handleSelectChange} required>
                 <option>Position Type </option>
                 <option value="Student">Student</option>
                 <option value="Teacher">Teacher</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              <Form.Label htmlFor='Username'>Username</Form.Label>
+              <Form.Control id="Username" type="text" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} required />
               <Form.Control.Feedback type='invalid'>Please enter username</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Form.Label htmlFor='Email address'>Email address</Form.Label>
+              <Form.Control id="Email address" type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required />
               <Form.Control.Feedback type='invalid'>Please enter email</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <Form.Label htmlFor="Password">Password</Form.Label>
+              <Form.Control id="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
               <Form.Control.Feedback type='invalid'>Please enter a password</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label>Repeat Password</Form.Label>
-              <Form.Control type="password" placeholder="Repeat password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required />
+              <Form.Label htmlFor='Repeat Password'>Repeat Password</Form.Label>
+              <Form.Control id="Repeat Password" type="password" placeholder="Repeat password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required />
               <Form.Control.Feedback type='invalid'>Passwords don't match</Form.Control.Feedback>
             </Form.Group>
             <div className="text-center pt-1 mb-5 pb-1">
