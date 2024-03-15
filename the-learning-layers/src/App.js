@@ -9,8 +9,8 @@ import Home from './Home 2';
 import StudentPage from './studentPage';
 import CreateAssignment from './createAssignment';
 import CreateCourse from './createCourse';
-
-
+import AllCourses from './AllCourses';
+import AdminPage from './AdminPage';
 function App() {
   return (
     <Router>
@@ -21,8 +21,11 @@ function App() {
       <Route path="/studentPage" element={<StudentPage />} />
         
       <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
-      <Route path = "/createCourse" element={<CreateCourse/>}/>
-      <Route path="/" element={<Home/>}/>
+      <Route path = "/" element={<Home/>}/>
+      <Route path="/home" element={<Home/>}/>
+      <Route path="/AllCourses" element={<AllCourses/>}/>
+      <Route path="/AdminPage" element={<AdminPage/>}/>
+      <Route path="/CreateCourse" element={<CreateCourse/>}/>
 
       </Routes>
     </Router>
