@@ -16,6 +16,9 @@ jobs:
     # Machine which this action will be run on. For a list of all the machines available/how to run on self hosted machine visit
     # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: the-learning-layers
 
     # Steps this job must take to complete
     steps:
@@ -34,4 +37,4 @@ jobs:
         run: npm install
 
       - name: Run Jest Tests
-        run: npm run test -- the-learning-layers
+        run: npm run test
