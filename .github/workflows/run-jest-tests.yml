@@ -28,7 +28,7 @@ jobs:
       - name: Set up NodeJS
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 20
 
       - name: Install all dependencies
         run: npm install
