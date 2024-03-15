@@ -9,6 +9,7 @@ import Home from './Home 2';
 import StudentPage from './studentPage';
 import CreateAssignment from './createAssignment';
 import CreateCourse from './createCourse';
+import TeacherDash from './teacherPage'
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
       <Route path="/login" element={<Login/>}/>
 
       <Route path="/studentPage" element={<StudentPage />} />
-        
+      <Route path="/teacherDash" element={<TeacherDash/>}/>
       <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
       <Route path = "/createCourse" element={<CreateCourse/>}/>
       <Route path="/" element={<Home/>}/>
