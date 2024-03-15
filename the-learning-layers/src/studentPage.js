@@ -65,11 +65,10 @@ function StudentPage() {
           ))}
         </Row>
         </div>
-        <Container className=" mt-auto py-3 bg-light text-center">
-          <span className="text-muted">© 2023 E-Learning Platform, Inc. All rights reserved.</span>
-        </Container>
-     
       </Container>
+      <footer className=" mt-auto py-3 bg-light text-center">
+        <span className="text-muted">© 2023 E-Learning Platform, Inc. All rights reserved.</span>
+      </footer>
       
     </>
   );
