@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom'; // Import MemoryRouter
 import '@testing-library/jest-dom/extend-expect';
-import CreateAccount from './CreateAccount';
+import CreateAccount from './createAccount';
 import { act } from '@testing-library/react';
 
 describe('CreateAccount component', () => {
