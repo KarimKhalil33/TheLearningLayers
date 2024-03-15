@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { Route, useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
@@ -120,7 +120,7 @@ function CreateCourse()
                         <Form.Control type="file" multiple />
                     </Form.Group>
                 </Row> */}
-                <Button as="input" type="submit" value="Create Course" />
+                <Button href="/AdminPage" as="input" type="submit" value="Create Course" />
             </Form>
             </Container>
 
