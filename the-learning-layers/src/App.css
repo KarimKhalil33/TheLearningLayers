@@ -83,6 +83,13 @@
   padding: 20px;
   margin: 20px 0;
 }
+.courseteach-card {
+  background-image: linear-gradient(to right, #15022a 0%, purple 100%);
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+}
 .cards{
   padding: 20px;
   margin: 20px 0;

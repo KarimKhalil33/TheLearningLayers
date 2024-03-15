@@ -9,6 +9,7 @@ import Home from './Home 2';
 import StudentPage from './studentPage';
 import CreateAssignment from './createAssignment';
 import CreateCourse from './createCourse';
+import TeacherDash from './teacherPage'
 import AllCourses from './AllCourses';
 import AdminPage from './AdminPage';
 function App() {
@@ -19,7 +20,7 @@ function App() {
       <Route path="/login" element={<Login/>}/>
 
       <Route path="/studentPage" element={<StudentPage />} />
-        
+      <Route path="/teacherDash" element={<TeacherDash/>}/>
       <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
       <Route path = "/" element={<Home/>}/>
       <Route path="/home" element={<Home/>}/>
