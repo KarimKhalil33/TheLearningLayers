@@ -128,3 +128,21 @@
   color: #666;
   font-size: 14px;
 }
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+  font-weight: bold;
+  color: #0056b3 !important;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  color: #007bff !important;
+}
+
+.icon {
+  margin-right: 8px;
+}
