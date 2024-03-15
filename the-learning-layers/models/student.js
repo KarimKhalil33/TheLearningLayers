@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    enrolled: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    enrolled: [{ type: String }],
 }, { collection: 'student' });
 
 const User = mongoose.model('User', userSchema); //creating that model in our database
