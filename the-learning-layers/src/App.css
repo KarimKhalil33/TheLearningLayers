@@ -58,3 +58,66 @@
     transform: scale(1.05);
   }
 } 
+
+.student-page {
+  font-family: Arial, sans-serif;
+}
+
+.student-page .navbar {
+  background-color: #fff;
+  margin-bottom: 40px;
+}
+
+.student-page h1, .student-page h2 {
+  color: #333;
+}
+
+.student-page p {
+  color: #666;
+}
+
+.course-card {
+  background-image: linear-gradient(to right, #15022a 0%, #0c409a 100%);
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+}
+.cards{
+  padding: 20px;
+  margin: 20px 0;
+  
+}
+.course-title h3 {
+  color: #fbf8fb;
+  margin-bottom: 15px;
+}
+
+.button {
+  background-color: #3513b9;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: #004494;
+}
+
+.footer {
+  background-color: #f8f9fa;
+  color: #666;
+  text-align: center;
+  padding: 20px 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer span {
+  color: #666;
+  font-size: 14px;
+}

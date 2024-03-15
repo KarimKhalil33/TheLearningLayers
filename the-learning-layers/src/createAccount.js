@@ -57,7 +57,7 @@ function CreateAccount() {
 
         if (response.status === 200) {
           console.log('User successfully created');
-          // console.log(username);
+        //   console.log(position);
 
         } else {
           const responseData = await response.json();
