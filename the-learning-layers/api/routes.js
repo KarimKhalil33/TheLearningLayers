@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
+const Course = require("../models/courses");
 
 router.post('/createAccount', async (req, res) => {
     const userData = req.body;
@@ -95,8 +96,6 @@ router.post('/login', (req, res) => {
   }
 });
 
-const Course = require("../models/courses");
-
 // Route to create a new course
 router.post('/createCourse', (req, res) => {
   const courseData = req.body;
@@ -113,7 +112,7 @@ router.post('/createCourse', (req, res) => {
   }
 });
 
-
+/*
 router.get('http://localhost:4000/courses', async (req, res) => {
   try {
     const courses = await Course.find(); // Fetch all courses from the database
@@ -122,6 +121,6 @@ router.get('http://localhost:4000/courses', async (req, res) => {
     res.status(500).json({ message: 'Error fetching courses', error: error });
   }
 });
-
+*/
 
 module.exports = router;

@@ -4,9 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
 import dark from './images/1.png';
-import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 function CreateCourse()
@@ -14,7 +12,7 @@ function CreateCourse()
     const [validated, setValidated] = useState(false);
     // State variables for form inputs
     const [courseName, setCourseName] = useState("");
-    const [courseNo, setCourseNo] = useState("");
+    const [courseId, setCourseNo] = useState("");
     const [description, setDescription] = useState("");
     const [teacher, setTeacher]=useState("");
 
@@ -25,6 +23,9 @@ function CreateCourse()
             e.stopPropagation();
         }
         else {
+
+          // Check if teacher value is empty and set it to "TBD" if it is
+          const teacherVal = teacher.trim() ? teacher : "TBD";
 
             try {
               const serverURL = 'http://localhost:4000';
@@ -38,8 +39,8 @@ function CreateCourse()
                 },
                 body: JSON.stringify({
                   name: courseName,
-                  courseNo,
-                  teacher,
+                  courseId,
+                  teacher: teacherVal,
                   description
                 }),
               });
@@ -48,8 +49,7 @@ function CreateCourse()
               }
       
               if (response.status === 200) {
-                console.log('User successfully created');
-              //   console.log(position);
+                console.log('Course successfully created'); // Handle successful course creation (e.g., redirect or clear form)
       
               } else {
                 const responseData = await response.json();
@@ -95,7 +95,7 @@ function CreateCourse()
                     <Col>
                         <Form.Group className="mb-4">
                             <Form.Label>Course Number</Form.Label>
-                            <Form.Control type="number" placeholder="000"  value={courseNo} onChange={(e) => setCourseNo(e.target.value)}required />
+                            <Form.Control type="number" placeholder="000"  value={courseId} onChange={(e) => setCourseNo(e.target.value)}required />
                             <Form.Control.Feedback type='invalid'>Please enter Course Number</Form.Control.Feedback>
                         </Form.Group>
                     </Col>
