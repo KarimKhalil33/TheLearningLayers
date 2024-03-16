@@ -38,7 +38,7 @@ function StudentPage() {
         <Row xs={1} md={2} lg={3} className="g-4">
           {courses.map((course) => (
             <Col key={course.id}>
-              <div className="course-card p-3 shadow-sm">
+              <div className="course-card-student p-3 shadow-sm">
                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.title}</h3>
                 <div  className="text-center">
                   <Button variant="primary" className="button">View Course</Button>
@@ -48,9 +48,6 @@ function StudentPage() {
           ))}
         </Row>
         </div>
-        <Container className=" mt-auto py-3 bg-light text-center">
-          <span className="text-muted">© 2023 E-Learning Platform, Inc. All rights reserved.</span>
-        </Container>
      
       </Container>
       <footer className=" mt-auto py-3 bg-light text-center">
