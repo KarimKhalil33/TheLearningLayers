@@ -120,7 +120,7 @@ function CreateCourse()
                         <Form.Control type="file" multiple />
                     </Form.Group>
                 </Row> */}
-                <Button href="/AdminPage" as="input" type="submit" value="Create Course" />
+                <input type="submit" value="Create Course" formaction="/AdminPage" />
             </Form>
             </Container>
 

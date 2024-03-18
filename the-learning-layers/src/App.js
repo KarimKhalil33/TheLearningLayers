@@ -12,6 +12,7 @@ import CreateCourse from './createCourse';
 import TeacherDash from './teacherPage'
 import AllCourses from './AllCourses';
 import AdminPage from './AdminPage';
+import PendingEnrollments from './pendingEnrollments';
 function App() {
   return (
     <Router>
@@ -27,6 +28,7 @@ function App() {
       <Route path="/AllCourses" element={<AllCourses/>}/>
       <Route path="/AdminPage" element={<AdminPage/>}/>
       <Route path="/CreateCourse" element={<CreateCourse/>}/>
+      <Route path="/pendingEnrollments" element={<PendingEnrollments/>}/>
 
       </Routes>
     </Router>
