@@ -42,7 +42,17 @@ function Login() {
         }
 
         if (response.status === 200) {
+          let responseData = await response.json();
           console.log('Login successful');
+          if(responseData.collectionName==='Teacher'){
+            routeChange('/teacherDash');
+          }
+          else if(responseData.collectionName==='User'){
+            routeChange('/studentPage');
+          }
+          else{
+            routeChange('/AdminPage');
+          }
         } else {
           const responseData = await response.json();
 
@@ -97,7 +107,7 @@ function Login() {
             <div className="text-center pt-1 mb-5 pb-1">
               <Button className="mb-4 w-100 gradient-custom-2" 
               type="submit"
-              onClick={() => routeChange('/AdminPage')}>
+              onClick={() => handleSubmit}>
                 Sign in
                 </Button>
               <a className="text-muted" href="#!">Forgot password?</a>
