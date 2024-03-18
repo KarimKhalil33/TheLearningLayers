@@ -5,47 +5,47 @@ const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 
 router.post('/createAccount', async (req, res) => {
-    const userData = req.body;
+  const userData = req.body;
 
-    // Find the email or username in the database
-    const existingUser = await User.findOne({ username: userData.username });
-    
+  // Find the email or username in the database
+  const existingUser = await User.findOne({ username: userData.username });
 
-    if (existingUser) {
-        // Return failed status if user exists
-        return res.status(400).json({
-            status: "FAILED",
-            message: "User with the provided username already exists"
-        });
+
+  if (existingUser) {
+    // Return failed status if user exists
+    return res.status(400).json({
+      status: "FAILED",
+      message: "User with the provided username already exists"
+    });
+  }
+
+  try {
+    // Save the user to the 'user' collection
+    const newUser = new User(userData);
+    newUser.save();
+
+    console.log(userData.position);
+
+    // Check the user's position and save to the appropriate collection
+    if (userData.position === `Student`) {
+      const newStudent = new Student(userData);
+      newStudent.save();
+    } else if (userData.position === `Teacher`) {
+      const newTeacher = new Teacher(userData);
+      newTeacher.save();
     }
 
-    try {
-        // Save the user to the 'user' collection
-        const newUser = new User(userData);
-         newUser.save();
-
-         console.log(userData.position);
-
-        // Check the user's position and save to the appropriate collection
-        if (userData.position === `Student`) {
-            const newStudent = new Student(userData);
-             newStudent.save();
-        } else if (userData.position === `Teacher`) {
-            const newTeacher = new Teacher(userData);
-             newTeacher.save();
-        }
-
-        res.status(200).json({
-            status: 'SUCCESS',
-            message: 'User successfully created'
-        });
-    } catch (error) {
-        console.error('Error saving user data:', error);
-        res.status(500).json({
-            status: 'FAILED',
-            message: 'Unable to save user to the database'
-        });
-    }
+    res.status(200).json({
+      status: 'SUCCESS',
+      message: 'User successfully created'
+    });
+  } catch (error) {
+    console.error('Error saving user data:', error);
+    res.status(500).json({
+      status: 'FAILED',
+      message: 'Unable to save user to the database'
+    });
+  }
 });
 
 router.post('/login', (req, res) => {
@@ -103,24 +103,25 @@ router.post('/createCourse', (req, res) => {
   // add validation or checks here
 
   try {
-      const newCourse = new Course(courseData);
-      newCourse.save();
-      res.status(200).send("Course saved to the database");
+    const newCourse = new Course(courseData);
+    newCourse.save();
+    res.status(200).send("Course saved to the database");
   } catch (error) {
-      console.error('Error saving course data:', error);
-      res.status(500).send("Unable to save course to the database");
+    console.error('Error saving course data:', error);
+    res.status(500).send("Unable to save course to the database");
   }
 });
 
-/*
-router.get('http://localhost:4000/courses', async (req, res) => {
+
+router.get('/createCourse',  async (req, res) => {
   try {
-    const courses = await Course.find(); // Fetch all courses from the database
+    const courses =  await Course.find({}); // Fetch all courses from the database
+    // console.log(courses);
     res.json(courses); // Send the courses as a response
   } catch (error) {
     res.status(500).json({ message: 'Error fetching courses', error: error });
   }
 });
-*/
+
 
 module.exports = router;

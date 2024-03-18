@@ -35,8 +35,9 @@ function StudentPage() {
     // Function to fetch courses
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:4000/courses'); // Adjust the endpoint as needed
+        const response = await fetch('http://localhost:4000/user/createCourse'); // Adjust the endpoint as needed
         const data = await response.json();
+        console.log(data);
         setCourses(data); // Update state with fetched courses
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -70,12 +71,12 @@ function StudentPage() {
         <p className="text-center mb-4">
           Explore your courses, track your progress, and engage with your classmates and instructors.
         </p>
-        <div class="cards">
+        {/* <div class="cards"> */}
         <Row xs={1} md={2} lg={3} className="g-4">
           {courses.map((course, index) => ( // Using index as the key
             <Col key={index}>
               <div className="course-card p-3 shadow-sm">
-                <h3 style={{ color: 'white' }} className="text-center my-3">{course.name}</h3>
+                <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                 <div className="text-center">
                   <Button variant="primary">View Course</Button>
                 </div>
@@ -83,7 +84,7 @@ function StudentPage() {
             </Col>
           ))}
         </Row>
-        </div>
+        {/* </div> */}
       </Container>
       <footer className=" mt-auto py-3 bg-light text-center">
         <span className="text-muted">© 2023 E-Learning Platform, Inc. All rights reserved.</span>
