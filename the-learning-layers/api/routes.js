@@ -102,6 +102,7 @@ router.post('/createCourse', (req, res) => {
   const courseData = req.body;
 
   // add validation or checks here
+  
 
   try {
       const newCourse = new Course(courseData);
