@@ -60,7 +60,7 @@ router.post('/login', (req, res) => {
   }
   else {
     //Check if the user exists in the database
-    User.find({ username })
+    User.findOne({ username })
       .then(data => {
         if (data.length) {
           //compare the password with the one in the database
