@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { Route, useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
@@ -15,8 +15,9 @@ function CreateCourse()
     const [validated, setValidated] = useState(false);
     // State variables for form inputs
     const [courseName, setCourseName] = useState("");
-    const [courseId, setCourseId] = useState("");
+    const [courseNo, setCourseNo] = useState("");
     const [description, setDescription] = useState("");
+    const [teacher, setTeacher]=useState("");
 
     const handleSubmit = async (e) => {
         const form = e.currentTarget;
@@ -38,7 +39,8 @@ function CreateCourse()
                 },
                 body: JSON.stringify({
                   name: courseName,
-                  courseId: courseId,
+                  courseNo,
+                  teacher,
                   description
                 }),
               });
@@ -94,11 +96,18 @@ function CreateCourse()
                     <Col>
                         <Form.Group className="mb-4">
                             <Form.Label>Course Number</Form.Label>
-                            <Form.Control type="number" placeholder="000"  value={courseId} onChange={(e) => setCourseId(e.target.value)}required />
+                            <Form.Control type="number" placeholder="000"  value={courseNo} onChange={(e) => setCourseNo(e.target.value)}required />
                             <Form.Control.Feedback type='invalid'>Please enter Course Number</Form.Control.Feedback>
                         </Form.Group>
                     </Col>
 
+                </Row>
+                <Row>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Teacher</Form.Label>
+                        <Form.Control type="text" placeholder="Enter Teacher Name"  value={teacher} onChange={(e) => setTeacher(e.target.value)} />
+                        <Form.Control.Feedback type='invalid'>Enter Teacher Name</Form.Control.Feedback>
+                    </Form.Group>
                 </Row>
                 <Row>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -112,7 +121,7 @@ function CreateCourse()
                         <Form.Control type="file" multiple />
                     </Form.Group>
                 </Row> */}
-                <Button as="input" type="submit" value="Create Course" />
+                <input type="submit" value="Create Course" formaction="/AdminPage" />
             </Form>
             </Container>
 
