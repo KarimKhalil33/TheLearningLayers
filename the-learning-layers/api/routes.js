@@ -103,8 +103,16 @@ router.post('/createCourse', (req, res) => {
 
   // add validation or checks here
 
+  // If instructor is not specified, set it to "TBD"
+  if (!courseData.teacher || courseData.teacher.trim() === '') {
+    courseData.teacher = "TBD";
+  }
+
   try {
       const newCourse = new Course(courseData);
+      if(newCourse.Teacher===""){
+
+      }
       newCourse.save();
       res.status(200).send("Course saved to the database");
   } catch (error) {
