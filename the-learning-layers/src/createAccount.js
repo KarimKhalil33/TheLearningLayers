@@ -57,6 +57,7 @@ function CreateAccount() {
 
         if (response.status === 200) {
           console.log('User successfully created');
+          routeChange('/login');
         //   console.log(position);
 
         } else {
