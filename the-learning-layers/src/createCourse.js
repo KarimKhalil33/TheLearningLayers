@@ -3,10 +3,12 @@ import './App.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';2
+import { Route, useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
 function CreateCourse() {
   const [validated, setValidated] = useState(false);
   // State variables for form inputs
@@ -15,6 +17,7 @@ function CreateCourse() {
   const [title, setCourseTitle] = useState("");
   const [description, setDescription] = useState("");
   const [teacher, setTeacher] = useState("");
+
 
   const handleSubmit = async (e) => {
     const form = e.currentTarget;
@@ -48,6 +51,7 @@ function CreateCourse() {
         if (response) {
           console.log("Response made");
         }
+
 
         if (response.status === 200) {
           console.log('Course successfully created'); // Handle successful course creation (e.g., redirect or clear form)
@@ -128,9 +132,11 @@ function CreateCourse() {
                         <Form.Control type="file" multiple />
                     </Form.Group>
                 </Row> */}
-          <Button as="input" type="submit" value="Create Course" />
-        </Form>
-      </Container>
+
+
+                <input type="submit" value="Create Course" formaction="/AdminPage" />
+            </Form>
+            </Container>
 
     </>
   )
