@@ -83,6 +83,13 @@
   padding: 20px;
   margin: 20px 0;
 }
+.courseteach-card {
+  background-image: linear-gradient(to right, #15022a 0%, purple 100%);
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+}
 .cards{
   padding: 20px;
   margin: 20px 0;
@@ -120,4 +127,22 @@
 .footer span {
   color: #666;
   font-size: 14px;
+}
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+  font-weight: bold;
+  color: #0056b3 !important;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  color: #007bff !important;
+}
+
+.icon {
+  margin-right: 8px;
 }
