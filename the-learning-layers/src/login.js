@@ -83,14 +83,14 @@ function Login() {
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <h3 style={{textAlign:"center"}}>Login</h3>
             <Form.Group className="mb-4">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              <Form.Label htmlFor="Username">Username</Form.Label>
+              <Form.Control id="Username" type="text" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} required />
               <Form.Control.Feedback type='invalid'>Please enter username</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-4">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <Form.Label htmlFor="Password">Password</Form.Label>
+              <Form.Control id="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
               <Form.Control.Feedback type='invalid'>Please enter a password</Form.Control.Feedback>
             </Form.Group>
 
