@@ -3,7 +3,10 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
+
+const Course = require("../models/courses");
 const Admin = require("../models/admin");
+
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
@@ -19,6 +22,9 @@ router.post('/createAccount', async (req, res) => {
       message: "User with the provided username already exists"
     });
   }
+
+
+
 
   try {
     // Save the user to the 'user' collection
@@ -110,21 +116,37 @@ router.post('/login', async (req, res) => {
   }
 });
 
-const Course = require("../models/courses");
-
 // Route to create a new course
 router.post('/createCourse', (req, res) => {
   const courseData = req.body;
 
   // add validation or checks here
 
+  // If instructor is not specified, set it to "TBD"
+  if (!courseData.teacher || courseData.teacher.trim() === '') {
+    courseData.teacher = "TBD";
+  }
+
   try {
+
     const newCourse = new Course(courseData);
     newCourse.save();
     res.status(200).send("Course saved to the database");
   } catch (error) {
     console.error('Error saving course data:', error);
     res.status(500).send("Unable to save course to the database");
+  }
+});
+
+
+router.get('/createCourse',  async (req, res) => {
+  try {
+    const courses =  await Course.find({}); // Fetch all courses from the database
+    // console.log(courses);
+    res.json(courses); // Send the courses as a response
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching courses', error: error });
+
   }
 });
 

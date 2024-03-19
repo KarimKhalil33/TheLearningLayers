@@ -35,7 +35,7 @@
   background-color: #0d0d0d;
   padding: 10px 20px;
   border: 2px solid #0c409a;
-  border-radius: 5px;
+  border-radius: 80px;
   cursor: pointer;
   font-size: large;
   font-weight: bold;
@@ -76,8 +76,15 @@
   color: #666;
 }
 
-.course-card {
+.course-card-student {
   background-image: linear-gradient(to right, #15022a 0%, #0c409a 100%);
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+}
+.course-card-admin {
+  background-image: linear-gradient(to right, #b707b1 0%, #e42c0b 100%);
   border-radius: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -145,4 +152,9 @@
 
 .icon {
   margin-right: 8px;
+}
+
+.custom-admin-button{
+  background-color: rgb(14, 179, 121); /* Change to your desired color */
+  border-color: rgb(14, 179, 121);
 }
