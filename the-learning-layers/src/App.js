@@ -9,21 +9,22 @@ import Home from './Home 2';
 import StudentPage from './studentPage';
 import CreateAssignment from './createAssignment';
 import CreateCourse from './createCourse';
-import TeacherDash from './teacherPage'
+import TeacherPage from './teacherPage'
 import AllCourses from './AllCourses';
 import AdminPage from './AdminPage';
+import ViewCourseTeacher from './viewCourseTeacher';
 function App() {
   return (
     <Router>
       <Routes>
       <Route path="/CreateAccount" element={<CreateAccount />} />
       <Route path="/login" element={<Login/>}/>
-
+      
       <Route path="/studentPage" element={<StudentPage />} />
-      <Route path="/teacherDash" element={<TeacherDash/>}/>
+      <Route path="/teacherPage" element={<TeacherPage/>}/>
       <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
       <Route path = "/" element={<Home/>}/>
-      <Route path="/home" element={<Home/>}/>
+      <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
       <Route path="/AllCourses" element={<AllCourses/>}/>
       <Route path="/AdminPage" element={<AdminPage/>}/>
       <Route path="/CreateCourse" element={<CreateCourse/>}/>
