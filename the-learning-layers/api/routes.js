@@ -35,7 +35,7 @@ router.post('/createAccount', async (req, res) => {
 
     // Check the user's position and save to the appropriate collection
     if (userData.position === `Student`) {
-      const newStudent = new Student(userData);
+      const newStudent = new User(userData);
       newStudent.save();
     } else if (userData.position === `Teacher`) {
       const newTeacher = new Teacher(userData);
