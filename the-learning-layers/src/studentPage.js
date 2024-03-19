@@ -9,25 +9,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 function StudentPage() {
-  // Placeholder data for courses, this would likely be fetched from a database in a real application.
-  /*
-  const courses = [
-    { title: 'Introduction to Programming', id: 1 },
-    { title: 'Advanced Programming', id: 2 },
-    { title: 'Data Structures', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    { title: 'Machine Architecture', id: 3 },
-    
-  ];
-  */
 
   const [courses, setCourses] = useState([]); // State to hold courses
 
@@ -76,7 +57,7 @@ function StudentPage() {
           {courses.map((course, index) => ( // Using index as the key
             <Col key={index}>
               <div className="course-card p-3 shadow-sm">
-                <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
+                <h3 className="text-center my-3">{course.name} {course.courseId}</h3>
                 <div className="text-center">
                   <Button variant="primary">View Course</Button>
                 </div>
