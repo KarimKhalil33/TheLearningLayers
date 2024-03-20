@@ -96,7 +96,8 @@ router.post('/login', async (req, res) => {
         res.json({
           status: "SUCCESS",
           message: "Login successful",
-          collectionName: collection
+          collectionName: collection,
+          authenticationId: 'logged'
         });
       } else { //send a failed request if user credentials have not been found
         res.status(400).json({
