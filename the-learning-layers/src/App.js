@@ -13,12 +13,16 @@ import TeacherDash from './teacherPage'
 import AllCourses from './AllCourses';
 import AdminPage from './AdminPage';
 import PendingEnrollments from './pendingEnrollments';
+import { useState } from 'react';
+
 function App() {
+  const [authenticationId, setAuthenticationId] = useState(); //using a useState variable to preserve changes to userId
+
   return (
     <Router>
       <Routes>
       <Route path="/CreateAccount" element={<CreateAccount />} />
-      <Route path="/login" element={<Login/>}/>
+      <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId}/>}/>
 
       <Route path="/studentPage" element={<StudentPage />} />
       <Route path="/teacherDash" element={<TeacherDash/>}/>

@@ -34,7 +34,7 @@ router.post('/createAccount', async (req, res) => {
 
     // Check the user's position and save to the appropriate collection
     if (userData.position === `Student`) {
-      const newStudent = new Student(userData);
+      const newStudent = new User(userData);
       newStudent.save();
     } else if (userData.position === `Teacher`) {
       const newTeacher = new Teacher(userData);
@@ -96,7 +96,8 @@ router.post('/login', async (req, res) => {
         res.json({
           status: "SUCCESS",
           message: "Login successful",
-          collectionName: collection
+          collectionName: collection,
+          authenticationId: 'logged'
         });
       } else { //send a failed request if user credentials have not been found
         res.status(400).json({

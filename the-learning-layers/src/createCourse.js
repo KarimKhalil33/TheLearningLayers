@@ -3,7 +3,7 @@ import './App.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
-import { Navbar, Nav } from 'react-bootstrap';2
+import { Navbar, Nav } from 'react-bootstrap';
 import { Route, useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';

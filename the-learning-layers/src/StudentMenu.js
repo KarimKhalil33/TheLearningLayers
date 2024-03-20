@@ -10,6 +10,7 @@ function StudentMenu() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
+              <Nav.Link href="/studentPage"> Courses </Nav.Link>
               <Nav.Link href="/allCourses"> Enroll in a Course</Nav.Link>
               
             </Nav>
