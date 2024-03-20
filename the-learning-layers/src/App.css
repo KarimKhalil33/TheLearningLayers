@@ -209,6 +209,7 @@ section{
   margin-bottom: 2em;
 }
 
+
 .custom-admin-button{
   background-color: rgb(14, 179, 121); /* Change to your desired color */
   border-color: rgb(14, 179, 121);
@@ -220,4 +221,27 @@ section{
 }
 .newAssessments Button{
   margin: 0.5em;
+}
+.existingAssignment{
+  border-bottom: grey solid 1px;
+  margin: 1em;
+  text-align: left;
+  /* align-items: ; */
+  width: 50em;
+}
+
+/* .existingAssignment p{
+  float: inline-start;
+} */
+
+.assignActions{
+  display: flexbox;
+  justify-content: space-evenly;
+  float:inline-end;
+
+} 
+.existingAssignment Button{
+  margin: 0.2em;
+  float: inline-end;
+  width: fit-content;
 }

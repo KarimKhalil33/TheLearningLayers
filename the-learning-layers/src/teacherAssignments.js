@@ -8,19 +8,27 @@ import { useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-// import TeacherMenu from './TeacherMenu';
+ import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
-// import AppFooter from './appFooter';
+import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
+import TeacherCourseNavigation from './teacherCourseNavigation';
 function TeacherAssignments(){
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const Assignments = ["Assign 1","Assign 2","Assign 3","Assign 4"];
+    TeacherCourseNavigation("/teacherAssignment");
+    
+    // async () => (
+        
+    // )
     return(
         <>
-            {/* <TeacherMenu></TeacherMenu> */}
+             <TeacherMenu></TeacherMenu>
+             <TeacherCourseNavigation setkey="/teacherAssignment"></TeacherCourseNavigation> 
             {/* A button opens a modal which allows the teacher to create an assignment */}
             <div className='newAssessments'>
                 <p><Button variant="primary" onClick={handleShow}>
@@ -101,15 +109,24 @@ function TeacherAssignments(){
                 <h6></h6>
             </div> */}
             <article className='main'>
+                {/* Yet to be filled out, this portion of the page displays all assignments for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
                 <header>
                     <h1><strong>Assignments</strong></h1>
                 </header>
-                <div className="existingAssignment">
-                    <p>Assignment Name</p>
-                    <Button variant='danger'>Delete Assignment</Button>
-                    <Button variant='success'>Grade Assignments</Button>
-                    <Button variant='info'>Edit Assignment</Button>
-                </div>
+                <Row className="existingAssignment">
+                    Assignment Name
+                    <div className='assignActions'>
+                    <Button variant='danger'>Delete</Button>
+                    <Button variant='success'>Grade</Button>
+                    <Button variant='info'>Edit</Button></div>
+                </Row>
+                <Row className="existingAssignment">
+                    Assignment Name
+                    <div className='assignActions'>
+                    <Button variant='danger'>Delete</Button>
+                    <Button variant='success'>Grade</Button>
+                    <Button variant='info'>Edit</Button></div>
+                </Row>
             </article>
             
         </>
