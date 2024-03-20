@@ -3,7 +3,6 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
-
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
 
@@ -35,7 +34,7 @@ router.post('/createAccount', async (req, res) => {
 
     // Check the user's position and save to the appropriate collection
     if (userData.position === `Student`) {
-      const newStudent = new Student(userData);
+      const newStudent = new User(userData);
       newStudent.save();
     } else if (userData.position === `Teacher`) {
       const newTeacher = new Teacher(userData);
@@ -138,17 +137,16 @@ router.post('/createCourse', (req, res) => {
   }
 });
 
-
-router.get('/createCourse',  async (req, res) => {
+// Route to fetch all the courses
+router.get('/createCourse', async (req, res) => {
   try {
-    const courses =  await Course.find({}); // Fetch all courses from the database
-    // console.log(courses);
+    const courses = await Course.find({}); // Fetch all courses from the database
     res.json(courses); // Send the courses as a response
   } catch (error) {
     res.status(500).json({ message: 'Error fetching courses', error: error });
-
   }
 });
+
 
 
 module.exports = router;
