@@ -1,12 +1,15 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import { Navbar, Nav } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import TeacherMenu from './TeacherMenu';
+import { Route } from 'react-router-dom';
 
 function StudentPage() {
   // Placeholder data for courses, this would likely be fetched from a database in a real application.
@@ -26,24 +29,14 @@ function StudentPage() {
     { title: 'Machine Architecture', id: 3 },
     
   ];
+  let navigate = useNavigate();
+  const routeChange = (path) => {
+    navigate(path);
+  };
 
   return (
     <>
-      <Navbar bg="light" expand="lg">
-        <Container>
-        <Navbar.Brand href="#home">Learning Layers</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="#dashboard">Dashboard</Nav.Link>
-              <Nav.Link href="#courses">Courses</Nav.Link>
-            </Nav>
-            <Nav>
-              <Nav.Link href="#profile">Profile</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <TeacherMenu></TeacherMenu>
       <Container className="my-5">
         <h1 className="text-center mb-4">WELCOME TO LEARNING LAYERS</h1>
         <h2 className="text-center mb-3">A better way to teach, anywhere and anytime.</h2>
@@ -57,7 +50,7 @@ function StudentPage() {
               <div className="courseteach-card p-3 shadow-sm">
                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.title}</h3>
                 <div  className="text-center">
-                  <Button variant="primary" className="button">View Course</Button>
+                  <Button variant="primary" className="button" onClick={() => routeChange('/viewCourseTeacher')}>View Course</Button>
                 </div>
               </div>
             </Col>
