@@ -5,7 +5,7 @@ const courseSchema = new mongoose.Schema({
     courseId: { type: String, required: true },
     name: { type: String, required: true },
     description: {type: String, required: true },
-    title:{type: String, required:true},
+    title: {type: String, required: true},
     teacher: { type: String},
     students: [{ type: String }],
 }, { collection: 'course' });
