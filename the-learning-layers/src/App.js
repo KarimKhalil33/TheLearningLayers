@@ -14,6 +14,7 @@ import AllCourses from './AllCourses';
 import AdminPage from './AdminPage';
 import ViewCourseTeacher from './viewCourseTeacher';
 import PendingEnrollments from './pendingEnrollments';
+import ViewCourseStudent from './viewCourseStudent';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
       <Route path = "/" element={<Home/>}/>
       <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
+      <Route path="/viewCourseStudent" element={<ViewCourseStudent/>}/>
       <Route path="/AllCourses" element={<AllCourses/>}/>
       <Route path="/AdminPage" element={<AdminPage/>}/>
       <Route path="/CreateCourse" element={<CreateCourse/>}/>
