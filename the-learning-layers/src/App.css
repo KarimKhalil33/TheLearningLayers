@@ -58,3 +58,11 @@
     transform: scale(1.05);
   }
 } 
+.newAssessments{
+  margin: 1em 1em;
+  float: inline-end;
+  flex: content;
+}
+.newAssessments Button{
+  margin: 0.5em;
+}

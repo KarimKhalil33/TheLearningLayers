@@ -7,6 +7,7 @@ import './App.css';
 import Login from './login'
 import Home from './Home 2'
 import CreateAssignment from './createAssignment';
+import TeacherAssignments from './teacherAssignments';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Route path="/CreateAccount" element={<CreateAccount />} />
       <Route path="/login" element={<Login/>}/>
       <Route path = "/createAssignment" element={<CreateAssignment/>}/>
+      <Route path = "/teacherAssignment" element={<TeacherAssignments/>}/>
       <Route path="/" element={<Home/>}/>
 
       </Routes>
