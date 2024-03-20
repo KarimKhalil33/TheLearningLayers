@@ -3,7 +3,7 @@ import './App.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
-import { Navbar, Nav } from 'react-bootstrap';2
+import { Navbar, Nav } from 'react-bootstrap';
 import { Route, useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
@@ -91,39 +91,39 @@ function CreateCourse() {
           <Row>
             <Col xs={7}>
               <Form.Group className="mb-4">
-                <Form.Label>Department Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter Department Name" value={courseName} onChange={(e) => setCourseName(e.target.value)} required />
+                <Form.Label htmlFor='Department Name'>Department Name</Form.Label>
+                <Form.Control id="Department Name" type="text" placeholder="Enter Department Name" value={courseName} onChange={(e) => setCourseName(e.target.value)} required />
                 <Form.Control.Feedback type='invalid'>Please enter Department Name</Form.Control.Feedback>
               </Form.Group>
             </Col>
 
             <Col>
               <Form.Group className="mb-4">
-                <Form.Label>Course Number</Form.Label>
-                <Form.Control type="number" placeholder="000" value={courseId} onChange={(e) => setCourseNo(e.target.value)} required />
+                <Form.Label htmlFor="Course Number">Course Number</Form.Label>
+                <Form.Control id="Course Number" type="number" placeholder="000" value={courseId} onChange={(e) => setCourseNo(e.target.value)} required />
                 <Form.Control.Feedback type='invalid'>Please enter Course Number</Form.Control.Feedback>
               </Form.Group>
             </Col>
 
           </Row>
           <Row>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-              <Form.Label>Teacher</Form.Label>
-              <Form.Control type="text" placeholder="Enter Teacher Name" value={teacher} onChange={(e) => setTeacher(e.target.value)} />
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor='Teacher'>Teacher</Form.Label>
+              <Form.Control id="Teacher" type="text" placeholder="Enter Teacher Name" value={teacher} onChange={(e) => setTeacher(e.target.value)} />
               <Form.Control.Feedback type='invalid'>Enter Teacher Name</Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Row>
             <Form.Group className="mb-4">
-              <Form.Label>Title</Form.Label>
-              <Form.Control type="text" placeholder="Course Title" value={title} onChange={(e) => setCourseTitle(e.target.value)} required />
+              <Form.Label htmlFor="Title">Title</Form.Label>
+              <Form.Control id="Title" type="text" placeholder="Course Title" value={title} onChange={(e) => setCourseTitle(e.target.value)} required />
               <Form.Control.Feedback type='invalid'>Please enter Course Title</Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Row>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-              <Form.Label>Enter Course Description</Form.Label>
-              <Form.Control as="textarea" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} required />
+            <Form.Group className="mb-3" >
+              <Form.Label htmlFor='Enter Course Description'>Enter Course Description</Form.Label>
+              <Form.Control id="Enter Course Description"as="textarea" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} required />
             </Form.Group>
           </Row>
           {/* <Row>
@@ -134,7 +134,7 @@ function CreateCourse() {
                 </Row> */}
 
 
-                <input type="submit" value="Create Course" formaction="/AdminPage" />
+                <input type="submit" value="Create Course" formAction="/AdminPage" />
             </Form>
             </Container>
 
