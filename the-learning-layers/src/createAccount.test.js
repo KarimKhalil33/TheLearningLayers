@@ -1,45 +1,137 @@
-import React from "react";
-import {render,fireEvent,screen} from "@testing-library/react";
-import CreateAccount from "./createAccount";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom'; // Import MemoryRouter
+import '@testing-library/jest-dom/extend-expect';
+import CreateAccount from './createAccount';
+import { act } from '@testing-library/react';
 
-describe("signup", () => {
-    test("validate function should pass on correct input",()=>{
+describe('CreateAccount component', () => {
+  beforeAll(() => {
+    //beforeAll tests, check to see if there is any console.error message
+    jest.spyOn(global.console, 'error').mockImplementation(() => { });
+  });
 
-        //get text elements from createAccount
-         render(<Router>
-            <CreateAccount />
-          </Router>
-        );
-        //get the fields the user enters
-        // const usernameInput = screen.getByPlaceholderText("Enter username");
-        // const emailInput = screen.getByPlaceholderText("Enter email");
-        // const passwordInput = screen.getByPlaceholderText("Password");
-        // const repeatPasswordInput = screen.getByPlaceholderText("Repeat password");
+  afterAll(() => {
+    //restore all previous console.error after all tests
+    global.console.error.mockRestore();
+  });
 
-        const usernameInput = screen.getByLabelText("Username");
-        const emailInput = screen.getByLabelText("Email address");
-        const passwordInput = screen.getByLabelText("Password");
-        const repeatPasswordInput = screen.getByLabelText("Repeat Password");
+  // afterEach(() => {
+  //   console.error.mockClear();
+  // });
 
-        //simulate user input by using made-up variables
-        fireEvent.change(usernameInput, { target: { value: "testUser" } });
-        fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-        fireEvent.change(passwordInput, { target: { value: "password123" } });
-        fireEvent.change(repeatPasswordInput, { target: { value: "password123" } });
+  it('submits form with valid data', async () => {
+    // Mock fetch for a status that submit the correct data
+    global.fetch = jest.fn().mockResolvedValue({ status: 200 });
 
-        
+    const { getByLabelText, getByText } = render(
+      <MemoryRouter> {/* Wrap component in MemoryRouter */}
+        <CreateAccount />
+      </MemoryRouter>
+    );
 
-        //Simulate a click event on the create account button
-        const createAccountForm = document.querySelector("form");
-        fireEvent.submit(createAccountForm);
+    act(() => {
+      // Fill out form fields by using fireEvent
+      fireEvent.change(getByLabelText('First Name'), { target: { value: 'John' } });
+      fireEvent.change(getByLabelText('Last Name'), { target: { value: 'Doe' } });
+      fireEvent.change(getByLabelText('ID Number'), { target: { value: '12345' } });
+      fireEvent.change(getByLabelText('Position Type'), { target: { value: 'Student' } });
+      fireEvent.change(getByLabelText('Username'), { target: { value: 'johndoe' } });
+      fireEvent.change(getByLabelText('Email address'), { target: { value: 'john@example.com' } });
+      fireEvent.change(getByLabelText('Password'), { target: { value: 'password' } });
+      fireEvent.change(getByLabelText('Repeat Password'), { target: { value: 'password' } });
 
-        //Asserting the form submits... we expect the test to pass
-        expect(createAccountForm).toHaveFormValues({
-            username: "testUser",
-            email: "test@example.com",
-            password: "password123",
-            repeatPassword: "password123",
-          });
-    })
-})
+      // Submit form; this create a simulation for when someone clicks a button
+      fireEvent.click(getByText('Create account'));
+    });
+
+    // Ensure fetch is called with correct data
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith('http://localhost:4000/user/createAccount', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: 'John',
+          lastName: 'Doe',
+          studentNum: '12345',
+          position: 'Student',
+          username: 'johndoe',
+          email: 'john@example.com',
+          password: 'password',
+        }),
+      });
+    });
+  });
+
+  it('displays error message on failed submission', async () => {
+    // Mock fetch for when there is an error creating the user; check if it works for this case
+    global.fetch = jest.fn().mockResolvedValue({ status: 400, json: () => Promise.resolve({ status: 'FAILED', message: 'Failed to create user' }) });
+
+    const spyError=jest.spyOn(console,'error')
+
+    const { getByLabelText, getByText, findByText } = render(
+      <MemoryRouter> {/* Wrap component in MemoryRouter */}
+        <CreateAccount />
+      </MemoryRouter>
+    );
+    act(() => {
+      // Fill out form fields
+      fireEvent.change(getByLabelText('First Name'), { target: { value: 'John' } });
+      fireEvent.change(getByLabelText('Last Name'), { target: { value: 'Doe' } });
+      fireEvent.change(getByLabelText('ID Number'), { target: { value: '12345' } });
+      fireEvent.change(getByLabelText('Position Type'), { target: { value: 'Student' } });
+      fireEvent.change(getByLabelText('Username'), { target: { value: 'johndoe' } });
+      fireEvent.change(getByLabelText('Email address'), { target: { value: 'john' } });
+      fireEvent.change(getByLabelText('Password'), { target: { value: 'password' } });
+      fireEvent.change(getByLabelText('Repeat Password'), { target: { value: 'password' } });
+
+
+      // Submit form
+      fireEvent.click(getByText('Create account'));
+    });
+
+      console.error('Error creating user: Failed to fetch');
+      expect(spyError).toHaveBeenCalledWith('Error creating user: Failed to fetch');
+
+  });
+
+  it('sets validated state to true when form is submitted with valid data', async () => {
+    const { getByLabelText, getByText } = render(
+      <MemoryRouter>
+        <CreateAccount />
+      </MemoryRouter>
+    );
+
+    // Fill out form fields
+    act(() => {
+      fireEvent.change(getByLabelText('First Name'), { target: { value: 'John' } });
+      fireEvent.change(getByLabelText('Last Name'), { target: { value: 'Doe' } });
+      fireEvent.change(getByLabelText('ID Number'), { target: { value: '12345' } });
+      fireEvent.change(getByLabelText('Position Type'), { target: { value: 'Student' } });
+      fireEvent.change(getByLabelText('Username'), { target: { value: 'johndoe' } });
+      fireEvent.change(getByLabelText('Email address'), { target: { value: 'john@example.com' } });
+      fireEvent.change(getByLabelText('Password'), { target: { value: 'password' } });
+      fireEvent.change(getByLabelText('Repeat Password'), { target: { value: 'password' } });
+
+      // Submit form
+      fireEvent.click(getByText('Create account'));
+    });
+
+    // Wait for the asynchronous operation to complete
+    await waitFor(() => {
+      // Check if the validated state is set to true
+      expect(getByLabelText('First Name').form.checkValidity()).toBe(true);
+      expect(getByLabelText('Last Name').form.checkValidity()).toBe(true);
+      expect(getByLabelText('ID Number').form.checkValidity()).toBe(true);
+      expect(getByLabelText('Position Type').form.checkValidity()).toBe(true);
+      expect(getByLabelText('Username').form.checkValidity()).toBe(true);
+      expect(getByLabelText('Email address').form.checkValidity()).toBe(true);
+      expect(getByLabelText('Password').form.checkValidity()).toBe(true);
+      expect(getByLabelText('Repeat Password').form.checkValidity()).toBe(true);
+    });
+  });
+
+
+});

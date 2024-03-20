@@ -4,14 +4,13 @@ const mongoose=require('mongoose'); //use to import MongoDB methods
 const userSchema = new mongoose.Schema({
     firstName: { type: String, required: true }, //we get the username from the frontend and same for other fields
     lastName: { type: String, required: true },
-    studentNum: { type: Number, required: true },
+    studentNum : { type: Number, required: true },
     position: {type:String, required:true},
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    enrolled: [{ type: String }],
-}, { collection: 'student' });
+}, { collection: 'teacher' });
 
-const User = mongoose.model('User', userSchema); //creating that model in our database
+const Teacher = mongoose.model('Teacher', userSchema); //creating that model in our database
 
-module.exports=User; //exporting it so it can be used in any other class
+module.exports=Teacher; //exporting it so it can be used in any other class
