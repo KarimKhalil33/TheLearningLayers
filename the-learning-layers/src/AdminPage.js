@@ -8,9 +8,18 @@ import AdminMenu from './AdminMenu'; // Assuming you have an AdminMenu component
 import  { useEffect, useState, routeChange } from 'react';
 import './App.css';
 import AppFooter from './appFooter';
+import { Trash } from 'react-bootstrap-icons';
+
+import { Route } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 
 function AdminPage() {
     const [courses, setCourses] = useState([]); // State to hold courses
+    let navigate = useNavigate();
+  const routeChange = (path) => {
+    navigate(path);
+  };
     useEffect(() => {
         // Function to fetch courses
         const fetchCourses = async () => {
@@ -36,14 +45,22 @@ function AdminPage() {
                 <div className="cards">
                     <Row xs={1} md={2} lg={3} className="g-4">
                     {courses.map((course, index) => ( // Using index as the key
-            <Col key={index}>
-              <div className="course-card-admin p-3 shadow-sm">
-                <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
-                <div className="text-center">
-                <Button variant="primary" className="button" onClick={() => routeChange('/viewCourseStudent')}>View Course</Button>
-                </div>
-              </div>
-            </Col>
+             <Col key={index}>
+             <div className="course-card-admin p-3 shadow-sm" style={{ position: 'relative' }}>
+                 <Button 
+                     variant="danger" 
+                     className="button" 
+                     style={{ position: 'absolute', top: '10px', right: '10px' }} 
+                     onClick={() => { /* Add delete logic here */ }}
+                 >
+                     <Trash /> {/* Use the Trash icon */}
+                 </Button>
+                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
+                 <div className="text-center">
+                     <Button variant="primary" className="button" onClick={() => routeChange('/viewCourseStudent')}>View</Button>
+                 </div>
+             </div>
+         </Col>
           ))}
                     </Row>
                 </div>
