@@ -35,7 +35,7 @@ function AllCourses() {
             <Row xs={1} md={2} lg={3} className="g-4">
               {courses.map((course) => (
                 <Col key={course.id}>
-                  <div className="course-card p-3 shadow-sm">
+                  <div className="course-card-student p-3 shadow-sm">
                     <h3 className="text-center my-3" style={{ color: 'white' }}>{course.title}</h3>
                     <div className="text-center">
                       <Button variant="primary" onClick={() => handleEnrollment(course.id)}>
