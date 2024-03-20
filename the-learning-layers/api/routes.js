@@ -9,7 +9,7 @@ router.post('/createAccount', async (req, res) => {
   const userData = req.body;
 
   // Find the email or username in the database
-  const existingUser = await User.findOne({ username: userData.username });
+  const existingUser = await User.findOne({username: userData.username });
 
 
   if (existingUser) {
@@ -137,4 +137,10 @@ router.post('/createCourse', (req, res) => {
 });
 
 
+
+
 module.exports = router;
+
+
+
+
