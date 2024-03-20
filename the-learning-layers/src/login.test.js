@@ -6,6 +6,16 @@ import { MemoryRouter } from 'react-router-dom';
 import { act } from '@testing-library/react';
 
 describe('Login component', () => {
+    beforeAll(() => {
+        //beforeAll tests, check to see if there is any console.error message
+        jest.spyOn(global.console, 'error').mockImplementation(() => { });
+      });
+    
+      afterAll(() => {
+        //restore all previous console.error after all tests
+        global.console.error.mockRestore();
+      });
+    
     // Mocking fetch function
     const mockFetch = jest.fn();
     global.fetch = mockFetch;

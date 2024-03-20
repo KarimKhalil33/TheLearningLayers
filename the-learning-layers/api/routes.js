@@ -3,7 +3,9 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
+const Course = require("../models/courses");
 const Admin = require("../models/admin");
+
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
@@ -20,6 +22,9 @@ router.post('/createAccount', async (req, res) => {
     });
   }
 
+
+
+
   try {
     // Save the user to the 'user' collection
     const newUser = new User(userData);
@@ -29,7 +34,7 @@ router.post('/createAccount', async (req, res) => {
 
     // Check the user's position and save to the appropriate collection
     if (userData.position === `Student`) {
-      const newStudent = new Student(userData);
+      const newStudent = new User(userData);
       newStudent.save();
     } else if (userData.position === `Teacher`) {
       const newTeacher = new Teacher(userData);
@@ -110,8 +115,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-const Course = require("../models/courses");
-
 // Route to create a new course
 router.post('/createCourse', (req, res) => {
   const courseData = req.body;
@@ -124,17 +127,26 @@ router.post('/createCourse', (req, res) => {
   }
 
   try {
-      const newCourse = new Course(courseData);
-      if(newCourse.Teacher===""){
 
-      }
-      newCourse.save();
-      res.status(200).send("Course saved to the database");
+    const newCourse = new Course(courseData);
+    newCourse.save();
+    res.status(200).send("Course saved to the database");
   } catch (error) {
     console.error('Error saving course data:', error);
     res.status(500).send("Unable to save course to the database");
   }
 });
+
+// Route to fetch all the courses
+router.get('/createCourse', async (req, res) => {
+  try {
+    const courses = await Course.find({}); // Fetch all courses from the database
+    res.json(courses); // Send the courses as a response
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching courses', error: error });
+  }
+});
+
 
 
 
