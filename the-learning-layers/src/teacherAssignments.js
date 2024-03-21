@@ -45,19 +45,20 @@ function TeacherAssignments(){
                             <Row>
                                 <Col xs={8}>
                                     <Form.Group className="mb-4">
-                                        <Form.Label>Assignment Name</Form.Label>
-                                        <Form.Control type="text" placeholder="Enter Assignment Name"  required />
+                                        <Form.Label htmlFor='assignmentName'>Assignment Name</Form.Label>
+                                        <Form.Control type="text" placeholder="Enter Assignment Name" id='assignmentName'  required />
                                         <Form.Control.Feedback type='invalid'>Please enter assignment name</Form.Control.Feedback>
                                     </Form.Group>
                                     {/* The teacher is required to name the assignemnt */}
                                 </Col>
                                 <Col>
-                                    <Form.Label>Weight</Form.Label> 
+                                    <Form.Label htmlFor='weight'>Weight</Form.Label> 
                                     <InputGroup className="mb-3">
                                         <Form.Control
                                         placeholder="Assignment Weight"
                                         aria-label="Asignment Weight"
                                         aria-describedby="basic-addon2"
+                                        id='weight'
                                         />
                                         <InputGroup.Text id="basic-addon2">%</InputGroup.Text>
                                     </InputGroup>
@@ -66,29 +67,29 @@ function TeacherAssignments(){
                             <Row>
                                 {/* The teacher is able to describe the assignment */}
                                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                                    <Form.Label>Enter Assignment Description</Form.Label>
-                                    <Form.Control as="textarea" rows={3} />
+                                    <Form.Label htmlFor='assignmentDescription'>Enter Assignment Description</Form.Label>
+                                    <Form.Control as="textarea" rows={3} id='assignmentDescription' />
                                 </Form.Group>
                             </Row>
                             <Row>
                                 {/* If the assignment has any extra documents, the teacher is able to upload it here */}
                                 <Form.Group controlId="formFileMultiple" className="mb-3">
-                                    <Form.Label>Upload Files</Form.Label>
-                                    <Form.Control type="file" multiple />
+                                    <Form.Label htmlFor='uploadFile'>Upload Files</Form.Label>
+                                    <Form.Control type="file" id='uploadFile'multiple />
                                 </Form.Group>
                             </Row>
                             <Row>
                                 {/* The teacher must set start and end dates for the assignment */}
                                 <Col>
                                     <Form.Group className="mb-4">
-                                        <Form.Label>Start Date</Form.Label>
-                                        <Form.Control type="Date"  required />
+                                        <Form.Label htmlFor='startDate'>Start Date</Form.Label>
+                                        <Form.Control type="Date" id='startDate'  required />
                                         <Form.Control.Feedback type='invalid'>Please enter a date</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                                 <Form.Group className="mb-4">
-                                        <Form.Label>End Date</Form.Label>
-                                        <Form.Control type="Date" required />
+                                        <Form.Label htmlFor='endDate'>End Date</Form.Label>
+                                        <Form.Control type="Date" id='endDate' required />
                                         <Form.Control.Feedback type='invalid'>Please enter a date</Form.Control.Feedback>
                                     </Form.Group>
                             </Row>
