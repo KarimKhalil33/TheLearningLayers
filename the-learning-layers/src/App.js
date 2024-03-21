@@ -16,19 +16,20 @@ import ViewCourseTeacher from './viewCourseTeacher';
 import PendingEnrollments from './pendingEnrollments';
 import ViewCourseStudent from './viewCourseStudent';
 
-function setAuthenticationId(authenticationId) {
+function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
 }
-function setCollectionName(collectionName) {
+function setCollectionName(collectionName) {//get which collection in MongoDB it belongs to
   sessionStorage.setItem('collectionName', JSON.stringify(collectionName));
 }
 
-function PrivateRoute({ roles }) {
+function PrivateRoute({ roles }) {//use a private route with roles to ensure protected routes
+  //get the username and collection that was stored in the session
   const authId = JSON.parse(sessionStorage.getItem('authenticationId'));
   const collectName = JSON.parse(sessionStorage.getItem('collectionName'));
   const userStatus = authId && collectName; // Check if both items exist
 
-  if (!userStatus) {
+  if (!userStatus) { //if the user statud doesn't exist, take the user back to login
     return <Navigate to="/login" replace />;
   }
 
@@ -44,7 +45,7 @@ function PrivateRoute({ roles }) {
 
 }
 
-function AnonymousRoute() {
+function AnonymousRoute() {//for all user who are not logged, allow access to certain sites
   const authId = JSON.parse(sessionStorage.getItem('authenticationId'));
   const collectName = JSON.parse(sessionStorage.getItem('collectionName'));
   const userStatus = authId && collectName; // Check if both items exist
@@ -57,33 +58,21 @@ function App() {
     <Router>
       <Routes>
 
-      <Route path="/CreateAccount" element={<CreateAccount />} />
-      <Route path="/login" element={<Login/>}/>
-      
-      <Route path="/studentPage" element={<StudentPage />} />
-      <Route path="/teacherPage" element={<TeacherPage/>}/>
-      <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
-      <Route path = "/" element={<Home/>}/>
-      <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
-      <Route path="/viewCourseStudent" element={<ViewCourseStudent/>}/>
-      <Route path="/AllCourses" element={<AllCourses/>}/>
-      <Route path="/AdminPage" element={<AdminPage/>}/>
-      <Route path="/CreateCourse" element={<CreateCourse/>}/>
-      <Route path="/pendingEnrollments" element={<PendingEnrollments/>}/>
-
+        {/* For when a teacher logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Teacher']} />}>
-          <Route path="/teacherDash" element={<TeacherDash />} />
+        <Route path="/teacherPage" element={<TeacherPage/>}/>
           <Route path="/CreateAssignment" element={<CreateAssignment />} />
           <Route path="/home" element={<Home />} />
           <Route path="/AllCourses" element={<AllCourses />} />
-
+          <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
         </Route>
-
+        {/* For when a student logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['User']} />}>
           <Route path="/studentPage" element={<StudentPage />} />
           <Route path="/AllCourses" element={<AllCourses />} />
-
+          <Route path="/viewCourseStudent" element={<ViewCourseStudent/>}/>
         </Route>
+        {/* For when an admin logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Admin']} />}>
           <Route path="/AdminPage" element={<AdminPage />} />
           <Route path="/CreateCourse" element={<CreateCourse />} />
@@ -91,10 +80,13 @@ function App() {
 
         </Route>
 
+        {/* For people who are not logged in */}
         <Route element={<AnonymousRoute />}>
           <Route path="/CreateAccount" element={<CreateAccount />} />
 
         </Route>
+
+        {/* Anyone can access these pages if they are logged in or not */}
         <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
         <Route path="/" element={<Home />} />
 
