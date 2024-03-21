@@ -63,7 +63,6 @@ function App() {
         <Route path="/teacherPage" element={<TeacherPage/>}/>
           <Route path="/CreateAssignment" element={<CreateAssignment />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/AllCourses" element={<AllCourses />} />
           <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
         </Route>
         {/* For when a student logs in, they should only be able to access certain pages */}

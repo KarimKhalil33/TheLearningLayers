@@ -48,7 +48,7 @@ function Login({ setAuthenticationId, setCollectionName }) { //pass a new proper
 
         // Depending on the user's role, navigate to the appropriate page
         if (responseData.collectionName === 'Teacher') {
-          navigate('/teacherDash'); // Redirect to the teacher dashboard
+          navigate('/teacherPage'); // Redirect to the teacher dashboard
         } else if (responseData.collectionName === 'User') {
           navigate('/studentPage'); // Redirect to the student page
         } else {
