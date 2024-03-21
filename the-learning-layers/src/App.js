@@ -13,7 +13,6 @@ import TeacherDash from './teacherPage'
 import AllCourses from './AllCourses';
 import AdminPage from './AdminPage';
 import PendingEnrollments from './pendingEnrollments';
-import { useState } from 'react';
 
 function setAuthenticationId(authenticationId) {
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
@@ -21,8 +20,6 @@ function setAuthenticationId(authenticationId) {
 function setCollectionName(collectionName) {
   sessionStorage.setItem('collectionName', JSON.stringify(collectionName));
 }
-
-
 
 function PrivateRoute({ roles }) {
   const authId = JSON.parse(sessionStorage.getItem('authenticationId'));
@@ -42,7 +39,7 @@ function PrivateRoute({ roles }) {
   } else {
     return <Navigate to="/login" replace />;
   }
-  
+
 }
 
 function AnonymousRoute() {
@@ -53,57 +50,39 @@ function AnonymousRoute() {
 }
 
 function App() {
-  // const [authenticationId, setAuthenticationId] = useState(); //using a useState variable to preserve changes to userId
-
-
+  
   return (
     <Router>
       <Routes>
         <Route element={<PrivateRoute roles={['Teacher']} />}>
           <Route path="/teacherDash" element={<TeacherDash />} />
           <Route path="/CreateAssignment" element={<CreateAssignment />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/AllCourses" element={<AllCourses />} />
+
         </Route>
 
         <Route element={<PrivateRoute roles={['User']} />}>
           <Route path="/studentPage" element={<StudentPage />} />
+          <Route path="/AllCourses" element={<AllCourses />} />
+
+        </Route>
+        <Route element={<PrivateRoute roles={['Admin']} />}>
+          <Route path="/AdminPage" element={<AdminPage />} />
+          <Route path="/CreateCourse" element={<CreateCourse />} />
+          <Route path="/pendingEnrollments" element={<PendingEnrollments />} />
+
         </Route>
 
         <Route element={<AnonymousRoute />}>
           <Route path="/CreateAccount" element={<CreateAccount />} />
-          <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
-          <Route path="/" element={<Home />} />
-        </Route>
-        {/* <Route path="/CreateAccount" element={<CreateAccount />} />
-        <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
 
-        <Route path="/studentPage" element={<StudentPage />} />
-        <Route path="/teacherDash" element={<TeacherDash />} />
-        <Route path="/CreateAssignment" element={<CreateAssignment />} />
+        </Route>
+        <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
         <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/AllCourses" element={<AllCourses />} />
-        <Route path="/AdminPage" element={<AdminPage />} />
-        <Route path="/CreateCourse" element={<CreateCourse />} />
-        <Route path="/pendingEnrollments" element={<PendingEnrollments />} /> */}
 
       </Routes>
     </Router>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
   );
 }
 
