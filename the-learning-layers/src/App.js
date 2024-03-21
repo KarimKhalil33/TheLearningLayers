@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import CreateAccount from './createAccount';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
@@ -15,24 +15,76 @@ import AdminPage from './AdminPage';
 import PendingEnrollments from './pendingEnrollments';
 import { useState } from 'react';
 
+function setAuthenticationId(authenticationId) {
+  sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
+}
+function setCollectionName(collectionName) {
+  sessionStorage.setItem('collectionName', JSON.stringify(collectionName));
+}
+
+
+
+function PrivateRoute({ roles }) {
+  const authId = JSON.parse(sessionStorage.getItem('authenticationId'));
+  const collectName = JSON.parse(sessionStorage.getItem('collectionName'));
+  const userStatus = authId && collectName; // Check if both items exist
+
+  if (!userStatus) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Check for role-based access
+  const allowed = roles.includes(collectName);
+
+  // If user's role is allowed, render the requested route, otherwise redirect to login
+  if (allowed) {
+    return <Outlet />;
+  } else {
+    return <Navigate to="/login" replace />;
+  }
+  
+}
+
+function AnonymousRoute() {
+  const authId = JSON.parse(sessionStorage.getItem('authenticationId'));
+  const collectName = JSON.parse(sessionStorage.getItem('collectionName'));
+  const userStatus = authId && collectName; // Check if both items exist
+  return userStatus ? <Navigate to="/" replace /> : <Outlet />;
+}
+
 function App() {
-  const [authenticationId, setAuthenticationId] = useState(); //using a useState variable to preserve changes to userId
+  // const [authenticationId, setAuthenticationId] = useState(); //using a useState variable to preserve changes to userId
+
 
   return (
     <Router>
       <Routes>
-      <Route path="/CreateAccount" element={<CreateAccount />} />
-      <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId}/>}/>
+        <Route element={<PrivateRoute roles={['Teacher']} />}>
+          <Route path="/teacherDash" element={<TeacherDash />} />
+          <Route path="/CreateAssignment" element={<CreateAssignment />} />
+        </Route>
 
-      <Route path="/studentPage" element={<StudentPage />} />
-      <Route path="/teacherDash" element={<TeacherDash/>}/>
-      <Route path = "/CreateAssignment" element={<CreateAssignment/>}/>
-      <Route path = "/" element={<Home/>}/>
-      <Route path="/home" element={<Home/>}/>
-      <Route path="/AllCourses" element={<AllCourses/>}/>
-      <Route path="/AdminPage" element={<AdminPage/>}/>
-      <Route path="/CreateCourse" element={<CreateCourse/>}/>
-      <Route path="/pendingEnrollments" element={<PendingEnrollments/>}/>
+        <Route element={<PrivateRoute roles={['User']} />}>
+          <Route path="/studentPage" element={<StudentPage />} />
+        </Route>
+
+        <Route element={<AnonymousRoute />}>
+          <Route path="/CreateAccount" element={<CreateAccount />} />
+          <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
+          <Route path="/" element={<Home />} />
+        </Route>
+        {/* <Route path="/CreateAccount" element={<CreateAccount />} />
+        <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
+
+        <Route path="/studentPage" element={<StudentPage />} />
+        <Route path="/teacherDash" element={<TeacherDash />} />
+        <Route path="/CreateAssignment" element={<CreateAssignment />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/AllCourses" element={<AllCourses />} />
+        <Route path="/AdminPage" element={<AdminPage />} />
+        <Route path="/CreateCourse" element={<CreateCourse />} />
+        <Route path="/pendingEnrollments" element={<PendingEnrollments />} /> */}
 
       </Routes>
     </Router>

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import PropTypes from 'prop-types';
 
-function Login({ setAuthenticationId }) { //pass a new property called setAuthenticationId
+function Login({ setAuthenticationId, setCollectionName }) { //pass a new property called setAuthenticationId
   const [validated, setValidated] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -54,7 +54,7 @@ function Login({ setAuthenticationId }) { //pass a new property called setAuthen
         } else {
           navigate('/AdminPage'); // Redirect to the admin page
         }
-        return responseData.authenticationId; // Assuming authenticationId is returned
+        return [responseData.authenticationId,responseData.collectionName]; // Assuming authenticationId is returned
       } else {
         const responseData = await response.json();
 
@@ -87,10 +87,12 @@ function Login({ setAuthenticationId }) { //pass a new property called setAuthen
           username,
           password,
         });
-        console.log("Authentication ID:", authenticationId);
-        if (authenticationId) {
+        console.log("Authentication ID:", authenticationId[0]);
+        console.log("Collection Name:", authenticationId[1]);
+        if (authenticationId[0]) {
           // If authentication is successful, set the authentication ID in the state
-          setAuthenticationId(authenticationId);
+          setAuthenticationId(authenticationId[0]);
+          setCollectionName(authenticationId[1])
         }
       } catch (error) {
         // Handle any errors that occur during login
@@ -158,7 +160,8 @@ function Login({ setAuthenticationId }) { //pass a new property called setAuthen
 // Define prop types for the Login component
 // This ensures that setAuthenticationId is a required function prop
 Login.propTypes = {
-  setAuthenticationId: PropTypes.func.isRequired // PropTypes for setAuthenticationId
+  setAuthenticationId: PropTypes.func.isRequired, // PropTypes for setAuthenticationId
+  setCollectionName: PropTypes.func.isRequired //PropTypes for collectionName
 };
 
 export default Login;
