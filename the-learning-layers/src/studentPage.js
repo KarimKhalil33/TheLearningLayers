@@ -16,7 +16,7 @@ function StudentPage() {
     // Function to fetch courses
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:4000/user/createCourse'); // Adjust the endpoint as needed
+        const response = await fetch('http://localhost:4000/user/course'); // Adjust the endpoint as needed
         const data = await response.json();
         console.log(data);
         setCourses(data); // Update state with fetched courses

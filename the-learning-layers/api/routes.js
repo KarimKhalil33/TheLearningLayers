@@ -139,7 +139,7 @@ router.post('/createCourse', (req, res) => {
 });
 
 // Route to fetch all the courses
-router.get('/createCourse', async (req, res) => {
+router.get('/course', async (req, res) => {
   try {
     const courses = await Course.find({}); // Fetch all courses from the database
     res.json(courses); // Send the courses as a response
