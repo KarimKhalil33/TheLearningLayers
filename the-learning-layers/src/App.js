@@ -13,6 +13,7 @@ import TeacherPage from './teacherPage'
 import AllCourses from './AllCourses';
 import AdminPage from './AdminPage';
 import ViewCourseTeacher from './viewCourseTeacher';
+import TeacherAssignments from './teacherAssignments';
 import PendingEnrollments from './pendingEnrollments';
 import ViewCourseStudent from './viewCourseStudent';
 
@@ -57,7 +58,6 @@ function App() {
   return (
     <Router>
       <Routes>
-
         {/* For when a teacher logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Teacher']} />}>
         <Route path="/teacherPage" element={<TeacherPage/>}/>
@@ -88,7 +88,6 @@ function App() {
         {/* Anyone can access these pages if they are logged in or not */}
         <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
         <Route path="/" element={<Home />} />
-
       </Routes>
     </Router>
   );
