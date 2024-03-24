@@ -28,14 +28,14 @@ function ViewCourseTeach(){
         <>
         <TeacherMenu></TeacherMenu>
         {/* sidebar for teachers to be able to work through the different pages of the course */}
-        {/* <article className='side-nav'>
+        <article className='side-nav'>
             <Nav variant="underline" defaultActiveKey="/viewCourseTeacher" className="flex-column ">
                 <Nav.Link className ="sidebar" eventKey="/viewCourseTeacher">View Course</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="/teacherAssignment" onClick={() => routeChange('/teacherAssignment')}>Assignments</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="link-2">Quizzes</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="link-3">Grades</Nav.Link>
             </Nav>
-        </article> */}
+        </article>
         <TeacherCourseNavigation setkey="/viewCourseTeacher"></TeacherCourseNavigation>
         <article className='upcoming'>
             {/*Section for teachers to be able to monitor upcoming assignments  */}

@@ -11,7 +11,7 @@ import Col from 'react-bootstrap/Col';
 import TeacherMenu from './TeacherMenu';
 import { Route } from 'react-router-dom';
 
-function StudentPage() {
+function TeacherPage() {
   // Placeholder data for courses, this would likely be fetched from a database in a real application.
   const courses = [
     { title: 'Introduction to Programming', id: 1 },
@@ -66,4 +66,4 @@ function StudentPage() {
   );
 }
 
-export default StudentPage;
+export default TeacherPage;
