@@ -1,15 +1,11 @@
 const mongoose = require('mongoose');
 
-// Creating a schema for course model
-const courseSchema = new mongoose.Schema({
-    courseId: { type: String, required: true },
-    name: { type: String, required: true },
-    description: {type: String, required: true },
-    title: {type: String, required: true},
-    teacher: { type: String},
-    students: [{ type: String }],
-}, { collection: 'course' });
+const enrollmentSchema = new mongoose.Schema({
+    studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
+    enrollmentDate: { type: Date, default: Date.now }
+}, { collection: 'enrollment' });
 
-const Course = mongoose.model('Course', courseSchema); //creating that model in our database
+const Enrollment = mongoose.model('Enrollment', enrollmentSchema);
 
-module.exports = Course; //exporting it so it can be used in any other class
+module.exports = Enrollment;

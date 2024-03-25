@@ -11,7 +11,6 @@ function PendingEnrollments() {
     const acceptEnrollment = async (studentNum, title) => {
         try {
 
-
             // Make a POST request to accept enrollment
             const serverURL = 'http://localhost:4000';
             const endpoint = '/api/enrolmentRoute/accept';

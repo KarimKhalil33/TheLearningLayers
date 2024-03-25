@@ -2,6 +2,26 @@ const express = require('express');
 const router = express.Router();
 const Course = require("../models/courses");
 
+// POST route to handle course enrollment
+router.post('/', async (req, res) => {
+    try {
+        // Retrieve student ID from session or wherever it's stored
+        const studentId = req.body.studentId; // Replace with actual retrieval logic
+
+        // Get course ID and student ID from request body
+        const courseId = req.body.courseId;
+
+        // Forward enrollment data to pendingEnrollment page
+        res.redirect(`/pendingEnrollment?studentId=${studentId}&courseId=${courseId}`);
+    } catch (error) {
+        console.error('Error enrolling in course:', error);
+        res.status(500).json({ success: false, message: 'Internal server error.' });
+    }
+});
+
+module.exports = router;
+
+
 router.post('/accept', async (req, res) => {
     try {
         const {title, studentNum } = req.body;
