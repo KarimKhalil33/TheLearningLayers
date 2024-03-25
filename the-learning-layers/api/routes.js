@@ -104,7 +104,8 @@ router.post('/login', async (req, res) => {
         res.json({
           status: "SUCCESS",
           message: "Login successful",
-          collectionName: collection
+          collectionName: collection,
+          authenticationId: username
         });
       } else { //send a failed request if user credentials have not been found
         res.status(400).json({
@@ -146,7 +147,7 @@ router.post('/createCourse', (req, res) => {
 
 
 // Route to fetch all the courses
-router.get('/createCourse', async (req, res) => {
+router.get('/course', async (req, res) => {
   try {
     const courses = await Course.find({}); // Fetch all courses from the database
     res.json(courses); // Send the courses as a response
