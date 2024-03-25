@@ -5,8 +5,6 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AdminMenu from './AdminMenu'; // Assuming you have an AdminMenu component
-import  { useEffect, useState, routeChange } from 'react';
-import './App.css';
 import AppFooter from './appFooter';
 
 function AdminPage() {
