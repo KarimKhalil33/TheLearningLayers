@@ -128,7 +128,6 @@ router.post('/createCourse', (req, res) => {
   const courseData = req.body;
 
   // add validation or checks here
-
   // If instructor is not specified, set it to "TBD"
   if (!courseData.teacher || courseData.teacher.trim() === '') {
     courseData.teacher = "TBD";
@@ -144,6 +143,7 @@ router.post('/createCourse', (req, res) => {
     res.status(500).send("Unable to save course to the database");
   }
 });
+
 
 // Route to fetch all the courses
 router.get('/createCourse', async (req, res) => {
@@ -167,11 +167,4 @@ router.get('/courses', async (req, res) => {
 });
 
 
-
-
-
 module.exports = router;
-
-
-
-

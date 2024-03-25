@@ -30,9 +30,6 @@ function AllCourses() {
       try {
           // Retrieve the student number from the session
           const studentNum = "";
-          
-
-  
           const response = await fetch('http://localhost:4000/api/enrollmentRoute', {
               method: 'POST',
               headers: {
