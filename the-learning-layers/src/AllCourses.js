@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -7,14 +7,23 @@ import Col from 'react-bootstrap/Col';
 import StudentMenu from './StudentMenu';
 
 function AllCourses() {
+    const [courses, setCourses] = useState([]);
     const [enrollmentStatus, setEnrollmentStatus] = useState({});
 
-    const courses = [
-        { title: 'Introduction to Programming', id: 1 },
-        { title: 'Advanced Programming', id: 2 },
-        { title: 'Data Structures', id: 3 },
-        { title: 'Machine Architecture', id: 4 }
-    ];
+    // Function to fetch courses from the backend
+    const fetchCourses = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/user/createCourse');
+            const data = await response.json();
+            setCourses(data); // Update courses state with fetched data
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCourses(); // Fetch courses when component mounts
+    }, []); // Empty dependency array ensures useEffect runs only once after initial render
 
     const handleEnrollment = (courseId) => {
         setEnrollmentStatus((prevStatus) => ({
@@ -34,12 +43,12 @@ function AllCourses() {
             </p>
             <Row xs={1} md={2} lg={3} className="g-4">
               {courses.map((course) => (
-                <Col key={course.id}>
+                <Col key={course._id}>
                   <div className="course-card-student p-3 shadow-sm">
                     <h3 className="text-center my-3" style={{ color: 'white' }}>{course.title}</h3>
                     <div className="text-center">
-                      <Button variant="primary" onClick={() => handleEnrollment(course.id)}>
-                        {enrollmentStatus[course.id] || 'Request to Enroll'}
+                      <Button variant="primary" onClick={() => handleEnrollment(course._id)}>
+                        {enrollmentStatus[course._id] || 'Request to Enroll'}
                       </Button>
                     </div>
                   </div>
@@ -54,4 +63,4 @@ function AllCourses() {
     );
 }
 
-export default AllCourses
+export default AllCourses;
