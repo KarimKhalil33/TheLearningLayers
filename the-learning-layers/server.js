@@ -1,24 +1,41 @@
-
+// Importing the database configuration (assuming it sets up the connection to MongoDB)
 require('./database');
 
-const app = require('express')();
-const cors=require('cors');
+// Importing required modules
+const express = require('express');
+const cors = require('cors');
+
+// Define the port for the server to listen on
 const port = 4000;
+
+// Create an Express application
+const app = express();
+
+// Enable CORS middleware to allow cross-origin requests
 app.use(cors());
 
-const bodyParser=require('express').json;
+// Importing bodyParser middleware (assuming it's used to parse JSON requests)
+const bodyParser = require('express').json;
 
-const userRouter=require('./api/routes');
-const pendingEnrollmentsRoutes = require('./api/enrolmentRoute');
+// Importing route functionalities for Express to use
+const userRouter = require('./api/routes'); // Assuming this handles user-related routes
+const pendingEnrollmentsRoutes = require('./api/enrolmentRoute'); // Assuming this handles enrolment routes
+const adminRoute = require('./api/adminRoute'); // Assuming this handles delete operations
 
- app.use(bodyParser());
- app.use('/user',userRouter);
- app.use('/api/enrolmentRoute', pendingEnrollmentsRoutes);
+// Using bodyParser middleware to parse incoming JSON requests
+app.use(bodyParser());
 
-app.listen(port,()=>{
+// Mounting userRouter for routes starting with '/user'
+app.use('/user', userRouter);
+
+// Mounting deleteRoute for routes starting with '/api/delete'
+app.use('/api/adminRoute', adminRoute);
+
+// Mounting pendingEnrollmentsRoutes for routes starting with '/api/enrolmentRoute'
+app.use('/api/enrolmentRoute', pendingEnrollmentsRoutes);
+
+// Start the Express server and listen on the specified port
+app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
-
-//run node server.js on the terminal for connection to database
-//create a new terminal and run npm start when connected to front end

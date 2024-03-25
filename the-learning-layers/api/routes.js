@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
       for (const collectionName of collectionNames) {
 
         const Collection = mongoose.model(collectionName);
-        const user = await Collection.findOne({ username }); //find the username in one of these collections
+        const user = await Collection.findOne({username}); //find the username in one of these collections
 
         if (user) {
 

@@ -4,7 +4,7 @@ const Course = require("../models/courses");
 
 router.post('/accept', async (req, res) => {
     try {
-        const { title, studentNum } = req.body;
+        const {title, studentNum } = req.body;
 
         // Find the course by title
         const course = await Course.findOne({ title });
