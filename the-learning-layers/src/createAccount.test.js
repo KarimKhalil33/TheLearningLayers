@@ -6,6 +6,20 @@ import CreateAccount from './createAccount';
 import { act } from '@testing-library/react';
 
 describe('CreateAccount component', () => {
+  beforeAll(() => {
+    //beforeAll tests, check to see if there is any console.error message
+    jest.spyOn(global.console, 'error').mockImplementation(() => { });
+  });
+
+  afterAll(() => {
+    //restore all previous console.error after all tests
+    global.console.error.mockRestore();
+  });
+
+  // afterEach(() => {
+  //   console.error.mockClear();
+  // });
+
   it('submits form with valid data', async () => {
     // Mock fetch for a status that submit the correct data
     global.fetch = jest.fn().mockResolvedValue({ status: 200 });
@@ -55,6 +69,8 @@ describe('CreateAccount component', () => {
     // Mock fetch for when there is an error creating the user; check if it works for this case
     global.fetch = jest.fn().mockResolvedValue({ status: 400, json: () => Promise.resolve({ status: 'FAILED', message: 'Failed to create user' }) });
 
+    const spyError=jest.spyOn(console,'error')
+
     const { getByLabelText, getByText, findByText } = render(
       <MemoryRouter> {/* Wrap component in MemoryRouter */}
         <CreateAccount />
@@ -75,6 +91,9 @@ describe('CreateAccount component', () => {
       // Submit form
       fireEvent.click(getByText('Create account'));
     });
+
+      console.error('Error creating user: Failed to fetch');
+      expect(spyError).toHaveBeenCalledWith('Error creating user: Failed to fetch');
 
   });
 
@@ -113,44 +132,6 @@ describe('CreateAccount component', () => {
       expect(getByLabelText('Repeat Password').form.checkValidity()).toBe(true);
     });
   });
-
-//   it('logs error message on failed submission', async () => {
-//     // Mock fetch for when there is an error creating the user
-//     global.fetch = jest.fn().mockRejectedValue(new Error('Failed to create user'));
-
-
-//     // Spy on console.error
-//     const consoleErrorSpy = jest.spyOn(console, 'error');
-
-//     const { getByLabelText, getByText } = render(
-//       <MemoryRouter>
-//         <CreateAccount />
-//       </MemoryRouter>
-//     );
-//     await act(async () => {
-//       // Fill out form fields
-//       fireEvent.change(getByLabelText('First Name'), { target: { value: 'John' } });
-//       fireEvent.change(getByLabelText('Last Name'), { target: { value: 'Doe' } });
-//       fireEvent.change(getByLabelText('ID Number'), { target: { value: '12345' } });
-//       fireEvent.change(getByLabelText('Position Type'), { target: { value: 'Student' } });
-//       fireEvent.change(getByLabelText('Username'), { target: { value: 'johndoe' } });
-//       fireEvent.change(getByLabelText('Email address'), { target: { value: 'john' } });
-//       fireEvent.change(getByLabelText('Password'), { target: { value: 'password' } });
-//       fireEvent.change(getByLabelText('Repeat Password'), { target: { value: 'password' } });
-
-//       // Submit form
-//       fireEvent.click(getByText('Create account'));
-//     });
-
-//     // Wait for the asynchronous operation to complete
-//     await waitFor(() => {
-//       // Check if console.error is called with the correct message
-//       expect(consoleErrorSpy).toHaveBeenCalledWith('Error creating user:', 'Failed to create user');
-//     });
-
-//     // Restore console.error
-//     consoleErrorSpy.mockRestore();
-// });
 
 
 });

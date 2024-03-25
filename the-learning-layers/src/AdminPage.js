@@ -5,6 +5,9 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AdminMenu from './AdminMenu'; // Assuming you have an AdminMenu component
+import  { useEffect, useState, routeChange } from 'react';
+import './App.css';
+import AppFooter from './appFooter';
 
 function AdminPage() {
     // State to store the list of courses
@@ -72,10 +75,9 @@ function AdminPage() {
                     </Row>
                 </div>
             </Container>
-
-            <footer className=" mt-auto py-3 bg-light text-center">
-                <span className="text-muted">© 2023 E-Learning Platform, Inc. All rights reserved.</span>
-            </footer>
+    
+            <AppFooter></AppFooter>
+      
         </>
     );
 }

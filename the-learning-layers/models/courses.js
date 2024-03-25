@@ -7,7 +7,7 @@ const courseSchema = new mongoose.Schema({
     description: {type: String, required: true },
     title: {type: String, required: true},
     teacher: { type: String},
-    students: [{ type: Number }],
+    students: [{ type: String }],
 }, { collection: 'course' });
 
 const Course = mongoose.model('Course', courseSchema); //creating that model in our database
