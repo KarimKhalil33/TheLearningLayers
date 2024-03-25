@@ -6,15 +6,24 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AdminMenu from './AdminMenu'; // Assuming you have an AdminMenu component
 import AppFooter from './appFooter';
+import { Trash } from 'react-bootstrap-icons';
+
+import { Route } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 
 function AdminPage() {
-    // State to store the list of courses
-    const [courses, setCourses] = useState([]);
 
-    // Function to fetch courses from the backend
-    const fetchCourses = async () => {
-        try {
-            const response = await fetch('http://localhost:4000/api/adminRoute/courses');
+    const [courses, setCourses] = useState([]); // State to hold courses
+    let navigate = useNavigate();
+  const routeChange = (path) => {
+    navigate(path);
+  };
+    useEffect(() => {
+        // Function to fetch courses
+        const fetchCourses = async () => {
+          try {
+            const response = await fetch('http://localhost:4000/api/adminRoute/courses'); // Adjust the endpoint as needed
             const data = await response.json();
             setCourses(data); // Update courses state with fetched data
         } catch (error) {
@@ -60,16 +69,26 @@ function AdminPage() {
                 <h2 className="text-center mb-3">Manage courses and student enrollments.</h2>
                 <div className="cards">
                     <Row xs={1} md={2} lg={3} className="g-4">
-                        {courses.map((course) => (
-                            <Col key={course._id}>
-                                <div className="course-card-admin p-3 shadow-sm">
-                                    <h3 style={{ color: 'white' }} className="text-center my-3">{course.title} {course.name} {course.courseId} </h3>
-                                    <div className="text-center">
-                                        <Button variant="primary" className="mb-2" onClick={() => handleDeleteCourse(course._id)}>Delete</Button>
-                                    </div>
-                                </div>
-                            </Col>
-                        ))}
+
+                    {courses.map((course, index) => ( // Using index as the key
+             <Col key={index}>
+             <div className="course-card-admin p-3 shadow-sm" style={{ position: 'relative' }}>
+                 <Button 
+                     variant="danger" 
+                     className="button" 
+                     style={{ position: 'absolute', top: '10px', right: '10px' }} 
+                     onClick={() => handleDeleteCourse(index)}
+                 >
+                     <Trash /> {/* Use the Trash icon */}
+                 </Button>
+                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
+                 <div className="text-center">
+                     <Button variant="primary" className="button" onClick={() => routeChange('/viewCourseStudent')}>View</Button>
+                 </div>
+             </div>
+         </Col>
+          ))}
+
                     </Row>
                 </div>
             </Container>
