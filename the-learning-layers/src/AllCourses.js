@@ -28,10 +28,11 @@ function AllCourses() {
       fetchCourses(); // Call the fetch function
     }, []);
 
-    const handleEnrollment = (courseId) => {
+    const handleEnrollment = (name, courseId) => {
+      const uniqueId = `${name}-${courseId}`; // Create a unique identifier using name and courseId
         setEnrollmentStatus((prevStatus) => ({
             ...prevStatus,
-            [courseId]: 'Pending Request'
+            [uniqueId]: 'Pending Request'
         }));
     };
 
@@ -50,8 +51,8 @@ function AllCourses() {
               <div className="course-card-student p-3 shadow-sm">
                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                 <div className="text-center">
-                <Button variant="primary" onClick={() => handleEnrollment(course.id)}>
-                        {enrollmentStatus[course.id] || 'Request to Enroll'}
+                <Button variant="primary" onClick={() => handleEnrollment(course.name, course.courseId)}>
+                        {enrollmentStatus[`${course.name}-${course.courseId}`] || 'Request to Enroll'}
                       </Button>
                 </div>
               </div>
