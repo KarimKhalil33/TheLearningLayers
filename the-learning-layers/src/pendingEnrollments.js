@@ -1,46 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, ListGroup, Button } from 'react-bootstrap';
 
 function PendingEnrollments() {
-    const [enrollments, setEnrollments] = useState([
-        { studentNum: 1, studentName: 'John Doe', title: 'Introduction to Programming' },
-        { studentNum: 2, studentName: 'Jane Smith', title: 'Advanced Mathematics' },
-        // Add more mock data as needed
-    ]);
+    const [enrollments, setEnrollments] = useState([]);
+
+    // Fetch enrollments when component mounts
+    useEffect(() => {
+        fetchEnrollments();
+    }, []);
+
+    const fetchEnrollments = async () => {
+        try {
+            // Make a GET request to fetch pending enrollments
+            const response = await fetch('http://localhost:4000/api/enrollmentRoute/pending');
+            const data = await response.json();
+            setEnrollments(data); // Update state with fetched enrollments
+        } catch (error) {
+            console.error('Error fetching enrollments:', error);
+        }
+    };
 
     const acceptEnrollment = async (studentNum, title) => {
         try {
-
             // Make a POST request to accept enrollment
-            const serverURL = 'http://localhost:4000';
-            const endpoint = '/api/enrolmentRoute/accept';
-            const fetchURL = `${serverURL}${endpoint}`;
-
-            await fetch(fetchURL, {
+            await fetch('http://localhost:4000/api/enrollmentRoute/accept', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({title, studentNum })
+                body: JSON.stringify({ studentNum, title })
             });
+
+            // Update state to remove the accepted enrollment
+            setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
         } catch (error) {
             console.error('Error accepting enrollment:', error);
         }
-
-        setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
     };
 
     const rejectEnrollment = async (studentNum) => {
         try {
             // Make a POST request to reject enrollment
-            await fetch(`/api/pendingEnrollments/${studentNum}/reject`, {
+            await fetch(`http://localhost:4000/api/enrollmentRoute/reject/${studentNum}`, {
                 method: 'POST'
             });
+
+            // Update state to remove the rejected enrollment
+            setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
         } catch (error) {
             console.error('Error rejecting enrollment:', error);
         }
-
-        setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
     };
 
     return (

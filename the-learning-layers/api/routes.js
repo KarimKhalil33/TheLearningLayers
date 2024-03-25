@@ -60,6 +60,7 @@ router.post('/login', async (req, res) => {
   username = username.trim();
   password = password.trim();
 
+
   if (username == "" || password == "") {
     res.json({
       status: "FAILED",
@@ -87,6 +88,13 @@ router.post('/login', async (req, res) => {
             // User found, set flag and break out of loop
             userFound = true;
             collection = collectionName; //set the collectionName so they can be redirected on frontend
+
+             // If the user is a student, store the student number in the session
+             if (collectionName === 'User') {
+              req.session.studentNum = user.studentNum;
+
+              console.log(req.session.studentNum)
+            }
             break;
           }
         }
