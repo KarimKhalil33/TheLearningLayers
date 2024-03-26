@@ -12,24 +12,31 @@ import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import AppFooter from './appFooter';
+import TeacherCourseNavigation from './teacherCourseNavigation';
 
 function ViewCourseTeach(){
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    let navigate = useNavigate();
+    const routeChange = (path) => {
+        navigate(path);
+    };
     return(
         <>
         <TeacherMenu></TeacherMenu>
         {/* sidebar for teachers to be able to work through the different pages of the course */}
-        <article className='side-nav'>
+        {/* <article className='side-nav'>
             <Nav variant="underline" defaultActiveKey="/viewCourseTeacher" className="flex-column ">
                 <Nav.Link className ="sidebar" eventKey="/viewCourseTeacher">View Course</Nav.Link>
-                <Nav.Link className ="sidebar" eventKey="link-1">Assignments</Nav.Link>
+                <Nav.Link className ="sidebar" eventKey="/teacherAssignment" onClick={() => routeChange('/teacherAssignment')}>Assignments</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="link-2">Quizzes</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="link-3">Grades</Nav.Link>
             </Nav>
-        </article>
+        </article> */}
+        <TeacherCourseNavigation setkey="/viewCourseTeacher"></TeacherCourseNavigation>
         <article className='upcoming'>
             {/*Section for teachers to be able to monitor upcoming assignments  */}
                 <h3><strong>Upcoming</strong></h3>
@@ -45,14 +52,6 @@ function ViewCourseTeach(){
                 <h1><strong>Course Name</strong></h1>
                 <h2>Course Description</h2>
             </header>
-            {/* Section for teachers to be able to monitor upcoming assignments 
-            <section id='upcoming'>
-                <h3><strong>Upcoming Assignments</strong></h3>
-                <ul>
-                    <li><a href="">Assignment 1</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 2</a> <span className='assignDate'>Date</span></li>
-                </ul><br></br>
-            </section> */}
             {/* Section detailing the course content */}
             <section id='courseDetails'>
                 <h3><strong>About the course</strong></h3>
