@@ -5,41 +5,49 @@ const User = require("../models/student");
 
 // POST route to handle course enrollment
 router.post('/pending', async (req, res) => {
+    console.log("Im in");
     try {
-        // Retrieve student number from the request body
-        const studentNum = 90434176;
-        // Get course ID from the request body
-        const courseId = req.body.courseId;
+  
 
-      //  console.log(studentNum);
+        // Retrieve data from the request body
+        const {username, courseId, courseName , title } = req.body;
 
-        // Save enrollment data to the database
+        console.log(courseName);
+        //get student info from authId/username
+        const student = await User.findOne({ username });
+
+        console.log(student);
+
+        // Set initial status as 'Pending'
+        const status = 'Pending';
+
+        // Create enrollment data object
         const enrollmentData = {
-            studentNum: studentNum,
-            studentName: "jasond",
+            studentNum: student.studentNum,
+            studentfisrtName: student.firstName,
+            studentlastName: student.lastName,
             courseId: courseId,
-            status: 'Pending', // Set initial status as 'Pending',
-            enrollmentDate: Date.now(),
-            title: "Introduction to Programming"
+            name : courseName,
+            status: status,
+            enrollmentDate: new Date(),
+            title: title
         };
-
-        // Assuming you have an Enrollment model
-        const Enrollment = require('../models/enrollment');
 
         console.log(enrollmentData);
 
-        // Create a new enrollment document in the database
+        const Enrollment = require('../models/enrollment');
+
+        // Create a new enrollment document in the enrollment collection
         await Enrollment.create(enrollmentData);
 
+        // Send success response
         res.status(200).json({ success: true, message: 'Enrollment successful.' });
     } catch (error) {
+        // Handle errors
         console.error('Error enrolling in course:', error);
-
         res.status(500).json({ success: false, message: 'Internal server error.' });
-        res.status(500).json({ error});
     }
 });
-
 
 
 router.post('/accept', async (req, res) => {
