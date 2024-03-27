@@ -148,6 +148,28 @@ router.get('/course', async (req, res) => {
   }
 });
 
+// Endpoint to fetch user profile information
+router.get('/profile/:username', async (req, res) => {
+  const { username } = req.params;
+  try {
+      // You can extend this to search in different collections based on user role
+      let user = await User.findOne({ username });
+      if (!user) {
+          user = await Teacher.findOne({ username });
+      }
+      if (!user) {
+          user = await Admin.findOne({ username });
+      }
+      if (user) {
+          res.json(user);
+      } else {
+          res.status(404).json({ message: 'User not found' });
+      }
+  } catch (error) {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ message: 'Error fetching user profile' });
+  }
+});
 
 
 
