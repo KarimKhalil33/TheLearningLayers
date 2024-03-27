@@ -4,6 +4,30 @@ const Course = require("../models/courses");
 const User = require("../models/student");
 const Enrollments = require('../models/enrollments');
 
+
+// Route to fetch enrollments for a specific student
+router.post('/courses', async (req, res) => {
+    console.log("im in the enrolled course retrival function");
+    try {
+        //get username from front end
+        const { username } = req.body;
+
+        //find student in database
+        const student = await User.findOne({username});
+        const studentNum = student.studentNum;
+        console.log(student);
+
+        // Fetch enrollments for the student based on student Num
+        const enrollments = await Enrollments.find({ studentNum });
+
+        res.status(200).json(enrollments);
+
+    } catch (error) {
+        console.error('Error fetching enrollments:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // POST route to handle course enrollment
 router.post('/pending', async (req, res) => {
     try {
@@ -82,6 +106,15 @@ router.post('/accept', async (req, res) => {
 
         console.log("course saved");
 
+        //save course in student enrollments 
+        const student = await User.findOneAndUpdate(
+            { studentNum },
+            { $addToSet: { enrolled: title } },
+            { new: true }
+        );
+
+            student.save();
+            
         // Find the enrollment by key
         let enrollment = await Enrollments.findOne({_id: key});
 

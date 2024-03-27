@@ -53,7 +53,7 @@ function PendingEnrollments() {
             });
 
             // Update state to remove the rejected enrollment
-            setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
+            setEnrollments(enrollments.filter(enrollment => enrollment._id !== key));
         } catch (error) {
             console.error('Error rejecting enrollment:', error);
         }
