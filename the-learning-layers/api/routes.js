@@ -27,16 +27,14 @@ router.post('/createAccount', async (req, res) => {
 
   try {
     // Save the user to the 'user' collection
-    const newUser = new User(userData);
-    newUser.save();
 
     console.log(userData.position);
 
     // Check the user's position and save to the appropriate collection
-    if (userData.position === `Student`) {
+    if (userData.position === "Student") {
       const newStudent = new User(userData);
       newStudent.save();
-    } else if (userData.position === `Teacher`) {
+    } else if (userData.position === "Teacher") {
       const newTeacher = new Teacher(userData);
       newTeacher.save();
     }
@@ -174,20 +172,31 @@ router.get('/profile/:username', async (req, res) => {
           res.status(404).json({ message: 'User not found' });
       }
   } catch (error) {
-      console.error('Error fetching user profile:', error);
       res.status(500).json({ message: 'Error fetching user profile' });
   }
 });
 
-router.get('/courses', async (req, res) => {
+
+router.post('/teacherPage', async (req, res) => {
+  const authenticationId = req.headers.authorization; // Assuming the authentication ID is sent in the Authorization header
   try {
-      const courses = await Course.find();
-      res.json(courses);
+    let teacher = await Teacher.findOne({ username: authenticationId });
+    console.log("Teacher:", teacher); // Log the teacher document found
+    if (!teacher) {
+      return res.status(404).json({ message: 'Teacher not found' });
+    }
+    let courses = await Course.find({ teacher: teacher.firstName + " " + teacher.lastName });
+    res.json(courses);
   } catch (error) {
-      console.error('Error fetching courses:', error);
-      res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching courses', error: error });
   }
 });
+
+
+
+
+
 
 
 module.exports = router;
