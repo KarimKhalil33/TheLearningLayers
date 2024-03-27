@@ -1,10 +1,13 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
+const Assignment = require('../models/assignments');
 
 
 router.post('/createAccount', async (req, res) => {
@@ -148,12 +151,35 @@ router.get('/course', async (req, res) => {
   }
 });
 
-
-
-
+// Set up storage engine with multer
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+      cb(null, '../../../Files'); // Save files in the 'Files' directory
+  },
+  filename: function(req, file, cb) {
+      cb(null, req.file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
 
 module.exports = router;
 
+// Route to create a new assignment
+router.post('/upload', upload.single('file'), async (req, res) => {
+  const { name, weight, description, startDate, dueDate } = req.body;
+  const filepath = path.join('Files', req.file.filename);
 
+  // add validation or checks here
+
+  try {
+
+    const newAssignment = new Assignment({ name, weight, description, filepath, startDate, dueDate });
+    newAssignment.save();
+    res.status(200).send("Assignment saved to the database");
+  } catch (error) {
+    console.error('Error saving assignment data:', error);
+    res.status(500).send("Unable to save assignment to the database");
+  }
+});
 
 

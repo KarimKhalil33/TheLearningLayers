@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import CreateAccount from './createAccount';
@@ -7,7 +6,6 @@ import './App.css';
 import Login from './login';
 import Home from './Home 2';
 import StudentPage from './studentPage';
-import CreateAssignment from './createAssignment';
 import CreateCourse from './createCourse';
 import TeacherPage from './teacherPage'
 import AllCourses from './AllCourses';
