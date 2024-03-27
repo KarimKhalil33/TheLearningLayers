@@ -27,16 +27,14 @@ router.post('/createAccount', async (req, res) => {
 
   try {
     // Save the user to the 'user' collection
-    const newUser = new User(userData);
-    newUser.save();
 
     console.log(userData.position);
 
     // Check the user's position and save to the appropriate collection
-    if (userData.position === `Student`) {
+    if (userData.position === "Student") {
       const newStudent = new User(userData);
       newStudent.save();
-    } else if (userData.position === `Teacher`) {
+    } else if (userData.position === "Teacher") {
       const newTeacher = new Teacher(userData);
       newTeacher.save();
     }
@@ -60,6 +58,7 @@ router.post('/login', async (req, res) => {
   username = username.trim();
   password = password.trim();
 
+
   if (username == "" || password == "") {
     res.json({
       status: "FAILED",
@@ -78,7 +77,7 @@ router.post('/login', async (req, res) => {
       for (const collectionName of collectionNames) {
 
         const Collection = mongoose.model(collectionName);
-        const user = await Collection.findOne({ username }); //find the username in one of these collections
+        const user = await Collection.findOne({username}); //find the username in one of these collections
 
         if (user) {
 
@@ -87,6 +86,13 @@ router.post('/login', async (req, res) => {
             // User found, set flag and break out of loop
             userFound = true;
             collection = collectionName; //set the collectionName so they can be redirected on frontend
+
+             // If the user is a student, store the student number in the session
+             if (collectionName === 'User') {
+              req.session.studentNum = user.studentNum;
+
+              console.log(req.session.studentNum)
+            }
             break;
           }
         }
@@ -121,7 +127,6 @@ router.post('/createCourse', (req, res) => {
   const courseData = req.body;
 
   // add validation or checks here
-
   // If instructor is not specified, set it to "TBD"
   if (!courseData.teacher || courseData.teacher.trim() === '') {
     courseData.teacher = "TBD";
@@ -137,6 +142,7 @@ router.post('/createCourse', (req, res) => {
     res.status(500).send("Unable to save course to the database");
   }
 });
+
 
 // Route to fetch all the courses
 router.get('/course', async (req, res) => {
@@ -166,16 +172,31 @@ router.get('/profile/:username', async (req, res) => {
           res.status(404).json({ message: 'User not found' });
       }
   } catch (error) {
-      console.error('Error fetching user profile:', error);
       res.status(500).json({ message: 'Error fetching user profile' });
+  }
+});
+
+
+router.post('/teacherPage', async (req, res) => {
+  const authenticationId = req.headers.authorization; // Assuming the authentication ID is sent in the Authorization header
+  try {
+    let teacher = await Teacher.findOne({ username: authenticationId });
+    console.log("Teacher:", teacher); // Log the teacher document found
+    if (!teacher) {
+      return res.status(404).json({ message: 'Teacher not found' });
+    }
+    let courses = await Course.find({ teacher: teacher.firstName + " " + teacher.lastName });
+    res.json(courses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching courses', error: error });
   }
 });
 
 
 
 
+
+
+
 module.exports = router;
-
-
-
-

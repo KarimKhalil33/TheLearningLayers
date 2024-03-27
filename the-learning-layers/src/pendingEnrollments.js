@@ -65,4 +65,3 @@ function PendingEnrollments() {
 }
 
 export default PendingEnrollments;
-
