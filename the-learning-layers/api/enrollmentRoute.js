@@ -58,7 +58,7 @@ router.get('/pending', async (req, res) => {
     }
 });
 
-
+//accept an enrollment
 router.post('/accept', async (req, res) => {
     console.log("i'm in");
     try {
@@ -107,25 +107,21 @@ router.post('/accept', async (req, res) => {
 
 
 router.post('/reject', async (req, res) => {
-    console.log("im in");
+    console.log("I'm in the rejection function");
     try {
-        const { key, title, studentNum } = req.body;
+        const {key } = req.body;
 
+        // Find the enrollment by key
+        const enrollment = await Enrollments.findOne({ _id: key });
 
-        // Find the enrollment object with status 'Pending' for the given studentNum
-        const enrollment = await Enrollments.findOne({key });
-
-        console.log("Pending enrollment found");
-
-        //handle a case where enrollment cant be found
-        if (!enrollment) {
-            return res.status(404).json({ error: 'Enrollment not found or already processed' });
+        // If enrollment object exists, update its status to 'Rejected'
+        if (enrollment) {
+            enrollment.status = 'Rejected';
+            // Save the enrollment object
+            await enrollment.save();
+        } else {
+            return res.status(404).json({ error: 'Enrollment not found' });
         }
-
-        // Update the enrollment status to 'Rejected' and save
-        enrollment.status = 'Rejected';
-        await enrollment.save();
-
 
         res.status(200).json({ message: 'Enrollment rejected successfully' });
     } catch (error) {
@@ -133,6 +129,7 @@ router.post('/reject', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 
 module.exports = router;
