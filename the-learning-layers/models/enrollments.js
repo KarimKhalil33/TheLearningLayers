@@ -12,6 +12,6 @@ const enrollmentSchema = new mongoose.Schema({
     title:  {type: String, ref: 'Course', required: true}
 });
 
-const Enrollment = mongoose.model('Enrollment', enrollmentSchema);
+const Enrollments = mongoose.model('Enrollments', enrollmentSchema);
 
-module.exports = Enrollment;
+module.exports = Enrollments;

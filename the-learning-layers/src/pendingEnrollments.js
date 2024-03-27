@@ -20,7 +20,7 @@ function PendingEnrollments() {
         }
     };
 
-    const acceptEnrollment = async (studentNum, title) => {
+    const acceptEnrollment = async (key,studentNum, title) => {
         try {
             // Make a POST request to accept enrollment
             await fetch('http://localhost:4000/api/enrollmentRoute/accept', {
@@ -28,21 +28,28 @@ function PendingEnrollments() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({studentNum, title })
+                body: JSON.stringify({key,studentNum,title})
             });
 
             // Update state to remove the accepted enrollment
-            setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
+            setEnrollments(enrollments.filter(enrollment => enrollment._id !== key));
         } catch (error) {
             console.error('Error accepting enrollment:', error);
         }
     };
 
-    const rejectEnrollment = async (studentNum) => {
+
+
+
+    const rejectEnrollment = async (key,studentNum, title) => {
         try {
             // Make a POST request to reject enrollment
-            await fetch(`http://localhost:4000/api/enrollmentRoute/reject/${studentNum}`, {
-                method: 'POST'
+            await fetch(`http://localhost:4000/api/enrollmentRoute/reject/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({key,studentNum, title })
             });
 
             // Update state to remove the rejected enrollment
@@ -62,8 +69,8 @@ function PendingEnrollments() {
                             <strong>{enrollment.studentfisrtName} {enrollment.studentlastName}</strong> for <em>{enrollment.title}</em>
                         </div>
                         <div>
-                            <Button variant="success" size="sm" onClick={() => acceptEnrollment(enrollment.studentNum, enrollment.title)} className="me-2">Accept</Button>
-                            <Button variant="danger" size="sm" onClick={() => rejectEnrollment(enrollment.studentNum)}>Reject</Button>
+                            <Button variant="success" size="sm" onClick={() => acceptEnrollment(enrollment._id ,enrollment.studentNum, enrollment.title)} className="me-2">Accept</Button>
+                            <Button variant="danger" size="sm" onClick={() => rejectEnrollment(enrollment._id, enrollment.studentNum, enrollment.title)}>Reject</Button>
                         </div>
                     </ListGroup.Item>
                 ))}

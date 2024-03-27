@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Course = require("../models/courses");
 const User = require("../models/student");
-const Enrollment = require('../models/enrollment');
+const Enrollments = require('../models/enrollments');
 
 // POST route to handle course enrollment
 router.post('/pending', async (req, res) => {
@@ -33,7 +33,7 @@ router.post('/pending', async (req, res) => {
         console.log(enrollmentData);
 
         // Create a new enrollment document in the enrollment collection
-        await Enrollment.create(enrollmentData);
+        await Enrollments.create(enrollmentData);
 
         // Send success response
         res.status(200).json({ success: true, message: 'Enrollment successful.' });
@@ -48,7 +48,7 @@ router.post('/pending', async (req, res) => {
 router.get('/pending', async (req, res) => {
     try {
         // Query the database for pending enrollments
-        const enrollments = await Enrollment.find({ status: 'Pending' });
+        const enrollments = await Enrollments.find({ status: 'Pending' });
 
         // Send the fetched enrollments as a response
         res.status(200).json(enrollments);
@@ -59,45 +59,43 @@ router.get('/pending', async (req, res) => {
 });
 
 
-
 router.post('/accept', async (req, res) => {
     console.log("i'm in");
     try {
-
-        const { title, studentNum } = req.body;
+        const { key, title, studentNum } = req.body;
 
         console.log(title);
-        // Find the course by title
-        const course = await Course.findOne({ title });
+        console.log(key);
+        console.log(studentNum);
 
-        console.log("course found");
+        // Find the course by title and update it student array
+       const course = await Course.findOneAndUpdate(
+            { title },
+            { $addToSet: { students: studentNum } },
+            { new: true }
+        );
 
-        // Check if the student is already enrolled in the course
-        if (course.students.includes(studentNum)) {
-            return res.status(400).json({ error: 'Student is already enrolled in the course' });
-        }
+        console.log("course student array attempt");
 
-        // Add the student to the course's students array
-        course.students.push(studentNum);
+        // Save the course with the updated students array
         await course.save();
 
-        console.log("student saved");
+        console.log("course saved");
 
-        let enrollment = await Enrollment.findOne({ studentNum, title, status: 'Pending' });
+        // Find the enrollment by key
+        let enrollment = await Enrollments.findOne({_id: key});
 
         console.log("enrollment trace found");
-        // If enrollment object exists, update its status to 'Accepted'
+
+
+        // If enrollment object exists, update its status to 'Approved'
         if (enrollment) {
             enrollment.status = 'Approved';
+            // Save the enrollment object
+            await enrollment.save();
         } else {
-            res.status(200).json({ message: 'No trace of request' });
+            return res.status(404).json({ error: 'Enrollment not found' });
         }
-
-        // Save the enrollment object
-        await enrollment.save();
-
-        console.log("enrollment saved");
-
 
         res.status(200).json({ message: 'Enrollment accepted successfully' });
     } catch (error) {
@@ -105,6 +103,37 @@ router.post('/accept', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+
+router.post('/reject', async (req, res) => {
+    console.log("im in");
+    try {
+        const { key, title, studentNum } = req.body;
+
+
+        // Find the enrollment object with status 'Pending' for the given studentNum
+        const enrollment = await Enrollments.findOne({key });
+
+        console.log("Pending enrollment found");
+
+        //handle a case where enrollment cant be found
+        if (!enrollment) {
+            return res.status(404).json({ error: 'Enrollment not found or already processed' });
+        }
+
+        // Update the enrollment status to 'Rejected' and save
+        enrollment.status = 'Rejected';
+        await enrollment.save();
+
+
+        res.status(200).json({ message: 'Enrollment rejected successfully' });
+    } catch (error) {
+        console.error('Error rejecting enrollment:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 module.exports = router;
 
