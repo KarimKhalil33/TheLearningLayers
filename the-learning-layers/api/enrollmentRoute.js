@@ -6,7 +6,6 @@ const Enrollment = require('../models/enrollment');
 
 // POST route to handle course enrollment
 router.post('/pending', async (req, res) => {
-    console.log("Im in");
     try {
   
 
@@ -35,7 +34,7 @@ router.post('/pending', async (req, res) => {
 
         // Create a new enrollment document in the enrollment collection
         await Enrollment.create(enrollmentData);
-        
+
         // Send success response
         res.status(200).json({ success: true, message: 'Enrollment successful.' });
     } catch (error) {
@@ -62,15 +61,16 @@ router.get('/pending', async (req, res) => {
 
 
 router.post('/accept', async (req, res) => {
+    console.log("i'm in");
     try {
-        const {title, studentNum } = req.body;
 
+        const { title, studentNum } = req.body;
+
+        console.log(title);
         // Find the course by title
         const course = await Course.findOne({ title });
 
-        if (!course) {
-            return res.status(404).json({ error: 'Course not found' });
-        }
+        console.log("course found");
 
         // Check if the student is already enrolled in the course
         if (course.students.includes(studentNum)) {
@@ -80,6 +80,24 @@ router.post('/accept', async (req, res) => {
         // Add the student to the course's students array
         course.students.push(studentNum);
         await course.save();
+
+        console.log("student saved");
+
+        let enrollment = await Enrollment.findOne({ studentNum, title, status: 'Pending' });
+
+        console.log("enrollment trace found");
+        // If enrollment object exists, update its status to 'Accepted'
+        if (enrollment) {
+            enrollment.status = 'Approved';
+        } else {
+            res.status(200).json({ message: 'No trace of request' });
+        }
+
+        // Save the enrollment object
+        await enrollment.save();
+
+        console.log("enrollment saved");
+
 
         res.status(200).json({ message: 'Enrollment accepted successfully' });
     } catch (error) {

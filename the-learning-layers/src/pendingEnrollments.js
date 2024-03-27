@@ -28,7 +28,7 @@ function PendingEnrollments() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ studentNum, title })
+                body: JSON.stringify({studentNum, title })
             });
 
             // Update state to remove the accepted enrollment
