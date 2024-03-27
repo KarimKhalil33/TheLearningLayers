@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './App.css';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AdminMenu from './AdminMenu'; // Assuming you have an AdminMenu component
+import  { useEffect, useState, routeChange } from 'react';
+import './App.css';
 import AppFooter from './appFooter';
 import { Trash } from 'react-bootstrap-icons';
-
 import { Route } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 
 function AdminPage() {
-
     const [courses, setCourses] = useState([]); // State to hold courses
     let navigate = useNavigate();
   const routeChange = (path) => {
@@ -23,44 +23,45 @@ function AdminPage() {
         // Function to fetch courses
         const fetchCourses = async () => {
           try {
-            const response = await fetch('http://localhost:4000/api/adminRoute/courses'); // Adjust the endpoint as needed
+            const response = await fetch('http://localhost:4000/user/course'); // Adjust the endpoint as needed
             const data = await response.json();
-            setCourses(data); // Update courses state with fetched data
-        } catch (error) {
+            console.log(data);
+            setCourses(data); // Update state with fetched courses
+          } catch (error) {
             console.error('Error fetching courses:', error);
-        }
-    };
+          }
+        };
 
-    // Fetch courses from the backend when the component mounts
-    useEffect(() => {
-        fetchCourses();
-    }, []); // Empty dependency array ensures useEffect runs only once after initial render
+     
+    
+        fetchCourses(); // Call the fetch function
+      }, []);
 
-    const handleDeleteCourse = async (courseId) => {
-        try {
-            // Construct the URL for the DELETE request
-            const serverURL = 'http://localhost:4000';
-            const endpoint = `/api/adminRoute/delete`;
-            const fetchURL = `${serverURL}${endpoint}`;
 
-            console.log('Fetch URL:', fetchURL);
+      // Function to handle course deletion
+const handleDeleteCourse = async (courseId) => {
+  try {
+      const response = await fetch('http://localhost:4000/api/adminRoute/delete', {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({courseId}),
+      });
 
-            // Send a DELETE request to the backend endpoint
-            await fetch(fetchURL, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({courseId})
-            });
+      if (response.ok) {
+ // If deletion is successful, update courses state to remove the deleted course
+ setCourses(prevCourses => prevCourses.filter(course => course._id !== courseId));
+ console.log('Course deleted successfully.');
+      } else {
+          console.error('Failed to delete course:', response.statusText);
+      }
+  } catch (error) {
+      console.error('Error deleting course:', error);
+  }
+};
 
-            // After deletion, fetch courses again to update the list
-            fetchCourses();
-        } catch (error) {
-            console.error('Error deleting course:', error);
-        }
-    };
-
+    
     return (
         <>
             <AdminMenu />
@@ -69,7 +70,6 @@ function AdminPage() {
                 <h2 className="text-center mb-3">Manage courses and student enrollments.</h2>
                 <div className="cards">
                     <Row xs={1} md={2} lg={3} className="g-4">
-
                     {courses.map((course, index) => ( // Using index as the key
              <Col key={index}>
              <div className="course-card-admin p-3 shadow-sm" style={{ position: 'relative' }}>
@@ -77,7 +77,7 @@ function AdminPage() {
                      variant="danger" 
                      className="button" 
                      style={{ position: 'absolute', top: '10px', right: '10px' }} 
-                     onClick={() => handleDeleteCourse(index)}
+                     onClick={() => { handleDeleteCourse(course._id)}} //send course key to delete course
                  >
                      <Trash /> {/* Use the Trash icon */}
                  </Button>
@@ -88,7 +88,6 @@ function AdminPage() {
              </div>
          </Col>
           ))}
-
                     </Row>
                 </div>
             </Container>
@@ -100,4 +99,3 @@ function AdminPage() {
 }
 
 export default AdminPage;
-

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import './App.css';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -10,7 +10,6 @@ import { Route } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 function AllCourses() {
-    const [courses, setCourses] = useState([]);
     const [enrollmentStatus, setEnrollmentStatus] = useState({});
     const [courses, setCourses] = useState([]); // State to hold courses
     useEffect(() => {
@@ -29,44 +28,13 @@ function AllCourses() {
       fetchCourses(); // Call the fetch function
     }, []);
 
-    const handleEnrollment = (courseId) => {
+    const handleEnrollment = (name, courseId) => {
+      const uniqueId = `${name}-${courseId}`; // Create a unique identifier using name and courseId
         setEnrollmentStatus((prevStatus) => ({
             ...prevStatus,
-            [courseId]: 'Pending Request'
+            [uniqueId]: 'Pending Request'
         }));
     };
-
-    useEffect(() => {
-        fetchCourses(); // Fetch courses when component mounts
-    }, []); // Empty dependency array ensures useEffect runs only once after initial render
-
-    const handleEnrollment = async (courseId) => {
-      try {
-          // Retrieve the student number from the session
-          const studentNum = "";
-          const response = await fetch('http://localhost:4000/api/enrollmentRoute', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                  courseId: courseId,
-                  studentNum: studentNum // Include the student number in the request body
-              })
-          });
-  
-          const data = await response.json();
-          console.log(data); // Log the response from the backend
-  
-          setEnrollmentStatus((prevStatus) => ({
-              ...prevStatus,
-              [courseId]: data.success ? 'Pending Request' : 'Enrollment Failed'
-          }));
-      } catch (error) {
-          console.error('Error enrolling in course:', error);
-      }
-  };
-  
 
     return (
         <>
@@ -83,8 +51,8 @@ function AllCourses() {
               <div className="course-card-student p-3 shadow-sm">
                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                 <div className="text-center">
-                <Button variant="primary" onClick={() => handleEnrollment(course.id)}>
-                        {enrollmentStatus[course.id] || 'Request to Enroll'}
+                <Button variant="primary" onClick={() => handleEnrollment(course.name, course.courseId)}>
+                        {enrollmentStatus[`${course.name}-${course.courseId}`] || 'Request to Enroll'}
                       </Button>
                 </div>
               </div>
@@ -97,4 +65,4 @@ function AllCourses() {
     );
 }
 
-export default AllCourses;
+export default AllCourses

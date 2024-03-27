@@ -6,12 +6,13 @@ const Course = require('../models/courses');
 router.delete('/delete', async (req, res) => {
   
     const courseId = req.body.courseId; // Accessing courseId from the request body
+    
     console.log(courseId);
     try {
        
         // Delete the course from the database
         await Course.deleteOne({ _id: courseId });
-        console.log("courses sucesffuly found and deleted");
+        console.log("courses sucesfuly found and deleted");
 
         // Send a success response
         res.status(200).json({ success: true, message: 'Course deleted successfully.' });
