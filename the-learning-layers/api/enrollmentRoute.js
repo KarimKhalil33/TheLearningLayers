@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Course = require("../models/courses");
 const User = require("../models/student");
+const Enrollment = require('../models/enrollment');
 
 // POST route to handle course enrollment
 router.post('/pending', async (req, res) => {
@@ -12,11 +13,8 @@ router.post('/pending', async (req, res) => {
         // Retrieve data from the request body
         const {username, courseId, courseName , title } = req.body;
 
-        console.log(courseName);
         //get student info from authId/username
         const student = await User.findOne({ username });
-
-        console.log(student);
 
         // Set initial status as 'Pending'
         const status = 'Pending';
@@ -35,11 +33,9 @@ router.post('/pending', async (req, res) => {
 
         console.log(enrollmentData);
 
-        const Enrollment = require('../models/enrollment');
-
         // Create a new enrollment document in the enrollment collection
         await Enrollment.create(enrollmentData);
-
+        
         // Send success response
         res.status(200).json({ success: true, message: 'Enrollment successful.' });
     } catch (error) {
@@ -48,6 +44,21 @@ router.post('/pending', async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 });
+
+
+router.get('/pending', async (req, res) => {
+    try {
+        // Query the database for pending enrollments
+        const enrollments = await Enrollment.find({ status: 'Pending' });
+
+        // Send the fetched enrollments as a response
+        res.status(200).json(enrollments);
+    } catch (error) {
+        console.error('Error fetching pending enrollments:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 
 router.post('/accept', async (req, res) => {

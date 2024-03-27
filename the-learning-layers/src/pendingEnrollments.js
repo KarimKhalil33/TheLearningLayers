@@ -59,7 +59,7 @@ function PendingEnrollments() {
                 {enrollments.map((enrollment) => (
                     <ListGroup.Item key={enrollment.studentNum} className="d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>{enrollment.studentName}</strong> for <em>{enrollment.title}</em>
+                            <strong>{enrollment.studentfisrtName} {enrollment.studentlastName}</strong> for <em>{enrollment.title}</em>
                         </div>
                         <div>
                             <Button variant="success" size="sm" onClick={() => acceptEnrollment(enrollment.studentNum, enrollment.title)} className="me-2">Accept</Button>
