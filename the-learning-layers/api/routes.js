@@ -11,7 +11,7 @@ router.post('/createAccount', async (req, res) => {
   const userData = req.body;
 
   // Find the email or username in the database
-  const existingUser = await User.findOne({ username: userData.username });
+  const existingUser = await User.findOne({username: userData.username });
 
 
   if (existingUser) {
@@ -96,7 +96,8 @@ router.post('/login', async (req, res) => {
         res.json({
           status: "SUCCESS",
           message: "Login successful",
-          collectionName: collection
+          collectionName: collection,
+          authenticationId: username
         });
       } else { //send a failed request if user credentials have not been found
         res.status(400).json({
@@ -138,7 +139,7 @@ router.post('/createCourse', (req, res) => {
 });
 
 // Route to fetch all the courses
-router.get('/createCourse', async (req, res) => {
+router.get('/course', async (req, res) => {
   try {
     const courses = await Course.find({}); // Fetch all courses from the database
     res.json(courses); // Send the courses as a response
@@ -147,6 +148,34 @@ router.get('/createCourse', async (req, res) => {
   }
 });
 
+// Endpoint to fetch user profile information
+router.get('/profile/:username', async (req, res) => {
+  const { username } = req.params;
+  try {
+      // You can extend this to search in different collections based on user role
+      let user = await User.findOne({ username });
+      if (!user) {
+          user = await Teacher.findOne({ username });
+      }
+      if (!user) {
+          user = await Admin.findOne({ username });
+      }
+      if (user) {
+          res.json(user);
+      } else {
+          res.status(404).json({ message: 'User not found' });
+      }
+  } catch (error) {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ message: 'Error fetching user profile' });
+  }
+});
+
+
 
 
 module.exports = router;
+
+
+
+

@@ -9,9 +9,11 @@ app.use(cors());
 const bodyParser=require('express').json;
 
 const userRouter=require('./api/routes');
+const pendingEnrollmentsRoutes = require('./api/enrolmentRoute');
 
  app.use(bodyParser());
- app.use('/user',userRouter)
+ app.use('/user',userRouter);
+ app.use('/api/enrolmentRoute', pendingEnrollmentsRoutes);
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}`);
