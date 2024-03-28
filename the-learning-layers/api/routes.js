@@ -154,27 +154,34 @@ router.get('/course', async (req, res) => {
 // Set up storage engine with multer
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-      cb(null, '../../../Files'); // Save files in the 'Files' directory
+      cb(null, '../Files'); // Save files in the 'Files' directory
   },
   filename: function(req, file, cb) {
-      cb(null, req.file.originalname);
+      console.log("Filepath log check");
+      cb(null, file.originalname);
+      console.log("check?");
   }
 });
+console.log("Check check");
 const upload = multer({ storage: storage });
 
 module.exports = router;
 
 // Route to create a new assignment
-router.post('/upload', upload.single('file'), async (req, res) => {
+console.log("before saving to database check")
+router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
+  console.log("start log check");
   const { name, weight, description, startDate, dueDate } = req.body;
-  const filepath = path.join('Files', req.file.filename);
+  const filepath = req.file.path;
 
   // add validation or checks here
 
   try {
 
+    console.log("Assign create log check");
     const newAssignment = new Assignment({ name, weight, description, filepath, startDate, dueDate });
     newAssignment.save();
+    console.log("Assign saved log check");
     res.status(200).send("Assignment saved to the database");
   } catch (error) {
     console.error('Error saving assignment data:', error);

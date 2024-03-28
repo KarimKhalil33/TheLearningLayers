@@ -56,10 +56,12 @@ function TeacherAssignments(){
                 });
 
                 if (response) {
+                    alert("here 1");
                 console.log("Response made");
                 }
         
                 if (response.status === 200) {
+                    alert("here 2");
                 console.log('Assignment successfully created');
         
                 } else {
@@ -94,7 +96,7 @@ function TeacherAssignments(){
                     </Modal.Header>
                     <Modal.Body>
                     <Container>
-                        <Form onSubmit={handleSubmit}>
+                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
                             <Row>
                                 <Col xs={8}>
                                     <Form.Group className="mb-4">
