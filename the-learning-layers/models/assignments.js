@@ -5,9 +5,9 @@ const assignmentSchema = new mongoose.Schema({
     name: { type: String, required: true },
     weight: {type: String, required: true },
     description: {type: String, required: true },
-    file: {type: Buffer, required: true },
-    startDate: {type: Date, required: true },
-    dueDate: {type: Date, required: true },
+    filepath: {type: String, required: true },
+    startDate: {type: String, required: true },
+    dueDate: {type: String, required: true },
 }, { collection: 'assignment' });
 
 const Assignment = mongoose.model('Assignment', assignmentSchema); //creating that model in our database
