@@ -15,7 +15,7 @@ function AdminMenu() {
                         {/* Add more links as needed */}
                     </Nav>
                     <Nav>
-                    <Nav.Link href="/profile">Profile</Nav.Link>
+                    <Nav.Link href="/Profile">Profile</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
