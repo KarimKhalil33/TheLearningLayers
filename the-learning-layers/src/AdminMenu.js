@@ -14,6 +14,9 @@ function AdminMenu() {
                         <Nav.Link as={Link} to="/pendingEnrollments">Pending Enrollments</Nav.Link>
                         {/* Add more links as needed */}
                     </Nav>
+                    <Nav>
+                    <Nav.Link href="/profile">Profile</Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
