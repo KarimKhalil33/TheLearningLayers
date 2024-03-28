@@ -14,17 +14,72 @@ import { useState } from 'react';
 import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
+
 function TeacherAssignments(){
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const Assignments = ["Assign 1","Assign 2","Assign 3","Assign 4"];
     TeacherCourseNavigation("/teacherAssignment");
+
+    const [validated, setValidated] = useState(false);
+    const [name, setName] = useState('');
+    const [weight, setWeight] = useState('');
+    const [description, setDescription] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [dueDate, setDueDate] = useState('');
+    // State hook for the file
+    const [file, setFile] = useState(null);
     
-    // async () => (
+    const handleSubmit = async (e) => {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('weight', weight);
+        formData.append('description', description);
+        formData.append('startDate', startDate);
+        formData.append('dueDate', dueDate);
+        formData.append('file', file); // Append the file
+
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        else {
+            try {
+                const serverURL = 'http://localhost:4000';
+                const endpoint = '/user/teacherAssignments';
+                const fetchURL = `${serverURL}${endpoint}`;
+                const response = await fetch(fetchURL, {
+                method: 'POST',
+                body: formData, // Send formData
+                });
+
+                if (response) {
+                    alert("here 1");
+                console.log("Response made");
+                }
         
-    // )
+                if (response.status === 200) {
+                    alert("here 2");
+                console.log('Assignment successfully created');
+        
+                } else {
+                const responseData = await response.json();
+        
+                if (responseData.status === 'FAILED') {
+                    // Display an error message to the user
+                    alert(responseData.message);
+                } else {
+                    console.error('Error creating assignment', response.statusText);
+                }
+                }
+            } catch (error) {
+                console.error('Error creating assignment', error.message);
+            }
+        } setValidated(true);
+    };
+
     return(
         <>
              <TeacherMenu></TeacherMenu>
@@ -41,12 +96,12 @@ function TeacherAssignments(){
                     </Modal.Header>
                     <Modal.Body>
                     <Container>
-                        <Form>
+                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
                             <Row>
                                 <Col xs={8}>
                                     <Form.Group className="mb-4">
                                         <Form.Label htmlFor='assignmentName'>Assignment Name</Form.Label>
-                                        <Form.Control type="text" placeholder="Enter Assignment Name" id='assignmentName'  required />
+                                        <Form.Control type="text" placeholder="Enter Assignment Name" id='assignmentName' value={name} onChange={e => setName(e.target.value)} required />
                                         <Form.Control.Feedback type='invalid'>Please enter assignment name</Form.Control.Feedback>
                                     </Form.Group>
                                     {/* The teacher is required to name the assignemnt */}
@@ -59,6 +114,9 @@ function TeacherAssignments(){
                                         aria-label="Asignment Weight"
                                         aria-describedby="basic-addon2"
                                         id='weight'
+                                        required
+                                        value={weight}
+                                        onChange={e => setWeight(e.target.value)}
                                         />
                                         <InputGroup.Text id="basic-addon2">%</InputGroup.Text>
                                     </InputGroup>
@@ -68,14 +126,14 @@ function TeacherAssignments(){
                                 {/* The teacher is able to describe the assignment */}
                                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                     <Form.Label htmlFor='assignmentDescription'>Enter Assignment Description</Form.Label>
-                                    <Form.Control as="textarea" rows={3} id='assignmentDescription' />
+                                    <Form.Control as="textarea" rows={3} id='assignmentDescription' required value={description} onChange={e => setDescription(e.target.value)} />
                                 </Form.Group>
                             </Row>
                             <Row>
                                 {/* If the assignment has any extra documents, the teacher is able to upload it here */}
-                                <Form.Group controlId="formFileMultiple" className="mb-3">
+                                <Form.Group controlId="formFile" className="mb-3">
                                     <Form.Label htmlFor='uploadFile'>Upload Files</Form.Label>
-                                    <Form.Control type="file" id='uploadFile'multiple />
+                                    <Form.Control type="file" id='uploadFile' required onChange={e => setFile(e.target.files[0])}  />
                                 </Form.Group>
                             </Row>
                             <Row>
@@ -83,13 +141,13 @@ function TeacherAssignments(){
                                 <Col>
                                     <Form.Group className="mb-4">
                                         <Form.Label htmlFor='startDate'>Start Date</Form.Label>
-                                        <Form.Control type="Date" id='startDate'  required />
+                                        <Form.Control type="Date" id='startDate' required value={startDate} onChange={e => setStartDate(e.target.value)}/>
                                         <Form.Control.Feedback type='invalid'>Please enter a date</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                                 <Form.Group className="mb-4">
                                         <Form.Label htmlFor='endDate'>End Date</Form.Label>
-                                        <Form.Control type="Date" id='endDate' required />
+                                        <Form.Control type="Date" id='endDate' required value={dueDate} onChange={e => setDueDate(e.target.value)} />
                                         <Form.Control.Feedback type='invalid'>Please enter a date</Form.Control.Feedback>
                                     </Form.Group>
                             </Row>
@@ -105,10 +163,6 @@ function TeacherAssignments(){
                 </Modal>
                 <Button>Create Quiz</Button>
             </div>
-            {/* <div className="assignment">
-                <h5>Assignment Name</h5>
-                <h6></h6>
-            </div> */}
             <article className='main'>
                 {/* Yet to be filled out, this portion of the page displays all assignments for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
                 <header>

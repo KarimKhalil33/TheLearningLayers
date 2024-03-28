@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import CreateAccount from './createAccount';
@@ -7,7 +6,6 @@ import './App.css';
 import Login from './login';
 import Home from './Home 2';
 import StudentPage from './studentPage';
-import CreateAssignment from './createAssignment';
 import CreateCourse from './createCourse';
 import TeacherPage from './teacherPage'
 import AllCourses from './AllCourses';
@@ -61,10 +59,10 @@ function App() {
       <Routes>
         {/* For when a teacher logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Teacher']} />}>
-        <Route path="/teacherPage" element={<TeacherPage/>}/>
-          <Route path="/CreateAssignment" element={<CreateAssignment />} />
+          <Route path="/teacherPage" element={<TeacherPage/>}/>
           <Route path="/home" element={<Home />} />
           <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
+          <Route path="/teacherAssignment" element={<TeacherAssignments/>}/>
         </Route>
         {/* For when a student logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['User']} />}>
