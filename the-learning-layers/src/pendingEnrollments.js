@@ -8,7 +8,7 @@ function PendingEnrollments() {
         // Add more mock data as needed
     ]);
 
-    const acceptEnrollment = async (studentNum, title) => {
+    const acceptEnrollment = async (key,studentNum, title) => {
         try {
 
 
@@ -22,8 +22,13 @@ function PendingEnrollments() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({title, studentNum })
+
+                body: JSON.stringify({key,studentNum,title})
             });
+
+            // Update state to remove the accepted enrollment
+            setEnrollments(enrollments.filter(enrollment => enrollment._id !== key));
+
         } catch (error) {
             console.error('Error accepting enrollment:', error);
         }
@@ -31,12 +36,24 @@ function PendingEnrollments() {
         setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
     };
 
-    const rejectEnrollment = async (studentNum) => {
+
+
+
+    const rejectEnrollment = async (key,studentNum, title) => {
         try {
             // Make a POST request to reject enrollment
-            await fetch(`/api/pendingEnrollments/${studentNum}/reject`, {
-                method: 'POST'
+
+            await fetch(`http://localhost:4000/api/enrollmentRoute/reject/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({key,studentNum, title })
             });
+
+            // Update state to remove the rejected enrollment
+            setEnrollments(enrollments.filter(enrollment => enrollment._id !== key));
+
         } catch (error) {
             console.error('Error rejecting enrollment:', error);
         }
@@ -51,11 +68,11 @@ function PendingEnrollments() {
                 {enrollments.map((enrollment) => (
                     <ListGroup.Item key={enrollment.studentNum} className="d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>{enrollment.studentName}</strong> for <em>{enrollment.title}</em>
+                            <strong>{enrollment.studentfisrtName} {enrollment.studentlastName}</strong> for <em>{enrollment.title}</em>
                         </div>
                         <div>
-                            <Button variant="success" size="sm" onClick={() => acceptEnrollment(enrollment.studentNum, enrollment.title)} className="me-2">Accept</Button>
-                            <Button variant="danger" size="sm" onClick={() => rejectEnrollment(enrollment.studentNum)}>Reject</Button>
+                            <Button variant="success" size="sm" onClick={() => acceptEnrollment(enrollment._id ,enrollment.studentNum, enrollment.title)} className="me-2">Accept</Button>
+                            <Button variant="danger" size="sm" onClick={() => rejectEnrollment(enrollment._id, enrollment.studentNum, enrollment.title)}>Reject</Button>
                         </div>
                     </ListGroup.Item>
                 ))}

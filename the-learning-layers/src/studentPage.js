@@ -9,8 +9,8 @@ import AppFooter from './appFooter';
 import StudentMenu from './StudentMenu';
 import { Route } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-function StudentPage() {
 
+function StudentPage() {
 
   const [courses, setCourses] = useState([]); // State to hold courses
   let navigate = useNavigate();
@@ -20,18 +20,28 @@ function StudentPage() {
   useEffect(() => {
     // Function to fetch courses
     const fetchCourses = async () => {
-      try {
-        const response = await fetch('http://localhost:4000/user/course'); // Adjust the endpoint as needed
-        const data = await response.json();
-        console.log(data);
-        setCourses(data); // Update state with fetched courses
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      }
+        try {
+            const username = JSON.parse(sessionStorage.getItem('authenticationId'));
+            const response = await fetch('http://localhost:4000/api/enrollmentRoute/courses', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username
+                }),
+            });
+            const data = await response.json();
+      
+            setCourses(data); // Update state with fetched courses
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+        }
     };
 
     fetchCourses(); // Call the fetch function
-  }, []);
+}, []);
+  
 
   return (
     <>
