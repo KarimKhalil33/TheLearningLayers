@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import CreateAccount from './createAccount';
@@ -7,7 +6,6 @@ import './App.css';
 import Login from './login';
 import Home from './Home 2';
 import StudentPage from './studentPage';
-import CreateAssignment from './createAssignment';
 import CreateCourse from './createCourse';
 import TeacherPage from './teacherPage'
 import AllCourses from './AllCourses';
@@ -18,6 +16,8 @@ import PendingEnrollments from './pendingEnrollments';
 import ViewCourseStudent from './viewCourseStudent';
 import GradeAssignment from './gradeAssignment';
 import ViewStudents from './viewStudents';
+import Profile from './Profile';
+import Grades from './Grades';
 
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
@@ -62,8 +62,7 @@ function App() {
       <Routes>
         {/* For when a teacher logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Teacher']} />}>
-        <Route path="/teacherPage" element={<TeacherPage/>}/>
-          <Route path="/CreateAssignment" element={<CreateAssignment />} />
+          <Route path="/teacherPage" element={<TeacherPage/>}/>
           <Route path="/home" element={<Home />} />
           <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
           <Route path="/teacherAssignment" element={<TeacherAssignments/>}/>
@@ -75,6 +74,8 @@ function App() {
           <Route path="/studentPage" element={<StudentPage />} />
           <Route path="/AllCourses" element={<AllCourses />} />
           <Route path="/viewCourseStudent" element={<ViewCourseStudent/>}/>
+          <Route path="/Profile" element={<Profile/>}/>
+          <Route path="/Grades" element={<Grades/>}/>
         </Route>
         {/* For when an admin logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Admin']} />}>

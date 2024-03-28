@@ -31,9 +31,36 @@ function AdminPage() {
             console.error('Error fetching courses:', error);
           }
         };
+
+     
     
         fetchCourses(); // Call the fetch function
       }, []);
+
+
+      // Function to handle course deletion
+const handleDeleteCourse = async (courseId) => {
+  try {
+      const response = await fetch('http://localhost:4000/api/adminRoute/delete', {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({courseId}),
+      });
+
+      if (response.ok) {
+ // If deletion is successful, update courses state to remove the deleted course
+ setCourses(prevCourses => prevCourses.filter(course => course._id !== courseId));
+ console.log('Course deleted successfully.');
+      } else {
+          console.error('Failed to delete course:', response.statusText);
+      }
+  } catch (error) {
+      console.error('Error deleting course:', error);
+  }
+};
+
     
     return (
         <>
@@ -50,7 +77,7 @@ function AdminPage() {
                      variant="danger" 
                      className="button" 
                      style={{ position: 'absolute', top: '10px', right: '10px' }} 
-                     onClick={() => { /* Add delete logic here */ }}
+                     onClick={() => { handleDeleteCourse(course._id)}} //send course key to delete course
                  >
                      <Trash /> {/* Use the Trash icon */}
                  </Button>
