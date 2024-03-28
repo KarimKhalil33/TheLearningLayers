@@ -199,6 +199,7 @@ router.post('/teacherPage', async (req, res) => {
 // Set up storage engine with multer
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
+      console.log("Destination function called");
       cb(null, '../Files'); // Save files in the 'Files' directory
   },
   filename: function(req, file, cb) {
@@ -210,14 +211,14 @@ const storage = multer.diskStorage({
 console.log("Check check");
 const upload = multer({ storage: storage });
 
-module.exports = router;
-
 // Route to create a new assignment
 console.log("before saving to database check")
 router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
-  console.log("start log check");
+  console.log("Route handler for '/teacherAssignments' called");
+  console.log("Uploaded file info: ", req.file);
+  console.log("Form data: ", req.body);
   const { name, weight, description, startDate, dueDate } = req.body;
-  const filepath = req.file.path;
+  const filepath = req.file.originalname;
 
   // add validation or checks here
   
