@@ -27,8 +27,7 @@ function ViewCourseStudent() {
             <Nav variant="underline" defaultActiveKey="/viewCourseTeacher" className="flex-column ">
                 <Nav.Link className ="sidebar" eventKey="/viewCourseTeacher">View Course</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="link-1">Assignments</Nav.Link>
-                <Nav.Link className ="sidebar" eventKey="link-2">Quizzes</Nav.Link>
-                <Nav.Link className ="sidebar" eventKey="link-3">Grades</Nav.Link>
+                <Nav.Link href="/Grades" className ="sidebar" eventKey="link-3">Grades</Nav.Link>
             </Nav>
         </article>
         <article className='upcoming'>
@@ -60,38 +59,7 @@ function ViewCourseStudent() {
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </section>
-            {/*A modal opens up showing a text area for the user to be able to edit the content on the page... submitting the page should update the page */}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                <Modal.Title>Edit Course Page</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                <Form>
-                <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlTextarea1"
-                    >
-                    <Form.Label>About the Course</Form.Label>
-                    <Form.Control as="textarea" rows={3} />
-                    </Form.Group>
-                    <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlTextarea1"
-                    >
-                    <Form.Label>Course syllabus</Form.Label>
-                    <Form.Control as="textarea" rows={3} />
-                    </Form.Group>
-                </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-                <Button variant="primary" onClick={handleClose}>
-                    Save Changes
-                </Button>
-                </Modal.Footer>
-            </Modal>
+            
         </article>
 
         <AppFooter></AppFooter>

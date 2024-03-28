@@ -245,3 +245,72 @@ section{
   float: inline-end;
   width: fit-content;
 }
+.newAssessments{
+  margin: 1em 1em;
+  float: inline-end;
+  flex: content;
+}
+.newAssessments Button{
+  margin: 0.5em;
+}
+.existingAssignment{
+  border-bottom: grey solid 1px;
+  margin: 1em;
+  text-align: left;
+  /* align-items: ; */
+  width: 50em;
+}
+
+/* .existingAssignment p{
+  float: inline-start;
+} */
+
+.assignActions{
+  display: flexbox;
+  justify-content: space-evenly;
+  float:inline-end;
+
+} 
+.existingAssignment Button{
+  margin: 0.2em;
+  float: inline-end;
+  width: fit-content;
+}
+.profile-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.profile-title {
+  text-align: center;
+  color: #333;
+}
+
+.profile-info {
+  margin: 15px 0;
+}
+
+.profile-info p {
+  font-size: 16px;
+  color: #666;
+}
+
+.logout-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 20px 0 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #0056b3;
+}
