@@ -21,6 +21,11 @@ function TeacherAssignments(){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     TeacherCourseNavigation("/teacherAssignment");
+    let navigate = useNavigate();
+    const routeChange = (path) => {
+        navigate(path);
+    };
+    // async () => (
 
     const [validated, setValidated] = useState(false);
     const [name, setName] = useState('');
@@ -59,7 +64,7 @@ function TeacherAssignments(){
                     alert("here 1");
                 console.log("Response made");
                 }
-        
+
                 if (response.status === 200) {
                     alert("here 2");
                 console.log('Assignment successfully created');
@@ -172,7 +177,7 @@ function TeacherAssignments(){
                     Assignment Name
                     <div className='assignActions'>
                     <Button variant='danger'>Delete</Button>
-                    <Button variant='success'>Grade</Button>
+                    <Button variant='success' onClick={()=>routeChange('/gradeAssignment')}>Grade</Button>
                     <Button variant='info'>Edit</Button></div>
                 </Row>
                 <Row className="existingAssignment">
@@ -186,5 +191,6 @@ function TeacherAssignments(){
             
         </>
     );
+    //this should show
 }
 export default TeacherAssignments;
