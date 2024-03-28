@@ -9,7 +9,6 @@ import  { useEffect, useState, routeChange } from 'react';
 import './App.css';
 import AppFooter from './appFooter';
 import { Trash } from 'react-bootstrap-icons';
-
 import { Route } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 

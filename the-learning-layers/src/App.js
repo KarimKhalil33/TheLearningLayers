@@ -16,6 +16,8 @@ import ViewCourseTeacher from './viewCourseTeacher';
 import TeacherAssignments from './teacherAssignments';
 import PendingEnrollments from './pendingEnrollments';
 import ViewCourseStudent from './viewCourseStudent';
+import GradeAssignment from './gradeAssignment';
+import ViewStudents from './viewStudents';
 
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
@@ -64,6 +66,9 @@ function App() {
           <Route path="/CreateAssignment" element={<CreateAssignment />} />
           <Route path="/home" element={<Home />} />
           <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
+          <Route path="/teacherAssignment" element={<TeacherAssignments/>}/>
+          <Route path="/gradeAssignment" element ={<GradeAssignment/>}/>
+          <Route path="/viewStudents" element={<ViewStudents/>}/> 
         </Route>
         {/* For when a student logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['User']} />}>

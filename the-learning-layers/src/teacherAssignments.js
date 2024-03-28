@@ -21,7 +21,10 @@ function TeacherAssignments(){
     const handleShow = () => setShow(true);
     const Assignments = ["Assign 1","Assign 2","Assign 3","Assign 4"];
     TeacherCourseNavigation("/teacherAssignment");
-    
+    let navigate = useNavigate();
+    const routeChange = (path) => {
+        navigate(path);
+    };
     // async () => (
         
     // )
@@ -118,7 +121,7 @@ function TeacherAssignments(){
                     Assignment Name
                     <div className='assignActions'>
                     <Button variant='danger'>Delete</Button>
-                    <Button variant='success'>Grade</Button>
+                    <Button variant='success' onClick={()=>routeChange('/gradeAssignment')}>Grade</Button>
                     <Button variant='info'>Edit</Button></div>
                 </Row>
                 <Row className="existingAssignment">
