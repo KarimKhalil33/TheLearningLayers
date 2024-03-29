@@ -14,8 +14,12 @@ import ViewCourseTeacher from './viewCourseTeacher';
 import TeacherAssignments from './teacherAssignments';
 import PendingEnrollments from './pendingEnrollments';
 import ViewCourseStudent from './viewCourseStudent';
+import GradeAssignment from './gradeAssignment';
+import ViewStudents from './viewStudents';
 import Profile from './Profile';
 import Grades from './Grades';
+import ViewCourseAdmin from './viewCourseAdmin';
+
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
 }
@@ -63,13 +67,14 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
           <Route path="/teacherAssignment" element={<TeacherAssignments/>}/>
+          <Route path="/gradeAssignment" element ={<GradeAssignment/>}/>
+          <Route path="/viewStudents" element={<ViewStudents/>}/> 
         </Route>
         {/* For when a student logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['User']} />}>
           <Route path="/studentPage" element={<StudentPage />} />
           <Route path="/AllCourses" element={<AllCourses />} />
           <Route path="/viewCourseStudent" element={<ViewCourseStudent/>}/>
-          <Route path="/Profile" element={<Profile/>}/>
           <Route path="/Grades" element={<Grades/>}/>
         </Route>
         {/* For when an admin logs in, they should only be able to access certain pages */}
@@ -77,7 +82,7 @@ function App() {
           <Route path="/AdminPage" element={<AdminPage />} />
           <Route path="/CreateCourse" element={<CreateCourse />} />
           <Route path="/pendingEnrollments" element={<PendingEnrollments />} />
-
+          <Route path="/viewCourseAdmin" element={<ViewCourseAdmin/>}/>
         </Route>
 
         {/* For people who are not logged in */}
@@ -89,6 +94,7 @@ function App() {
         {/* Anyone can access these pages if they are logged in or not */}
         <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
         <Route path="/" element={<Home />} />
+        <Route path="/Profile" element={<Profile/>}/>
       </Routes>
     </Router>
   );

@@ -245,6 +245,22 @@ section{
   float: inline-end;
   width: fit-content;
 }
+
+.students{
+  width: 60em;
+  margin:2em;
+}
+.studentButtons{
+  display: flexbox;
+  flex-direction: row;
+}
+#dropdown-basic-button{
+  margin: 1em;
+}
+.overall{
+  float:right;
+}
+
 .newAssessments{
   margin: 1em 1em;
   float: inline-end;
@@ -314,3 +330,4 @@ section{
 .logout-button:hover {
   background-color: #0056b3;
 }
+

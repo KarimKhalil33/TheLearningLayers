@@ -16,10 +16,11 @@ function Profile() {
     const collectionName = sessionStorage.getItem('collectionName');
     // Base URL for the server
     const serverURL = 'http://localhost:4000';
-
+    const s = collectionName.toLowerCase();
+    console.log(s)
     // Construct the endpoint based on the user's role
-    let endpoint = `/profile/${collectionName.toLowerCase()}/${authenticationId}`;
-
+    let endpoint = `/profile/${s}/${authenticationId}`;
+    
     // Function to fetch user profile from the server
     const fetchProfile = async () => {
       try {
