@@ -1,10 +1,13 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
+const Assignment = require('../models/assignments');
 
 
 router.post('/createAccount', async (req, res) => {
@@ -27,16 +30,14 @@ router.post('/createAccount', async (req, res) => {
 
   try {
     // Save the user to the 'user' collection
-    const newUser = new User(userData);
-    newUser.save();
 
     console.log(userData.position);
 
     // Check the user's position and save to the appropriate collection
-    if (userData.position === `Student`) {
+    if (userData.position === "Student") {
       const newStudent = new User(userData);
       newStudent.save();
-    } else if (userData.position === `Teacher`) {
+    } else if (userData.position === "Teacher") {
       const newTeacher = new Teacher(userData);
       newTeacher.save();
     }
@@ -156,14 +157,80 @@ router.get('/course', async (req, res) => {
   }
 });
 
-
-router.get('/courses', async (req, res) => {
+// Endpoint to fetch user profile information
+router.get('/profile/:username', async (req, res) => {
+  const { username } = req.params;
   try {
-      const courses = await Course.find();
-      res.json(courses);
+      // You can extend this to search in different collections based on user role
+      let user = await User.findOne({ username });
+      if (!user) {
+          user = await Teacher.findOne({ username });
+      }
+      if (!user) {
+          user = await Admin.findOne({ username });
+      }
+      if (user) {
+          res.json(user);
+      } else {
+          res.status(404).json({ message: 'User not found' });
+      }
   } catch (error) {
-      console.error('Error fetching courses:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ message: 'Error fetching user profile' });
+  }
+});
+
+
+router.post('/teacherPage', async (req, res) => {
+  const authenticationId = req.headers.authorization; // Assuming the authentication ID is sent in the Authorization header
+  try {
+    let teacher = await Teacher.findOne({ username: authenticationId });
+    console.log("Teacher:", teacher); // Log the teacher document found
+    if (!teacher) {
+      return res.status(404).json({ message: 'Teacher not found' });
+    }
+    let courses = await Course.find({ teacher: teacher.firstName + " " + teacher.lastName });
+    res.json(courses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching courses', error: error });
+  }
+});
+
+// Set up storage engine with multer
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+      cb(null, '../Files'); // Save files in the 'Files' directory
+  },
+  filename: function(req, file, cb) {
+      console.log("Filepath log check");
+      cb(null, file.originalname);
+      console.log("check?");
+  }
+});
+console.log("Check check");
+const upload = multer({ storage: storage });
+
+module.exports = router;
+
+// Route to create a new assignment
+console.log("before saving to database check")
+router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
+  console.log("start log check");
+  const { name, weight, description, startDate, dueDate } = req.body;
+  const filepath = req.file.path;
+
+  // add validation or checks here
+  
+  try {
+
+    console.log("Assign create log check");
+    const newAssignment = new Assignment({ name, weight, description, filepath, startDate, dueDate });
+    newAssignment.save();
+    console.log("Assign saved log check");
+    res.status(200).send("Assignment saved to the database");
+  } catch (error) {
+    console.error('Error saving assignment data:', error);
+    res.status(500).send("Unable to save assignment to the database");
   }
 });
 

@@ -14,7 +14,7 @@ function TeacherMenu() {
               <Nav.Link href="#courses">Courses</Nav.Link>
             </Nav>
             <Nav>
-              <Nav.Link href="#profile">Profile</Nav.Link>
+              <Nav.Link href="/profile">Profile</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

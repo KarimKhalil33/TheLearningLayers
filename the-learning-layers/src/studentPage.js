@@ -9,8 +9,8 @@ import AppFooter from './appFooter';
 import StudentMenu from './StudentMenu';
 import { Route } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-function StudentPage() {
 
+function StudentPage() {
 
   const [courses, setCourses] = useState([]); // State to hold courses
   let navigate = useNavigate();
