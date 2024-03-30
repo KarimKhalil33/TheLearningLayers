@@ -28,6 +28,40 @@ router.post('/courses', async (req, res) => {
     }
 });
 
+// Route to fetch courses student can enroll in for a specific student
+router.get('/available', async (req, res) => {
+    console.log("I'm in the available course retrieval function");
+    try {
+        // Get username from the front end
+        const {username } = req.body;
+
+        console.log(username);
+
+        // Find the student in the database
+        const student = await User.findOne({ username});
+
+        const studentNum = student.studentNum;
+
+        // Fetch current enrollments for the student
+        const currentEnrollments = await Enrollments.find({ studentNum });
+
+        // Get available enrollments using aggregation
+        const availableEnrollments = await Enrollments.aggregate([
+            { $match: { $expr: { $eq: [{ $type: "$_id" }, "objectId"] } } }, // Make sure _id is an ObjectId
+            { $match: { _id: { $nin: currentEnrollments.map(enrollment => enrollment._id) } } }
+        ]);
+
+        res.json(availableEnrollments);
+
+    } catch (error) {
+        console.error('Error fetching enrollments:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+
+
 // POST route to handle course enrollment
 router.post('/pending', async (req, res) => {
     try {
@@ -114,7 +148,7 @@ router.post('/accept', async (req, res) => {
         );
 
             student.save();
-            
+
         // Find the enrollment by key
         let enrollment = await Enrollments.findOne({_id: key});
 

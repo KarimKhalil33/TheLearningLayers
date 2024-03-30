@@ -13,14 +13,27 @@ function AllCourses() {
     const [enrollmentStatus, setEnrollmentStatus] = useState({});
     
     //get user info from session
-    const username = JSON.parse(sessionStorage.getItem('authenticationId'));
+    const username = sessionStorage.getItem('authenticationId');
 
     const [courses, setCourses] = useState([]); // State to hold courses
     useEffect(() => {
-      // Function to fetch courses
+
+    
+      // Function to fetch courses that the student is not enrolled in
       const fetchCourses = async () => {
         try {
-          const response = await fetch('http://localhost:4000/user/course'); // Adjust the endpoint as needed
+          const response = await fetch('http://localhost:4000/api/enrollmentRoute/available', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username }), // Include the username in the request body
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to fetch courses');
+          }
+    
           const data = await response.json();
           console.log(data);
           setCourses(data); // Update state with fetched courses
@@ -28,9 +41,10 @@ function AllCourses() {
           console.error('Error fetching courses:', error);
         }
       };
-  
+    
       fetchCourses(); // Call the fetch function
     }, []);
+    
 
 
     // Function to handle enrollment
