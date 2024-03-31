@@ -11,7 +11,6 @@ import AppFooter from './appFooter';
 import { Trash } from 'react-bootstrap-icons';
 import { Route } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-import ViewCourseStudent from './viewCourseStudent';
 
 function AdminPage() {
     const [courses, setCourses] = useState([]); // State to hold courses
@@ -83,7 +82,7 @@ const handleDeleteCourse = async (courseId) => {
                  </Button>
                  <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                  <div className="text-center">
-                     <Button variant="primary" className="button" onClick={() => routeChange('/viewCourseAdmin')}>View</Button>
+                     <Button variant="primary" className="button" onClick={() => routeChange(`/viewCourseAdmin?name=${encodeURIComponent(course.name)}&courseId=${encodeURIComponent(course.courseId)}`)}>View</Button>
                  </div>
              </div>
          </Col>
