@@ -18,7 +18,7 @@ router.post('/courses', async (req, res) => {
         console.log(student);
 
         // Fetch enrollments for the student based on student Num
-        const enrollments = await Enrollments.find({ studentNum });
+        const enrollments = await Enrollments.find({studentNum });
 
         res.status(200).json(enrollments);
 
