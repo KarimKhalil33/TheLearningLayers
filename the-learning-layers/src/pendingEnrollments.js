@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react'; 
 import { Container, ListGroup, Button } from 'react-bootstrap';
 
 function PendingEnrollments() {
     const [enrollments, setEnrollments] = useState([]);
 
-    // Fetch enrollments when component mounts
     useEffect(() => {
+
+        const fetchEnrollments = async () => {
+            try {
+                // Make a GET request to fetch pending enrollments
+                const response = await fetch('http://localhost:4000/api/enrollmentRoute/pending');
+                const data = await response.json();
+                setEnrollments(data); // Update state with fetched enrollments
+            } catch (error) {
+                console.error('Error fetching enrollments:', error);
+            }
+        };
+
         fetchEnrollments();
     }, []);
-
-    const fetchEnrollments = async () => {
-        try {
-            // Make a GET request to fetch pending enrollments
-            const response = await fetch('http://localhost:4000/api/enrollmentRoute/pending');
-            const data = await response.json();
-            setEnrollments(data); // Update state with fetched enrollments
-        } catch (error) {
-            console.error('Error fetching enrollments:', error);
-        }
-    };
 
     const acceptEnrollment = async (studentNum, title) => {
         try {
             // Make a POST request to accept enrollment
+
             await fetch('http://localhost:4000/api/enrollmentRoute/accept', {
                 method: 'POST',
                 headers: {

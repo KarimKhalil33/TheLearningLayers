@@ -10,27 +10,39 @@ import { Route } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 function AllCourses() {
-    const [enrollmentStatus, setEnrollmentStatus] = useState({});
-    
     //get user info from session
-    const username = JSON.parse(sessionStorage.getItem('authenticationId'));
+   const username = JSON.parse(sessionStorage.getItem('authenticationId'));
 
     const [courses, setCourses] = useState([]); // State to hold courses
-    useEffect(() => {
-      // Function to fetch courses
-      const fetchCourses = async () => {
-        try {
-          const response = await fetch('http://localhost:4000/user/course'); // Adjust the endpoint as needed
+    const [enrollmentStatus, setEnrollmentStatus] = useState([]);
+
+
+  useEffect(() => {
+          //grab courses the student is not enrolled in
+    const fetchCourses = async () => {
+      console.log("hello");
+      try {
+          const username = JSON.parse(sessionStorage.getItem('authenticationId'));
+          const response = await fetch('http://localhost:4000/api/enrollmentRoute/available', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  username: username
+              }),
+          });
           const data = await response.json();
           console.log(data);
           setCourses(data); // Update state with fetched courses
-        } catch (error) {
+      } catch (error) {
           console.error('Error fetching courses:', error);
-        }
-      };
-  
-      fetchCourses(); // Call the fetch function
-    }, []);
+      }
+  };
+
+  fetchCourses(); // Call the fetch function
+}, []);
+
 
 
     // Function to handle enrollment
