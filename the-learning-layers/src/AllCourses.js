@@ -25,7 +25,7 @@ const fetchCourses = async () => {
   console.log(username);
   try {
     const response = await fetch(`http://localhost:4000/api/enrollmentRoute/available`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },

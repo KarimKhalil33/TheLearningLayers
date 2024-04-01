@@ -30,11 +30,10 @@ router.post('/courses', async (req, res) => {
 
 
 // Route to fetch courses student can enroll in for a specific student
-router.get('/available', async (req, res) => {
-    console.log("I'm in the available course retrieval function");
+router.post('/available', async (req, res) => {
     try {
         // Get username from the query parameters
-        const username = req.body;
+        const username = req.body.username;
         console.log(username);
 
         // Find the student in the database
