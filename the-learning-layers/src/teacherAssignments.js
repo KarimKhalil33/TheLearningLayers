@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -21,6 +21,11 @@ function TeacherAssignments(){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     TeacherCourseNavigation("/teacherAssignment");
+
+    // to retrieve course id and name from previous page
+    const { courseId, courseName } = useParams();
+    const decodedCourseName = decodeURIComponent(courseName);
+
     let navigate = useNavigate();
     const routeChange = (path) => {
         navigate(path);

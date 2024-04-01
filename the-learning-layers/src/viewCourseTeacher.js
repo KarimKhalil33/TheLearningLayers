@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -20,9 +20,18 @@ function ViewCourseTeach(){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    // to retrieve course id and name from previous page
+    const { courseId, courseName } = useParams();
+    const decodedCourseName = decodeURIComponent(courseName);
+
     let navigate = useNavigate();
     const routeChange = (path) => {
         navigate(path);
+    };
+
+    const navigateToAssignments = () => {
+        // Navigate to assignments with courseId and courseName
+        navigate(`/teacherAssignments/${courseId}/${encodeURIComponent(courseName)}`);
     };
     return(
         <>
@@ -40,7 +49,7 @@ function ViewCourseTeach(){
         </article>
         <article className="main">
             <header>
-                <h1><strong>Course Name</strong></h1>
+                <h1><strong>{decodedCourseName} {courseId}</strong></h1>
                 <h2>Course Description</h2>
             </header>
             {/* Section detailing the course content */}
