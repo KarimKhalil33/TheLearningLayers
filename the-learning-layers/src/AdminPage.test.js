@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import AdminPage from './adminPage';
+import AdminPage from './AdminPage';
 import { MemoryRouter } from 'react-router-dom';
 import { act } from '@testing-library/react';
 
@@ -28,9 +28,10 @@ describe('AdminPage component', () => {
     // Mock fetch
     global.fetch = jest.fn(() =>
       Promise.resolve({
+        ok:true,
         json: () =>
           Promise.resolve([
-            {  name:'EDUC',courseId:100 },
+            { name: 'EDUC', courseId: 100, _id:1233456 },
           ]),
       })
     );
@@ -46,7 +47,7 @@ describe('AdminPage component', () => {
       <AdminPage />
     </MemoryRouter>);
 
-//expect these text be in the website on page load
+    //expect these text be in the website on page load
     expect(getByText('ADMIN DASHBOARD')).toBeInTheDocument();
     expect(getByText('Manage courses and student enrollments.')).toBeInTheDocument();
 
@@ -62,7 +63,7 @@ describe('AdminPage component', () => {
     const { getAllByRole } = render(<MemoryRouter>
       <AdminPage />
     </MemoryRouter>);
-    
+
     //check that I have existing card on the website
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -85,6 +86,34 @@ describe('AdminPage component', () => {
     await waitFor(() => {
       expect(window.location.href).toBe(`http://localhost/viewCourseAdmin?name=EDUC&courseId=100`);
     })
+  });
+
+  test('clicking delete icon deletes course', async () => {
+    const { queryByText } = render(<MemoryRouter>
+      <AdminPage />
+    </MemoryRouter>);
+
+    //check that I have existing card on the website
+    await waitFor(() => {
+      const del = screen.getByTestId('delete');
+      // Wait for the component to fetch data and render
+      fireEvent.click(del);
+    });
+
+    // Assert that rejectEnrollment was called
+    expect(global.fetch).toHaveBeenCalledWith('http://localhost:4000/api/adminRoute/delete', {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ courseId:1233456 }),
+  });
+
+    // Ensure that after click reject once, you only have another student left on page
+    await waitFor(() => {
+      expect(queryByText('EDUC 100')).not.toBeInTheDocument();
+    });
+
   });
 
 

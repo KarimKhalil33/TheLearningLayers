@@ -9,7 +9,7 @@ import StudentPage from './studentPage';
 import CreateCourse from './createCourse';
 import TeacherPage from './teacherPage'
 import AllCourses from './AllCourses';
-import AdminPage from './adminPage';
+import AdminPage from './AdminPage';
 import ViewCourseTeacher from './viewCourseTeacher';
 import TeacherAssignments from './teacherAssignments';
 import PendingEnrollments from './pendingEnrollments';
