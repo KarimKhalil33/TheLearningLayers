@@ -13,15 +13,17 @@ function AllCourses() {
     //get user info from session
    const username = JSON.parse(sessionStorage.getItem('authenticationId'));
 
+    const [courses, setCourses] = useState([]); // State to hold courses
     const [enrollmentStatus, setEnrollmentStatus] = useState([]);
 
-    const [courses, setCourses] = useState([]); // State to hold courses
+
   useEffect(() => {
-          //grab courses the student is enrolled in
+          //grab courses the student is not enrolled in
     const fetchCourses = async () => {
+      console.log("hello");
       try {
           const username = JSON.parse(sessionStorage.getItem('authenticationId'));
-          const response = await fetch('http://localhost:4000/api/enrollmentRoute/courses', {
+          const response = await fetch('http://localhost:4000/api/enrollmentRoute/available', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -31,7 +33,7 @@ function AllCourses() {
               }),
           });
           const data = await response.json();
-    
+          console.log(data);
           setCourses(data); // Update state with fetched courses
       } catch (error) {
           console.error('Error fetching courses:', error);
@@ -41,40 +43,6 @@ function AllCourses() {
   fetchCourses(); // Call the fetch function
 }, []);
 
-
-//  // Request to fetch all courses that the student is enrolled in
-// const fetchCourses = async () => {
-//   console.log(username);
-//   try {
-//     const response = await fetch(`http://localhost:4000/api/enrollmentRoute/available`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ username: username }),
-  
-      
-//     }
-    
-//     );
-
-//     if (!response.ok) {
-//       throw new Error('Failed to fetch courses');
-//     }
-
-//     const data = await response.json();
-//     console.log(data);
-//     setCourses(data); // Update state with fetched courses
-//   } catch (error) {
-//     console.error('Error fetching courses:', error);
-//   }
-// };
-
-// fetchCourses(); // Call the fetch function
-
-
-//     }, []);
-    
 
 
     // Function to handle enrollment

@@ -18,7 +18,7 @@ router.post('/courses', async (req, res) => {
         console.log(student);
 
         // Fetch enrollments for the student based on student Num
-        const enrollments = await Enrollments.find({studentNum });
+        const enrollments = await Enrollments.find({studentNum , status: 'Approved' });
 
         res.status(200).json(enrollments);
 
@@ -32,6 +32,8 @@ router.post('/courses', async (req, res) => {
 // Route to fetch courses student can enroll in for a specific student
 router.post('/available', async (req, res) => {
     try {
+
+        console.log("im in the available enrollment course retrival function");
         // Get username from the query parameters
         const username = req.body.username;
         console.log(username);
@@ -47,13 +49,16 @@ router.post('/available', async (req, res) => {
         console.log(studentNum);
 
         // Fetch current enrollments for the student
-        const currentEnrollments = await Enrollments.find({ studentNum });
+        const currentEnrollments = await Enrollments.find({studentNum});
 
-        // Get available enrollments using aggregation
-        const availableEnrollments = await Enrollments.aggregate([
-            { $match: { $expr: { $eq: [{ $type: "$_id" }, "objectId"] } } }, // Make sure _id is an ObjectId
-            { $match: { _id: { $nin: currentEnrollments.map(enrollment => enrollment._id) } } }
-        ]);
+        console.log('Current Enrollments:', currentEnrollments);
+
+        // Get courses the student isn't enrolled in
+        const allCourses = await Course.find({}); // Assuming you have a Course model
+
+        const availableEnrollments = allCourses.filter(course => {
+            return !currentEnrollments.some(enrollment => enrollment.courseId == (course.courseId));
+        });
 
         res.json(availableEnrollments);
 
@@ -125,7 +130,7 @@ router.get('/pending', async (req, res) => {
 router.post('/accept', async (req, res) => {
     console.log("i'm in");
     try {
-        const { key, title, studentNum } = req.body;
+        const { key, studentNum , title} = req.body;
 
         console.log(title);
         console.log(key);
@@ -133,8 +138,8 @@ router.post('/accept', async (req, res) => {
 
         // Find the course by title and update it student array
        const course = await Course.findOneAndUpdate(
-            { title },
-            { $addToSet: { students: studentNum } },
+            { title : title},
+            { students: studentNum},
             { new: true }
         );
 
@@ -144,15 +149,6 @@ router.post('/accept', async (req, res) => {
         await course.save();
 
         console.log("course saved");
-
-        //save course in student enrollments 
-        const student = await User.findOneAndUpdate(
-            { studentNum },
-            { $addToSet: { enrolled: title } },
-            { new: true }
-        );
-
-            student.save();
 
         // Find the enrollment by key
         let enrollment = await Enrollments.findOne({_id: key});
@@ -165,6 +161,9 @@ router.post('/accept', async (req, res) => {
             enrollment.status = 'Approved';
             // Save the enrollment object
             await enrollment.save();
+            console.log("enrollment saved");
+            
+
         } else {
             return res.status(404).json({ error: 'Enrollment not found' });
         }

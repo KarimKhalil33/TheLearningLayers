@@ -7,13 +7,13 @@ const userSchema = new mongoose.Schema({
     studentNum: { type: Number, required: true },
     position: {type:String, required:true},
     username: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique : true },
     password: { type: String, required: true },
-    enrolled: [{
-        courseId: { type: String, ref: 'Course'},
-        name: {type: String,ref: 'Course' },
-        title:  {type: String, ref: 'Course'}
-    }]
+    enrolled: [
+        {
+            courseId: { type: String, ref: 'Course' }
+        }
+    ]
 }, { collection: 'student' });
 
 const User = mongoose.model('User', userSchema); //creating that model in our database

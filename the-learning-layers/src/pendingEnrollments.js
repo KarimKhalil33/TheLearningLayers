@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { Container, ListGroup, Button } from 'react-bootstrap';
 
 function PendingEnrollments() {
+    
+    
     const [enrollments, setEnrollments] = useState([
-        { studentNum: 1, studentName: 'John Doe', title: 'Introduction to Programming' },
-        { studentNum: 2, studentName: 'Jane Smith', title: 'Advanced Mathematics' },
-        // Add more mock data as needed
+
     ]);
+
+    useEffect(() => {
+
+        const fetchEnrollments = async () => {
+            try {
+                // Make a GET request to fetch pending enrollments
+                const response = await fetch('http://localhost:4000/api/enrollmentRoute/pending');
+                const data = await response.json();
+                setEnrollments(data); // Update state with fetched enrollments
+            } catch (error) {
+                console.error('Error fetching enrollments:', error);
+            }
+        };
+
+        fetchEnrollments();
+    }, []);
+
+   
+
 
     const acceptEnrollment = async (key,studentNum, title) => {
         try {
@@ -14,7 +33,7 @@ function PendingEnrollments() {
 
             // Make a POST request to accept enrollment
             const serverURL = 'http://localhost:4000';
-            const endpoint = '/api/enrolmentRoute/accept';
+            const endpoint = '/api/enrollmentRoute/accept';
             const fetchURL = `${serverURL}${endpoint}`;
 
             await fetch(fetchURL, {
@@ -33,7 +52,6 @@ function PendingEnrollments() {
             console.error('Error accepting enrollment:', error);
         }
 
-        setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
     };
 
 
@@ -58,7 +76,6 @@ function PendingEnrollments() {
             console.error('Error rejecting enrollment:', error);
         }
 
-        setEnrollments(enrollments.filter(enrollment => enrollment.studentNum !== studentNum));
     };
 
     return (
