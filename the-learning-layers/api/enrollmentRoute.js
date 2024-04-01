@@ -28,19 +28,24 @@ router.post('/courses', async (req, res) => {
     }
 });
 
+
 // Route to fetch courses student can enroll in for a specific student
 router.get('/available', async (req, res) => {
     console.log("I'm in the available course retrieval function");
     try {
-        // Get username from the front end
-        const {username } = req.body;
-
+        // Get username from the query parameters
+        const username = req.body;
         console.log(username);
 
         // Find the student in the database
-        const student = await User.findOne({ username});
+        const student = await User.findOne({username});
 
+
+        console.log(student);
         const studentNum = student.studentNum;
+
+
+        console.log(studentNum);
 
         // Fetch current enrollments for the student
         const currentEnrollments = await Enrollments.find({ studentNum });
@@ -58,6 +63,7 @@ router.get('/available', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 
 
