@@ -93,7 +93,7 @@ function AllCourses() {
               <div className="course-card-student p-3 shadow-sm">
                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                 <div className="text-center">
-                <Button variant="primary" onClick={() => handleEnrollment(course.name, course.courseId, course.title)}>
+                <Button className="button" variant="primary" onClick={() => handleEnrollment(course.name, course.courseId, course.title)}>
                         {enrollmentStatus[`${course.name}-${course.courseId}`] || 'Request to Enroll'}
                       </Button>
                 </div>
