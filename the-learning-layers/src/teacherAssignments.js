@@ -20,11 +20,13 @@ function TeacherAssignments(){
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    TeacherCourseNavigation("/teacherAssignment");
 
     // to retrieve course id and name from previous page
     const { courseId, courseName } = useParams();
     const decodedCourseName = decodeURIComponent(courseName);
+    const course = `${courseName} ${courseId}`;
+
+    TeacherCourseNavigation(courseId, courseName);
 
     let navigate = useNavigate();
     const routeChange = (path) => {
@@ -44,6 +46,7 @@ function TeacherAssignments(){
     const handleSubmit = async (e) => {
         const formData = new FormData();
         formData.append('name', name);
+        formData.append('course', course);
         formData.append('weight', weight);
         formData.append('description', description);
         formData.append('startDate', startDate);
@@ -93,7 +96,7 @@ function TeacherAssignments(){
     return(
         <>
              <TeacherMenu></TeacherMenu>
-             <TeacherCourseNavigation setkey="/teacherAssignment"></TeacherCourseNavigation> 
+             <TeacherCourseNavigation courseId={courseId} courseName={decodedCourseName} />
             {/* A button opens a modal which allows the teacher to create an assignment */}
             <div className='newAssessments'>
                 <p><Button variant="primary" onClick={handleShow}>

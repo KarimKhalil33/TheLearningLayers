@@ -24,19 +24,10 @@ function ViewCourseTeach(){
     const { courseId, courseName } = useParams();
     const decodedCourseName = decodeURIComponent(courseName);
 
-    let navigate = useNavigate();
-    const routeChange = (path) => {
-        navigate(path);
-    };
-
-    const navigateToAssignments = () => {
-        // Navigate to assignments with courseId and courseName
-        navigate(`/teacherAssignments/${courseId}/${encodeURIComponent(courseName)}`);
-    };
     return(
         <>
         <TeacherMenu></TeacherMenu>
-        <TeacherCourseNavigation setkey="/viewCourseTeacher"></TeacherCourseNavigation>
+        <TeacherCourseNavigation courseId={courseId} courseName={decodedCourseName} />
         <article className='upcoming'>
             {/*Section for teachers to be able to monitor upcoming assignments  */}
                 <h3><strong>Upcoming</strong></h3>

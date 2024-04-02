@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 // Creating a schema for assignment model
 const assignmentSchema = new mongoose.Schema({
     name: { type: String, required: true },
+    course: {type: String, required: true},
     weight: {type: String, required: true },
     description: {type: String, required: true },
     filepath: {type: String, required: true },

@@ -208,7 +208,7 @@ const storage = multer.diskStorage({
       console.log("check?");
   }
 });
-console.log("Check check");
+
 const upload = multer({ storage: storage });
 
 // Route to create a new assignment
@@ -217,7 +217,7 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
   console.log("Route handler for '/teacherAssignments' called");
   console.log("Uploaded file info: ", req.file);
   console.log("Form data: ", req.body);
-  const { name, weight, description, startDate, dueDate } = req.body;
+  const { name, course, weight, description, startDate, dueDate } = req.body;
   const filepath = req.file.originalname;
 
   // add validation or checks here
@@ -225,7 +225,7 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
   try {
 
     console.log("Assign create log check");
-    const newAssignment = new Assignment({ name, weight, description, filepath, startDate, dueDate });
+    const newAssignment = new Assignment({ name, course, weight, description, filepath, startDate, dueDate });
     newAssignment.save();
     console.log("Assign saved log check");
     res.status(200).send("Assignment saved to the database");
