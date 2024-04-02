@@ -147,16 +147,6 @@ router.post('/createCourse', (req, res) => {
 });
 
 
-// Route to fetch all the courses
-router.get('/course', async (req, res) => {
-  try {
-    const courses = await Course.find({}); // Fetch all courses from the database
-    res.json(courses); // Send the courses as a response
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching courses', error: error });
-  }
-});
-
 // Endpoint to fetch user profile information
 router.get('/profile/:username', async (req, res) => {
   const { username } = req.params;
@@ -176,6 +166,24 @@ router.get('/profile/:username', async (req, res) => {
       }
   } catch (error) {
       res.status(500).json({ message: 'Error fetching user profile' });
+  }
+});
+
+
+// Route to fetch the course information
+router.get('/viewCourseTeacher/:courseId/:courseName', async (req, res) => {
+  const { courseId, courseName } = req.params;
+
+  try {
+    let course = await Course.findOne({ courseId, name: courseName }); // Fetch course info from the database
+    console.log("Course", course); // Log the course document found
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    res.json(course); // Send the course as a response
+  } catch (error) {
+    console.error('Error fetching course:', error);
+    res.status(500).json({ message: 'Error fetching course data' });
   }
 });
 
