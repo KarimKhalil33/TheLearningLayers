@@ -18,7 +18,7 @@ function StudentPage() {
     navigate(path);
   };
   useEffect(() => {
-    // Function to fetch courses
+    // Function to fetch courses student is enrolled in
     const fetchCourses = async () => {
         try {
             const username = JSON.parse(sessionStorage.getItem('authenticationId'));

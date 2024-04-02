@@ -19,7 +19,7 @@ import ViewStudents from './viewStudents';
 import Profile from './Profile';
 import Grades from './Grades';
 import ViewCourseAdmin from './viewCourseAdmin';
-
+import EditProfile from './editProfile';
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
 }
@@ -95,6 +95,7 @@ function App() {
         <Route path="/login" element={<Login setAuthenticationId={setAuthenticationId} setCollectionName={setCollectionName} />} />
         <Route path="/" element={<Home />} />
         <Route path="/Profile" element={<Profile/>}/>
+        <Route path="/EditProfile" element={<EditProfile/>}/> 
       </Routes>
     </Router>
   );
