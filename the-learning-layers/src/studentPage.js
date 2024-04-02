@@ -59,7 +59,7 @@ function StudentPage() {
               <div className="course-card-student p-3 shadow-sm">
                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                 <div className="text-center">
-                <Button variant="primary" className="button" onClick={() => routeChange('/viewCourseStudent')}>View Course</Button>
+                <Button variant="primary" className="button" onClick={() => routeChange(`/viewCourseStudent?name=${encodeURIComponent(course.name)}&courseId=${encodeURIComponent(course.courseId)}`)}>View Course</Button>
                 </div>
               </div>
             </Col>
