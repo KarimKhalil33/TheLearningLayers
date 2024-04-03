@@ -243,5 +243,18 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
   }
 });
 
+router.get('getAssignments',async(req,res)=>{
+  try{
+    const name = req.params.name;
+    const courseId = req.params.courseId;
+    const assignment = await Course.findOne({ name, courseId });
+
+    res.json(assignment);
+}
+catch(error){
+    res.status(500).json({ error: 'Internal server error' });
+}
+})
+
 
 module.exports = router;
