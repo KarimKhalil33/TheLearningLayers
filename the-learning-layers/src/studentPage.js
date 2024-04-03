@@ -18,20 +18,30 @@ function StudentPage() {
     navigate(path);
   };
   useEffect(() => {
-    // Function to fetch courses
+    // Function to fetch courses student is enrolled in
     const fetchCourses = async () => {
-      try {
-        const response = await fetch('http://localhost:4000/user/course'); // Adjust the endpoint as needed
-        const data = await response.json();
-        console.log(data);
-        setCourses(data); // Update state with fetched courses
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      }
+        try {
+            const username = JSON.parse(sessionStorage.getItem('authenticationId'));
+            const response = await fetch('http://localhost:4000/api/enrollmentRoute/courses', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username
+                }),
+            });
+            const data = await response.json();
+      
+            setCourses(data); // Update state with fetched courses
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+        }
     };
 
     fetchCourses(); // Call the fetch function
-  }, []);
+}, []);
+  
 
   return (
     <>
@@ -49,7 +59,7 @@ function StudentPage() {
               <div className="course-card-student p-3 shadow-sm">
                 <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                 <div className="text-center">
-                <Button variant="primary" className="button" onClick={() => routeChange('/viewCourseStudent')}>View Course</Button>
+                <Button variant="primary" className="button" onClick={() => routeChange(`/viewCourseStudent?name=${encodeURIComponent(course.name)}&courseId=${encodeURIComponent(course.courseId)}`)}>View Course</Button>
                 </div>
               </div>
             </Col>
