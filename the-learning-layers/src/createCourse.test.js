@@ -31,7 +31,15 @@ describe('CreateCourse component', () => {
 
     it('submit form with correct fields entered', async () => {
         // Mock fetch for a status that submit the correct data
-        global.fetch = jest.fn().mockResolvedValue({ status: 200 });
+        global.fetch = jest.fn(()=>{
+            Promise.resolve({
+                ok:true,
+                json:()=>
+                Promise.resolve([
+                    {name:'COSC',courseId:101,teacher:"TEST",title:"Test",description:"loren ipsum"}
+                ])
+            })
+        });
 
         //Render the component
         const { getByLabelText, getAllByText } = render(<MemoryRouter><CreateCourse /></MemoryRouter>);

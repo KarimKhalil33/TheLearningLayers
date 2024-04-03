@@ -74,7 +74,7 @@ function CreateCourse() {
   };
   return (
     <>
-      <AdminMenu />
+     <AdminMenu></AdminMenu>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
           <Nav className="mx-auto">
