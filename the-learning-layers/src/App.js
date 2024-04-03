@@ -20,6 +20,7 @@ import Profile from './Profile';
 import Grades from './Grades';
 import ViewCourseAdmin from './viewCourseAdmin';
 import EditProfile from './editProfile';
+import StudentAssignments from './studentAssignments';
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
 }
@@ -76,6 +77,7 @@ function App() {
           <Route path="/AllCourses" element={<AllCourses />} />
           <Route path="/viewCourseStudent" element={<ViewCourseStudent/>}/>
           <Route path="/Grades" element={<Grades/>}/>
+          <Route path="/StudentAssignments" element={<StudentAssignments/>}/>
         </Route>
         {/* For when an admin logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Admin']} />}>
