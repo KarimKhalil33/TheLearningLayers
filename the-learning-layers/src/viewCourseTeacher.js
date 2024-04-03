@@ -4,30 +4,50 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AppFooter from './appFooter';
 import TeacherCourseNavigation from './teacherCourseNavigation';
 
 function ViewCourseTeach(){
     const [show, setShow] = useState(false);
-
+    const [course, setCourse] = useState(null); // State to hold course details
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    let navigate = useNavigate();
-    const routeChange = (path) => {
-        navigate(path);
-    };
+    // to retrieve course id and name from previous page
+    const { courseId, courseName } = useParams();
+    const decodedCourseName = decodeURIComponent(courseName);
+
+    useEffect(() => {
+        const fetchCourse = async () => {
+            const serverURL = 'http://localhost:4000';
+            // Use both courseId and courseName in the endpoint
+            const endpoint = `/viewCourseTeacher/${courseId}/${encodeURIComponent(decodedCourseName)}`;
+            const fetchURL = `${serverURL}${endpoint}`;
+
+            try {
+                const response = await fetch(fetchURL);
+                if (!response.ok) throw new Error('Failed to fetch course details');
+                const data = await response.json();
+                setCourse(data); // Update state with fetched course
+            } catch (error) {
+                console.error('Error fetching course:', error);
+            }
+        };
+
+        fetchCourse();
+    }, []);
+
     return(
         <>
         <TeacherMenu></TeacherMenu>
-        <TeacherCourseNavigation setkey="/viewCourseTeacher"></TeacherCourseNavigation>
+        <TeacherCourseNavigation courseId={courseId} courseName={decodedCourseName} />
         <article className='upcoming'>
             {/*Section for teachers to be able to monitor upcoming assignments  */}
                 <h3><strong>Upcoming</strong></h3>
@@ -40,14 +60,20 @@ function ViewCourseTeach(){
         </article>
         <article className="main">
             <header>
-                <h1><strong>Course Name</strong></h1>
-                <h2>Course Description</h2>
+                <h1><strong>{decodedCourseName} {courseId}</strong></h1>
+                {course ? <h2>{course.title}</h2> : <h2>Loading...</h2>}
             </header>
             {/* Section detailing the course content */}
-            <section id='courseDetails'>
-                <h3><strong>About the course</strong></h3>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </section>
+            {course ? (
+                    <>
+                        <section id='courseDetails'>
+                            <h3><strong>About the course</strong></h3>
+                            {course.description}
+                        </section>
+                    </>
+                ) : (
+                    <p>Loading course details...</p>
+                )}
             {/*Section details the course syllabus */}
             <section id='syllabus'>
                 <h3><strong>Syllabus</strong></h3>

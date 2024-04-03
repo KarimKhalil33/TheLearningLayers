@@ -175,20 +175,18 @@ router.post('/accept', async (req, res) => {
     }
 });
 
-
-
 router.post('/reject', async (req, res) => {
     console.log("I'm in the rejection function");
     try {
-        const {key } = req.body;
+        const { key } = req.body;
 
-        // Find the enrollment by key
-        const enrollment = await Enrollments.findOne({ _id: key });
+        // Find and delete the enrollment by key
+        const enrollment = await Enrollments.findOneAndDelete({ _id: key });
 
         // If enrollment object exists, update its status to 'Rejected'
         if (enrollment) {
+            // Update status to 'Rejected'
             enrollment.status = 'Rejected';
-            // Save the enrollment object
             await enrollment.save();
         } else {
             return res.status(404).json({ error: 'Enrollment not found' });
