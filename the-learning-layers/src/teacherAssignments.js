@@ -25,6 +25,7 @@ function TeacherAssignments(){
     const routeChange = (path) => {
         navigate(path);
     };
+    
     // async () => (
 
     const [validated, setValidated] = useState(false);
@@ -166,7 +167,7 @@ function TeacherAssignments(){
                     </Button>
                     </Modal.Footer>
                 </Modal>
-                <Button>Create Quiz</Button>
+
             </div>
             <article className='main'>
                 {/* Yet to be filled out, this portion of the page displays all assignments for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
@@ -193,4 +194,5 @@ function TeacherAssignments(){
     );
     //this should show
 }
+
 export default TeacherAssignments;

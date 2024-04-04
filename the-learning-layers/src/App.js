@@ -18,6 +18,7 @@ import GradeAssignment from './gradeAssignment';
 import ViewStudents from './viewStudents';
 import Profile from './Profile';
 import Grades from './Grades';
+import TeacherQuizes from './teacherQuizes';
 import ViewCourseAdmin from './viewCourseAdmin';
 
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
@@ -68,7 +69,8 @@ function App() {
           <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
           <Route path="/teacherAssignment" element={<TeacherAssignments/>}/>
           <Route path="/gradeAssignment" element ={<GradeAssignment/>}/>
-          <Route path="/viewStudents" element={<ViewStudents/>}/> 
+          <Route path="/viewStudents" element={<ViewStudents/>}/>
+          <Route path="/teacherQuizes" element={<TeacherQuizes/>}/> 
         </Route>
         {/* For when a student logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['User']} />}>

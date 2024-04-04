@@ -15,7 +15,7 @@ function TeacherCourseNavigation(setkey){
             <Nav variant="underline" defaultActiveKey={setkey} className="flex-column teachernav">
                 <Nav.Link className ="sidebar" eventKey="/viewCourseTeacher" onClick={() => routeChange('/viewCourseTeacher')}>View Course</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="/teacherAssignment" onClick={() => routeChange('/teacherAssignment')}>Assignments</Nav.Link>
-                <Nav.Link className ="sidebar" eventKey="">Quizzes</Nav.Link>
+                <Nav.Link className ="sidebar" eventKey="/teacherQuizes" onClick={() => routeChange('/teacherQuizes')}>Quizzes</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="/viewStudents" onClick={() => routeChange('/viewStudents')}>Students</Nav.Link>
             </Nav>
         </article>

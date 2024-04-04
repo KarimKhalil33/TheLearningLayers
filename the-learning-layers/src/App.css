@@ -331,3 +331,9 @@ section{
   background-color: #0056b3;
 }
 
+#addOption{
+  width: fit-content;
+  margin-left: 13px;
+  margin-top: 2px;
+}
+
