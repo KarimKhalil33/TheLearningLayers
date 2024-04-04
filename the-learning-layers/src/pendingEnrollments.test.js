@@ -18,7 +18,7 @@ describe('PendingEnrollments component', () => {
   });
 
   it('renders the component with enrollments', async () => {
-    const { getByText } = render(<PendingEnrollments />);
+    const { getByText } = render(<MemoryRouter><PendingEnrollments /></MemoryRouter>);
 
     // Wait for the component to fetch data and render
     await waitFor(() => {

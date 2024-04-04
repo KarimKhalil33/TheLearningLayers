@@ -8,7 +8,7 @@ import { Route, useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import AdminMenu from './AdminMenu';
 function CreateCourse() {
   const [validated, setValidated] = useState(false);
   // State variables for form inputs
@@ -74,6 +74,7 @@ function CreateCourse() {
   };
   return (
     <>
+     <AdminMenu></AdminMenu>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
           <Nav className="mx-auto">

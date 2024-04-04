@@ -6,11 +6,10 @@ function StudentMenu() {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
-        <Navbar.Brand href="#home">Student Dahboard</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="/studentPage"> Courses </Nav.Link>
+              <Nav.Link href="/studentPage"> Dashboard </Nav.Link>
               <Nav.Link href="/allCourses"> Enroll in a Course</Nav.Link>
             </Nav>
             <Nav>
