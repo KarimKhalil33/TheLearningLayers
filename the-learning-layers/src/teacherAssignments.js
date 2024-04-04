@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -20,7 +20,14 @@ function TeacherAssignments(){
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    TeacherCourseNavigation("/teacherAssignment");
+
+    // to retrieve course id and name from previous page
+    const { courseId, courseName } = useParams();
+    const decodedCourseName = decodeURIComponent(courseName);
+    const course = `${courseName} ${courseId}`;
+
+    TeacherCourseNavigation(courseId, courseName);
+
     let navigate = useNavigate();
     const routeChange = (path) => {
         navigate(path);
@@ -40,6 +47,7 @@ function TeacherAssignments(){
     const handleSubmit = async (e) => {
         const formData = new FormData();
         formData.append('name', name);
+        formData.append('course', course);
         formData.append('weight', weight);
         formData.append('description', description);
         formData.append('startDate', startDate);
@@ -89,7 +97,7 @@ function TeacherAssignments(){
     return(
         <>
              <TeacherMenu></TeacherMenu>
-             <TeacherCourseNavigation setkey="/teacherAssignment"></TeacherCourseNavigation> 
+             <TeacherCourseNavigation courseId={courseId} courseName={decodedCourseName} />
             {/* A button opens a modal which allows the teacher to create an assignment */}
             <div className='newAssessments'>
                 <p><Button variant="primary" onClick={handleShow}>
