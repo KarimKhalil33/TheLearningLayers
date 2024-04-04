@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate, useParams } from "react-router-dom";
+import { json, useNavigate, useParams } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -16,64 +16,48 @@ import TeacherCourseNavigation from './teacherCourseNavigation';
 
 function ViewCourseTeach(){
     const [show, setShow] = useState(false);
-    const [course, setCourse] = useState(null); // State to hold course details
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    // to retrieve course id and name from previous page
-    const { courseId, courseName } = useParams();
-    const decodedCourseName = decodeURIComponent(courseName);
-
+    const [course, setCourse] = useState([]);
     useEffect(() => {
-        const fetchCourse = async () => {
-            const serverURL = 'http://localhost:4000';
-            // Use both courseId and courseName in the endpoint
-            const endpoint = `/viewCourseTeacher/${courseId}/${encodeURIComponent(decodedCourseName)}`;
-            const fetchURL = `${serverURL}${endpoint}`;
+        // Access query parameters from window.location.search
+        const params = new URLSearchParams(window.location.search);
+        const courseName = params.get('name');
+        const courseId = params.get('courseId');
 
-            try {
-                const response = await fetch(fetchURL);
-                if (!response.ok) throw new Error('Failed to fetch course details');
-                const data = await response.json();
-                setCourse(data); // Update state with fetched course
-            } catch (error) {
-                console.error('Error fetching course:', error);
-            }
-        };
+        // Now you can use `name` and `courseId` to fetch data from the database
+        // For example, fetch course based on the received parameters
+        fetchCourse(courseName, courseId);
+    }, []); // Effect runs only once when component mounts
 
-        fetchCourse();
-    }, []);
+    const fetchCourse = async (courseName, courseId) => {
+        try {
+            // Make fetch request to fetch course based on query parameters
+            const response = await fetch(`http://localhost:4000/api/teacherRoute/viewCourseTeacher?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}`);
+            const data = await response.json();
+            alert("in");
+            console.log(data);
+            setCourse(data);
+        } catch (error) {
+            console.error('Error fetching course:', error);
+        }
+    };
 
     return(
         <>
         <TeacherMenu></TeacherMenu>
-        <TeacherCourseNavigation courseId={courseId} courseName={decodedCourseName} />
-        <article className='upcoming'>
-            {/*Section for teachers to be able to monitor upcoming assignments  */}
-                <h3><strong>Upcoming</strong></h3>
-                <ul>
-                    <li><a href="">Assignment 1</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 2</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 3</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 4</a> <span className='assignDate'>Date</span></li>
-                </ul>
-        </article>
+        <TeacherCourseNavigation courseName={course.name} courseId={course.courseId} />
         <article className="main">
             <header>
-                <h1><strong>{decodedCourseName} {courseId}</strong></h1>
-                {course ? <h2>{course.title}</h2> : <h2>Loading...</h2>}
+                <h1><strong>{course.name} {course.courseId}</strong></h1>
+                <h2>{course.title}</h2>
             </header>
             {/* Section detailing the course content */}
-            {course ? (
-                    <>
-                        <section id='courseDetails'>
-                            <h3><strong>About the course</strong></h3>
-                            {course.description}
-                        </section>
-                    </>
-                ) : (
-                    <p>Loading course details...</p>
-                )}
+            <section id='courseDetails'>
+                <h3><strong>About the course</strong></h3>
+                {course.description}
+            </section>
             {/*Section details the course syllabus */}
             <section id='syllabus'>
                 <h3><strong>Syllabus</strong></h3>

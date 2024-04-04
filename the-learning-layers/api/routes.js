@@ -1,13 +1,10 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
-const Assignment = require('../models/assignments');
 
 
 router.post('/createAccount', async (req, res) => {
@@ -170,24 +167,6 @@ router.get('/profile/:username', async (req, res) => {
 });
 
 
-// Route to fetch the course information
-router.get('/viewCourseTeacher/:courseId/:courseName', async (req, res) => {
-  const { courseId, courseName } = req.params;
-
-  try {
-    let course = await Course.findOne({ courseId, name: courseName }); // Fetch course info from the database
-    console.log("Course", course); // Log the course document found
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-    res.json(course); // Send the course as a response
-  } catch (error) {
-    console.error('Error fetching course:', error);
-    res.status(500).json({ message: 'Error fetching course data' });
-  }
-});
-
-
 router.post('/teacherPage', async (req, res) => {
   const authenticationId = req.headers.authorization; // Assuming the authentication ID is sent in the Authorization header
   try {
@@ -201,45 +180,6 @@ router.post('/teacherPage', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error fetching courses', error: error });
-  }
-});
-
-// Set up storage engine with multer
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-      console.log("Destination function called");
-      cb(null, '../Files'); // Save files in the 'Files' directory
-  },
-  filename: function(req, file, cb) {
-      console.log("Filepath log check");
-      cb(null, file.originalname);
-      console.log("check?");
-  }
-});
-
-const upload = multer({ storage: storage });
-
-// Route to create a new assignment
-console.log("before saving to database check")
-router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
-  console.log("Route handler for '/teacherAssignments' called");
-  console.log("Uploaded file info: ", req.file);
-  console.log("Form data: ", req.body);
-  const { name, course, weight, description, startDate, dueDate } = req.body;
-  const filepath = req.file.originalname;
-
-  // add validation or checks here
-  
-  try {
-
-    console.log("Assign create log check");
-    const newAssignment = new Assignment({ name, course, weight, description, filepath, startDate, dueDate });
-    newAssignment.save();
-    console.log("Assign saved log check");
-    res.status(200).send("Assignment saved to the database");
-  } catch (error) {
-    console.error('Error saving assignment data:', error);
-    res.status(500).send("Unable to save assignment to the database");
   }
 });
 
