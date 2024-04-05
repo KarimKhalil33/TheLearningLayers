@@ -7,7 +7,7 @@ const grades = new mongoose.Schema({
     assignmentGrades: [{
         assignmentName: String,
         grade: Number,
-        status:String
+        status: { type: String, default: 'missing' }
     }],
     quizGrades:[{
         quizName: String,
