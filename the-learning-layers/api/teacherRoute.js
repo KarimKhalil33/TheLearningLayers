@@ -2,16 +2,15 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const Course = require('../models/courses');
+const Student = require('../models/student');
 const Assignment = require('../models/assignments');
 
 //when the user clicks view course, get the course details
 router.get('/viewCourseTeacher', async(req,res) =>{
-    console.log("here 1");
     try{
-        console.log("here 2");
-        const courseName = req.query.name;
+        const name = req.query.name;
         const courseId = req.query.courseId;
-        const course = await Course.findOne({ courseName, courseId });
+        const course = await Course.findOne({ name, courseId });
 
         console.log(course);
 
@@ -34,7 +33,6 @@ const storage = multer.diskStorage({
     filename: function(req, file, cb) {
         console.log("Filepath log check");
         cb(null, file.originalname);
-        console.log("check?");
     }
 });
   
@@ -62,6 +60,18 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
       res.status(500).send("Unable to save assignment to the database");
     }
 });
-  
+
+// Route to get student details by their student numbers
+router.get('/viewStudents', async (req, res) => {
+    const studentNumbers = req.query.studentNumbers.split(',').map(num => parseInt(num)); // Assuming studentNumbers are passed as a comma-separated string
+    try {
+        const students = await Student.find({ 'studentNum': { $in: studentNumbers } });
+        res.json(students);
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 module.exports = router;

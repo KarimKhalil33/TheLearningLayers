@@ -61,14 +61,14 @@ function TeacherAssignments(){
         }
         else {
             try {
-                const serverURL = 'http://localhost:4000';
-                const endpoint = '/user/teacherAssignments';
-                const fetchURL = `${serverURL}${endpoint}`;
+                const fetchURL = `http://localhost:4000/api/teacherRoute/teacherAssignments?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(name)}`;
+                
                 const response = await fetch(fetchURL, {
                 method: 'POST',
                 body: formData, // Send formData
                 });
 
+                console.log(response);
                 if (response) {
                 console.log("Response made");
                 }
@@ -95,7 +95,7 @@ function TeacherAssignments(){
     return(
         <>
              <TeacherMenu></TeacherMenu>
-             <TeacherCourseNavigation courseId={courseId} courseName={courseName} />
+             <TeacherCourseNavigation/>
             {/* A button opens a modal which allows the teacher to create an assignment */}
             <div className='newAssessments'>
                 <p><Button variant="primary" onClick={handleShow}>
