@@ -57,16 +57,7 @@ function ViewCourseStudent() {
                 <Nav.Link href="/Grades" className ="sidebar" eventKey="link-3">Grades</Nav.Link>
             </Nav>
         </article>
-        <article className='upcoming'>
-            {/*Section for teachers to be able to monitor upcoming assignments  */}
-                <h3><strong>Upcoming</strong></h3>
-                <ul>
-                    <li><a href="">Assignment 1</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 2</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 3</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 4</a> <span className='assignDate'>Date</span></li>
-                </ul>
-        </article>
+       
         <article className="main">
             <header>
             <h1><strong>{course.name} {course.courseId}</strong></h1>
