@@ -8,7 +8,7 @@ const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
 const Assignment = require('../models/assignments');
-
+const Grades=require('..models/grades');
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
@@ -146,6 +146,15 @@ router.post('/createCourse', (req, res) => {
   }
 });
 
+// Route to fetch all the courses
+router.get('/course', async (req, res) => {
+  try {
+    const courses = await Course.find({}); // Fetch all courses from the database
+    res.json(courses); // Send the courses as a response
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching courses', error: error });
+  }
+});
 
 // Endpoint to fetch user profile information
 router.get('/profile/:username', async (req, res) => {
@@ -242,6 +251,34 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
     res.status(500).send("Unable to save assignment to the database");
   }
 });
+
+router.get('/getAssignments',async(req,res)=>{
+  try{
+    const name = req.query.name;
+    const courseId = req.query.courseId;
+    const course=name+" "+courseId;
+    const assignment = await Assignment.findOne({ course });
+    res.json(assignment);
+}
+catch(error){
+    res.status(500).json({ error: 'Internal server error' });
+}
+})
+
+router.get('/getGrades',async(req,res)=>{
+  try{
+    const name = req.query.name;
+    const courseId = req.query.courseId;
+    const course=name+" "+courseId;
+    const studentNum= req.body.studentNum;
+
+    const grades = await Grades.findOne({course,studentNum});
+    res.json(grades);
+  }
+  catch(error){
+    res.status(500).json({ error: 'Internal server error' });
+}
+})
 
 
 module.exports = router;
