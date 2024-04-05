@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, ListGroup, Button } from 'react-bootstrap';
 
 function PendingEnrollments() {
-    const [enrollments, setEnrollments] = useState({});
+    const [enrollments, setEnrollments] = useState([]);
 
     useEffect(() => {
 
@@ -16,7 +16,7 @@ function PendingEnrollments() {
                 data.forEach(enrollment => {
                     enrollmentsObject[enrollment._id] = enrollment;
                 });
-                setEnrollments(enrollmentsObject); // Update state with fetched enrollments
+                setEnrollments(data); // Update state with fetched enrollments
             } catch (error) {
                 console.error('Error fetching enrollments:', error);
             }
