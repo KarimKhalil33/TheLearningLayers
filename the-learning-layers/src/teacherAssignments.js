@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
  import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
@@ -32,7 +32,10 @@ function TeacherAssignments(){
     const routeChange = (path) => {
         navigate(path);
     };
+    
     // async () => (
+
+    const [assignments,setAssignments]=useState([]);
 
     const [validated, setValidated] = useState(false);
     const [name, setName] = useState('');
@@ -43,6 +46,31 @@ function TeacherAssignments(){
     // State hook for the file
     const [file, setFile] = useState(null);
     
+    useEffect(() => {
+        // Function to fetch courses student is enrolled in
+        const fetchAssignments = async () => {
+            try {
+                const response = await fetch('http://localhost:4000/user/getAssignments', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                       name:courseName,
+                       courseId
+                    }),
+                });
+                const data = await response.json();
+          
+                setAssignments(data); // Update state with fetched courses
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+            }
+        };
+    
+        fetchAssignments(); // Call the fetch function
+    }, []);
+
     const handleSubmit = async (e) => {
         const formData = new FormData();
         formData.append('name', name);
@@ -174,7 +202,7 @@ function TeacherAssignments(){
                     </Button>
                     </Modal.Footer>
                 </Modal>
-                <Button>Create Quiz</Button>
+
             </div>
             <article className='main'>
                 {/* Yet to be filled out, this portion of the page displays all assignments for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
@@ -201,4 +229,5 @@ function TeacherAssignments(){
     );
     //this should show
 }
+
 export default TeacherAssignments;
