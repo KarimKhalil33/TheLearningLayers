@@ -8,7 +8,6 @@ function Profile() {
 
     useEffect(() => {
         const username = sessionStorage.getItem("authenticationId");
-        
         if (username) {
             setUserProfile({ username });
         } else {

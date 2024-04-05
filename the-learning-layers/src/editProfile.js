@@ -1,33 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'; // Assume you have a CSS file for styling
-
+import { useNavigate } from 'react-router-dom';
 function EditProfile() {
-  const [profile, setProfile] = useState({
-    username: '',
-    email: '',
-    // Add other fields as needed
-  });
-
+  const [userProfile, setUserProfile] = useState({});
+  const navigate = useNavigate();
   useEffect(() => {
-    // Here you would fetch the current user profile details to populate the form
-    // For now, we will simulate this with sessionStorage
-    const username = sessionStorage.getItem('username');
-    const email = sessionStorage.getItem('email');
-    
-    if (username && email) {
-      setProfile({ ...profile, username, email });
+    const username = sessionStorage.getItem("authenticationId");
+    if (username) {
+        setUserProfile({ username });
+    } else {
+        console.error('No user data available');
     }
-  }, []);
+}, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile({ ...profile, [name]: value });
+    setUserProfile({ ...userProfile, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Here you would handle the form submission to update the profile details
-    console.log('Profile updated:', profile);
+    console.log('Profile updated:', userProfile);
     // After updating, you might want to navigate back to the profile page or show a success message
   };
 
@@ -40,16 +34,7 @@ function EditProfile() {
           type="text"
           id="username"
           name="username"
-          value={profile.username}
-          onChange={handleChange}
-        />
-
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={profile.email}
+          value={userProfile.username}
           onChange={handleChange}
         />
 

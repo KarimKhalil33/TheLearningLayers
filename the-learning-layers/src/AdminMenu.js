@@ -6,10 +6,10 @@ function AdminMenu() {
     return (
         <Navbar bg="dark" variant="dark" expand="lg">
             <Container>
-                <Navbar.Brand as={Link} to="/adminPage">Admin Dashboard</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
+                        <Nav.Link as={Link} to="/AdminPage"> Dashboard</Nav.Link>
                         <Nav.Link as={Link} to="/createCourse">Create Course</Nav.Link>
                         <Nav.Link as={Link} to="/pendingEnrollments">Pending Enrollments</Nav.Link>
                         {/* Add more links as needed */}

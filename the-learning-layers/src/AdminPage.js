@@ -31,8 +31,6 @@ function AdminPage() {
             }
         };
 
-
-
         fetchCourses(); // Call the fetch function
     }, []);
 

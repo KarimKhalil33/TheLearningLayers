@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -8,7 +8,7 @@ import { Route, useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import AdminMenu from './AdminMenu';
 function CreateCourse() {
   const [validated, setValidated] = useState(false);
   // State variables for form inputs
@@ -17,7 +17,32 @@ function CreateCourse() {
   const [title, setCourseTitle] = useState("");
   const [description, setDescription] = useState("");
   const [teacher, setTeacher] = useState("");
+  const [teachers, setTeachers] = useState([]);
 
+  useEffect(() => {
+    // Function to fetch teachers
+    const fetchTeachers = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/adminRoute/teachers', {
+          method: 'GET', // Assuming it is a GET request
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setTeachers(data); // Assuming the API returns an array of teacher names
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+      }
+    };
+  
+    fetchTeachers();
+  }, []);
+  
 
   const handleSubmit = async (e) => {
     const form = e.currentTarget;
@@ -74,10 +99,11 @@ function CreateCourse() {
   };
   return (
     <>
+     <AdminMenu></AdminMenu>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
           <Nav className="mx-auto">
-            <Nav.Link href="#home"><div className="text-center">
+            <Nav.Link href="/adminPage"><div className="text-center">
               <img id="logo" src={dark}
                 style={{ width: '100px' }} alt="logo" />
             </div></Nav.Link>
@@ -107,11 +133,16 @@ function CreateCourse() {
 
           </Row>
           <Row>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor='Teacher'>Teacher</Form.Label>
-              <Form.Control id="Teacher" type="text" placeholder="Enter Teacher Name" value={teacher} onChange={(e) => setTeacher(e.target.value)} />
-              <Form.Control.Feedback type='invalid'>Enter Teacher Name</Form.Control.Feedback>
-            </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor='Teacher'>Teacher</Form.Label>
+            <Form.Control as="select" id="Teacher" value={teacher} onChange={(e) => setTeacher(e.target.value)} required>
+              <option value="">Select Teacher</option>
+              {teachers.map((teacher, index) => (
+                <option key={index} value={teacher.name}>{teacher.name}</option>
+              ))}
+            </Form.Control>
+            <Form.Control.Feedback type='invalid'>Please select a teacher</Form.Control.Feedback>
+          </Form.Group>
           </Row>
           <Row>
             <Form.Group className="mb-4">
