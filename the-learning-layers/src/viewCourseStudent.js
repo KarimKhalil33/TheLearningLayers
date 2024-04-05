@@ -50,12 +50,21 @@ function ViewCourseStudent() {
             // Make fetch request to fetch courses based on query parameters
             const response = await fetch(`http://localhost:4000/api/adminRoute/viewCourseStudent?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
             const data = await response.json();
-            console.log(data);
             setCourse(data);
         } catch (error) {
             console.error('Error fetching courses:', error);
         }
     };
+    const listAssignments = assignments.length > 0 ? (
+        assignments.map((assignment) => (
+            <li key={assignment._id}>
+                <a href="">{assignment.name}</a> <span className='assignDate'>{assignment.dueDate}</span>
+            </li>
+        ))
+    ) : (
+        <li>No assignments yet</li>
+    );
+
 
     return (
         <>
@@ -105,14 +114,8 @@ function ViewCourseStudent() {
                 {/*Section for teachers to be able to monitor upcoming assignments  */}
                 <h3><strong>Upcoming</strong></h3>
                 <ul>
-                    {assignments && assignments.length > 0 && assignments.map((assignment, index) => (
-                        <li key={index}>
-                            <a href="">{assignment.name}</a> <span className='assignDate'>{assignment.dueDate}</span>
-                        </li>
-                    ))}
+                    {listAssignments}
                 </ul>
-
-
             </article>
             <article className="main">
                 <header>
