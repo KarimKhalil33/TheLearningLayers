@@ -22,6 +22,7 @@ function ViewCourseStudent() {
     // const handleShow = () => setShow(true);
 
     const [course, setCourse] = useState([]);
+    const [assignments, setAssignments] = useState([]);
 
     // Access query parameters from window.location.search
     const params = new URLSearchParams(window.location.search);
@@ -31,9 +32,19 @@ function ViewCourseStudent() {
         // Now you can use `name` and `courseId` to fetch data from the database
         // For example, fetch courses based on the received parameters
         fetchCourses(name, courseId);
+        fetchAssignments(name, courseId);
     }, []); // Effect runs only once when component mounts
 
-
+    const fetchAssignments = async (name, courseId) => {
+        try {
+            // Make fetch request to fetch assignments based on query parameters
+            const response = await fetch(`http://localhost:4000/user/getAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
+            const data = await response.json();
+            setAssignments(data);
+        } catch (error) {
+            console.error('Error fetching assignments:', error);
+        }
+    }
     const fetchCourses = async (name, courseId) => {
         try {
             // Make fetch request to fetch courses based on query parameters
@@ -61,11 +72,14 @@ function ViewCourseStudent() {
                 {/*Section for teachers to be able to monitor upcoming assignments  */}
                 <h3><strong>Upcoming</strong></h3>
                 <ul>
-                    <li><a href="">Assignment 1</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 2</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 3</a> <span className='assignDate'>Date</span></li>
-                    <li><a href="">Assignment 4</a> <span className='assignDate'>Date</span></li>
+                    {assignments && assignments.length > 0 && assignments.map((assignment, index) => (
+                        <li key={index}>
+                            <a href="">{assignment.name}</a> <span className='assignDate'>{assignment.dueDate}</span>
+                        </li>
+                    ))}
                 </ul>
+
+
             </article>
             <article className="main">
                 <header>

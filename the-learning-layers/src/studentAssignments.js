@@ -26,7 +26,7 @@ function StudentAssignments() {
     //         const data = await response.json();
     //         setAssignments(data);
     //     } catch (error) {
-    //         console.error('Error fetching courses:', error);
+    //         console.error('Error fetching assignments:', error);
     //     }
     // }, []);
 
