@@ -41,9 +41,8 @@ function StudentAssignments() {
     };
 
     const viewAssignment = (assignmentId) => {
-        navigate(`/assignment/${assignmentId}`);
-    };
-
+        navigate(`/assignments/${assignmentId}`);
+      };
     return (
         <>
             <StudentMenu />
