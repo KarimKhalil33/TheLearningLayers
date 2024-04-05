@@ -1,6 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const Course = require('../models/courses');
+const Teacher = require('../models/teacher'); // Import the Teacher model
+
+
+
+// New route to fetch teachers
+router.get('/teachers', async (req, res) => {
+    try {
+        const teachers = await Teacher.find();
+        // Map the teacher data to include a full name field
+        const teacherNames = teachers.map(teacher => ({
+            name: `${teacher.firstName} ${teacher.lastName}`,
+            username: teacher.username // Include the username if needed for identification
+        }));
+        res.json(teacherNames);
+    } catch (error) {
+        console.error('Error fetching teachers:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 // Route to delete a course
 router.delete('/delete', async (req, res) => {

@@ -226,6 +226,22 @@ const storage = multer.diskStorage({
   }
 });
 
+// Endpoint to fetch all teachers
+router.get('/teachers', async (req, res) => {
+  try {
+    const teachers = await Teacher.find();
+    // Assuming you want to send back a list of full names
+    const teacherNames = teachers.map(teacher => ({
+      name: teacher.firstName + ' ' + teacher.lastName,
+      username: teacher.username // Include the username if it's needed on the frontend
+    }));
+    res.status(200).json(teacherNames);
+  } catch (error) {
+    console.error('Error fetching teachers:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 const upload = multer({ storage: storage });
 
 // Route to create a new assignment
@@ -249,6 +265,21 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
   } catch (error) {
     console.error('Error saving assignment data:', error);
     res.status(500).send("Unable to save assignment to the database");
+  }
+});
+
+
+// Route to get a specific assignment
+router.get('/assignments/:assignmentId', async (req, res) => {
+  try {
+    const assignment = await Assignment.findById(req.params.assignmentId);
+    if (!assignment) {
+      return res.status(404).json({ message: 'Assignment not found' });
+    }
+    res.json(assignment);
+  } catch (error) {
+    console.error('Error fetching assignment:', error);
+    res.status(500).json({ message: 'Error fetching assignment details' });
   }
 });
 
@@ -279,6 +310,7 @@ router.get('/getGrades',async(req,res)=>{
     res.status(500).json({ error: 'Internal server error' });
 }
 })
+
 
 
 module.exports = router;
