@@ -24,14 +24,11 @@ function AdminPage() {
             try {
                 const response = await fetch('http://localhost:4000/user/course'); // Adjust the endpoint as needed
                 const data = await response.json();
-                console.log(data);
                 setCourses(data); // Update state with fetched courses
             } catch (error) {
                 console.error('Error fetching courses:', error);
             }
         };
-
-
 
         fetchCourses(); // Call the fetch function
     }, []);

@@ -46,6 +46,8 @@ app.use('/api/adminRoute', adminRoute);
 // Mounting pendingEnrollmentsRoutes for routes starting with '/api/enrolmentRoute'
 app.use('/api/enrollmentRoute', pendingEnrollmentsRoutes);
 
+
+
 // Start the Express server and listen on the specified port
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
