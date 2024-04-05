@@ -18,6 +18,7 @@ import GradeAssignment from './gradeAssignment';
 import ViewStudents from './viewStudents';
 import Profile from './Profile';
 import Grades from './Grades';
+import TeacherQuizes from './teacherQuizes';
 import ViewCourseAdmin from './viewCourseAdmin';
 import EditProfile from './editProfile';
 import StudentAssignments from './studentAssignments';
@@ -69,7 +70,8 @@ function App() {
           <Route path="/viewCourseTeacher/:courseId/:courseName" element={<ViewCourseTeacher/>}/>
           <Route path="/teacherAssignments/:courseId/:courseName" element={<TeacherAssignments/>}/>
           <Route path="/gradeAssignment" element ={<GradeAssignment/>}/>
-          <Route path="/viewStudents" element={<ViewStudents/>}/> 
+          <Route path="/viewStudents" element={<ViewStudents/>}/>
+          <Route path="/teacherQuizes" element={<TeacherQuizes/>}/> 
         </Route>
         {/* For when a student logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['User']} />}>
