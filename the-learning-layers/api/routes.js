@@ -6,7 +6,7 @@ const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
 const Assignment = require('../models/assignments');
-const Grades=require('..models/grades');
+const Grades=require('../models/grades');
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
