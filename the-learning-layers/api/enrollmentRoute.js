@@ -178,17 +178,14 @@ router.post('/accept', async (req, res) => {
 router.post('/reject', async (req, res) => {
     console.log("I'm in the rejection function");
     try {
-             // Retrieve data from FormData
-             const id = req.body.id;
-             const title = req.body.title;
-             const studentNum = req.body.studentNum;
-
+             // Retrieve data from body
+             const {id,studentNum, title} = req.body;
              console.log(id);
              console.log(title);
              console.log(studentNum);
    
         // Find and delete the enrollment 
-        const enrollment = await Enrollments.findOne({id, title, studentNum});
+        const enrollment = await Enrollments.findOne({studentNum, title});
         
 
         console.log("Enrollment found");
@@ -201,7 +198,7 @@ router.post('/reject', async (req, res) => {
             await enrollment.save();
             console.log("Status changed");
 
-            const enrollment = await Enrollments.findOneAndDelete({ _id: id});
+            await Enrollments.findOneAndDelete({ _id: enrollment._id});
             console.log("Enrollment deleted ");
         } else {
             return res.status(404).json({ error: 'Enrollment not found' });
