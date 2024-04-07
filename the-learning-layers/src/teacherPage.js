@@ -15,7 +15,10 @@ import AppFooter from './appFooter';
 function TeacherPage() {
   const [courses, setCourses] = useState([]); // State to hold courses
   let navigate = useNavigate();
-  
+  const routeChange = (path) => {
+    navigate(path);
+  };
+
   useEffect(() => {
     // Function to fetch courses
     const fetchCourses = async () => {
@@ -45,11 +48,6 @@ function TeacherPage() {
     fetchCourses(); // Call the fetch function
   }, []);
 
-  const navigateToCourse = (courseId, courseName) => {
-    // Navigate with courseId and courseName in the URL
-    navigate(`/viewCourseTeacher/${courseId}/${encodeURIComponent(courseName)}`);
-  };
-
   return (
     <>
       <TeacherMenu></TeacherMenu>
@@ -64,9 +62,9 @@ function TeacherPage() {
             {courses.map((course, index) => (
               <Col key={index}>
                 <div className="courseteach-card p-3 shadow-sm">
-                  <h3 style={{ color: 'white' }} className="text-center my-3">{course.title}</h3>
+                  <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                   <div className="text-center" >
-                    <Button variant="primary" className="button" onClick={() => navigateToCourse(course.courseId, course.name)} >View Course</Button>
+                    <Button variant="primary" className="button" onClick={() => routeChange(`/viewCourseTeacher?courseId=${encodeURIComponent(course.courseId)}&name=${encodeURIComponent(course.name)}`)} >View Course</Button>
                   </div>
                 </div>
               </Col>

@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
  import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
@@ -21,19 +21,21 @@ function TeacherAssignments(){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    // to retrieve course id and name from previous page
-    const { courseId, courseName } = useParams();
-    const decodedCourseName = decodeURIComponent(courseName);
+    // Access query parameters from window.location.search
+    const params = new URLSearchParams(window.location.search);
+    const courseName = params.get('name');
+    const courseId = params.get('courseId');
+
     const course = `${courseName} ${courseId}`;
 
-    TeacherCourseNavigation(courseId, courseName);
+    TeacherCourseNavigation( courseName, courseId );
 
     let navigate = useNavigate();
     const routeChange = (path) => {
         navigate(path);
     };
-    
-    // async () => (
+
+    const [assignments,setAssignments]=useState([]);
 
     const [validated, setValidated] = useState(false);
     const [name, setName] = useState('');
@@ -44,6 +46,31 @@ function TeacherAssignments(){
     // State hook for the file
     const [file, setFile] = useState(null);
     
+    useEffect(() => {
+        // Function to fetch courses student is enrolled in
+        const fetchAssignments = async () => {
+            try {
+                const response = await fetch('http://localhost:4000/user/getAssignments', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                       name:courseName,
+                       courseId
+                    }),
+                });
+                const data = await response.json();
+          
+                setAssignments(data); // Update state with fetched courses
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+            }
+        };
+    
+        fetchAssignments(); // Call the fetch function
+    }, []);
+
     const handleSubmit = async (e) => {
         const formData = new FormData();
         formData.append('name', name);
@@ -61,21 +88,19 @@ function TeacherAssignments(){
         }
         else {
             try {
-                const serverURL = 'http://localhost:4000';
-                const endpoint = '/user/teacherAssignments';
-                const fetchURL = `${serverURL}${endpoint}`;
+                const fetchURL = `http://localhost:4000/api/teacherRoute/teacherAssignments?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(name)}`;
+                
                 const response = await fetch(fetchURL, {
                 method: 'POST',
                 body: formData, // Send formData
                 });
 
+                console.log(response);
                 if (response) {
-                    alert("here 1");
                 console.log("Response made");
                 }
 
                 if (response.status === 200) {
-                    alert("here 2");
                 console.log('Assignment successfully created');
         
                 } else {
@@ -97,7 +122,7 @@ function TeacherAssignments(){
     return(
         <>
              <TeacherMenu></TeacherMenu>
-             <TeacherCourseNavigation courseId={courseId} courseName={decodedCourseName} />
+             <TeacherCourseNavigation/>
             {/* A button opens a modal which allows the teacher to create an assignment */}
             <div className='newAssessments'>
                 <p><Button variant="primary" onClick={handleShow}>

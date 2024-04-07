@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
  import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
@@ -19,11 +19,34 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
 function GradeAssignment(){
-    const [show, setShow] = useState(false);
+    const [students, setStudents] = useState([]);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    const Assignments = ["Assign 1","Assign 2","Assign 3","Assign 4"];
+    useEffect(() => {
+        // Access query parameters from window.location.search
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name');
+        const courseId = params.get('courseId');
+
+        fetchCourse( name, courseId);
+    }, []); // Effect runs only once when component mounts
+
+    const fetchCourse = async (name, courseId) => {
+        try {
+            // Fetch course details to get student numbers
+            const courseResponse = await fetch(`http://localhost:4000/api/teacherRoute/viewCourseTeacher?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
+            const course = await courseResponse.json();
+            
+            // Now fetch student details using the student numbers from the course
+            const studentNumbers = course.students.join(',');
+            const studentsResponse = await fetch(`http://localhost:4000/api/teacherRoute/viewStudents?studentNumbers=${studentNumbers}`);
+            const studentsData = await studentsResponse.json();
+
+            setStudents(studentsData);
+        } catch (error) {
+            console.error('Error fetching:', error);
+        }
+    };
+
     TeacherCourseNavigation("/teacherAssignment");
     // populate arrays with actual values from the database. Map functions have been defined to enable the information to be used.
     const students= ["Student 1", "Student 2", "Student 3", "Student 4"]

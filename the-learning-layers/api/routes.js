@@ -1,6 +1,4 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require("../models/student");
@@ -8,7 +6,7 @@ const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
 const Assignment = require('../models/assignments');
-
+const Grades=require('../models/grades');
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
@@ -146,6 +144,15 @@ router.post('/createCourse', (req, res) => {
   }
 });
 
+// Route to fetch all the courses
+router.get('/course', async (req, res) => {
+  try {
+    const courses = await Course.find({}); // Fetch all courses from the database
+    res.json(courses); // Send the courses as a response
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching courses', error: error });
+  }
+});
 
 // Endpoint to fetch user profile information
 router.get('/profile/:username', async (req, res) => {
@@ -170,24 +177,6 @@ router.get('/profile/:username', async (req, res) => {
 });
 
 
-// Route to fetch the course information
-router.get('/viewCourseTeacher/:courseId/:courseName', async (req, res) => {
-  const { courseId, courseName } = req.params;
-
-  try {
-    let course = await Course.findOne({ courseId, name: courseName }); // Fetch course info from the database
-    console.log("Course", course); // Log the course document found
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-    res.json(course); // Send the course as a response
-  } catch (error) {
-    console.error('Error fetching course:', error);
-    res.status(500).json({ message: 'Error fetching course data' });
-  }
-});
-
-
 router.post('/teacherPage', async (req, res) => {
   const authenticationId = req.headers.authorization; // Assuming the authentication ID is sent in the Authorization header
   try {
@@ -204,44 +193,48 @@ router.post('/teacherPage', async (req, res) => {
   }
 });
 
-// Set up storage engine with multer
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-      console.log("Destination function called");
-      cb(null, '../Files'); // Save files in the 'Files' directory
-  },
-  filename: function(req, file, cb) {
-      console.log("Filepath log check");
-      cb(null, file.originalname);
-      console.log("check?");
-  }
-});
-
-const upload = multer({ storage: storage });
-
-// Route to create a new assignment
-console.log("before saving to database check")
-router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
-  console.log("Route handler for '/teacherAssignments' called");
-  console.log("Uploaded file info: ", req.file);
-  console.log("Form data: ", req.body);
-  const { name, course, weight, description, startDate, dueDate } = req.body;
-  const filepath = req.file.originalname;
-
-  // add validation or checks here
-  
+// Route to get a specific assignment
+router.get('/assignments/:assignmentId', async (req, res) => {
   try {
-
-    console.log("Assign create log check");
-    const newAssignment = new Assignment({ name, course, weight, description, filepath, startDate, dueDate });
-    newAssignment.save();
-    console.log("Assign saved log check");
-    res.status(200).send("Assignment saved to the database");
+    const assignment = await Assignment.findById(req.params.assignmentId);
+    if (!assignment) {
+      return res.status(404).json({ message: 'Assignment not found' });
+    }
+    res.json(assignment);
   } catch (error) {
-    console.error('Error saving assignment data:', error);
-    res.status(500).send("Unable to save assignment to the database");
+    console.error('Error fetching assignment:', error);
+    res.status(500).json({ message: 'Error fetching assignment details' });
   }
 });
+
+router.get('/getAssignments',async(req,res)=>{
+  try{
+    const name = req.query.name;
+    const courseId = req.query.courseId;
+    const course=name+" "+courseId;
+    const assignment = await Assignment.findOne({ course });
+    res.json(assignment);
+}
+catch(error){
+    res.status(500).json({ error: 'Internal server error' });
+}
+})
+
+router.get('/getGrades',async(req,res)=>{
+  try{
+    const name = req.query.name;
+    const courseId = req.query.courseId;
+    const course=name+" "+courseId;
+    const studentNum= req.body.studentNum;
+
+    const grades = await Grades.findOne({course,studentNum});
+    res.json(grades);
+  }
+  catch(error){
+    res.status(500).json({ error: 'Internal server error' });
+}
+})
+
 
 
 module.exports = router;
