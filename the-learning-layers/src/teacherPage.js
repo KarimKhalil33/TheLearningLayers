@@ -12,32 +12,12 @@ import TeacherMenu from './TeacherMenu';
 import { Route } from 'react-router-dom';
 
 function TeacherPage() {
-  // Placeholder data for courses, this would likely be fetched from a database in a real application.
-  // const courses = [
-  //   { title: 'Introduction to Programming', id: 1 },
-  //   { title: 'Advanced Programming', id: 2 },
-  //   { title: 'Data Structures', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-  //   { title: 'Machine Architecture', id: 3 },
-
-  // ];
-  // let navigate = useNavigate();
-  // const routeChange = (path) => {
-  //   navigate(path);
-  // };
   const [courses, setCourses] = useState([]); // State to hold courses
   let navigate = useNavigate();
   const routeChange = (path) => {
     navigate(path);
   };
+
   useEffect(() => {
     // Function to fetch courses
     const fetchCourses = async () => {
@@ -81,9 +61,9 @@ function TeacherPage() {
             {courses.map((course, index) => (
               <Col key={index}>
                 <div className="courseteach-card p-3 shadow-sm">
-                  <h3 style={{ color: 'white' }} className="text-center my-3">{course.title}</h3>
+                  <h3 style={{ color: 'white' }} className="text-center my-3">{course.name} {course.courseId}</h3>
                   <div className="text-center" >
-                    <Button variant="primary" className="button" onClick={() => routeChange('/viewCourseTeacher')} >View Course</Button>
+                    <Button variant="primary" className="button" onClick={() => routeChange(`/viewCourseTeacher?courseId=${encodeURIComponent(course.courseId)}&name=${encodeURIComponent(course.name)}`)} >View Course</Button>
                   </div>
                 </div>
               </Col>

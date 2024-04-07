@@ -72,7 +72,7 @@ describe('AdminPage component', () => {
 
 
     // Get all buttons with the name "View"
-    const viewCourseButtons = screen.getAllByRole('button', { name: /view/i });
+    const viewCourseButtons = getAllByRole('button', { name: /view/i });
 
     //wrapped in act for asynchronous tests
     act(() => {

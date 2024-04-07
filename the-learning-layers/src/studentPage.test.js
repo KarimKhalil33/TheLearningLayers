@@ -1,24 +1,19 @@
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import TeacherPage from './teacherPage';
+import StudentPage from './studentPage';
 import { MemoryRouter } from 'react-router-dom';
 import { act } from '@testing-library/react';
 
-describe('TeacherPage component', () => {
+describe('StudentPage component', () => {
   //Before each test run, mock these things
   beforeEach(() => {
     // Mock sessionStorage
-    Object.defineProperty(window, 'sessionStorage', {
-      value: {
-        getItem: jest.fn(() => 'dummyAuthenticationId'),
-      },
-      writable: true,
-    });
+    sessionStorage.setItem('authenticationId', JSON.stringify('test_username'));
 
     //Mocking landing window href location
     global.window = Object.create(window);
-    const url = "http://localhost/viewCourseTeacher"; //target url for page changes
+    const url = "http://localhost/viewCourseStudent"; //target url for page changes
     Object.defineProperty(window, "location", {
       value: {
         href: url
@@ -28,10 +23,11 @@ describe('TeacherPage component', () => {
     // Mock fetch
     global.fetch = jest.fn(() =>
       Promise.resolve({
+        ok:true,
         json: () =>
           Promise.resolve([
-            { name: 'Introduction to Programming', courseId: 1 },
-            { name: 'Advanced Programming', courseId: 2 },
+            { name:'COSC',courseId: 101 },
+            {name:'COSC',courseId:111 },
           ]),
       })
     );
@@ -44,31 +40,31 @@ describe('TeacherPage component', () => {
 
   test('renders welcome message and course cards', async () => {
     const { getByText, getAllByRole } = render(<MemoryRouter>
-      <TeacherPage />
+      <StudentPage />
     </MemoryRouter>);
 
 //expect these text be in the website on page load
     expect(getByText('WELCOME TO LEARNING LAYERS')).toBeInTheDocument();
-    expect(getByText('A better way to teach, anywhere and anytime.')).toBeInTheDocument();
-    expect(getByText('Explore your courses, track your students\' progress, and engage with your class.')).toBeInTheDocument();
+    expect(getByText('A better way to learn, anywhere and anytime.')).toBeInTheDocument();
+    expect(getByText('Explore your courses, track your progress, and engage with your classmates and instructors.')).toBeInTheDocument();
 
     // Wait for fetch to complete and render course cards
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
-      expect(getAllByRole('heading', { name: /Introduction to Programming|Advanced Programming/ })).toHaveLength(2);
+      expect(getAllByRole('heading', { name: /COSC 101|COSC 111/ })).toHaveLength(2);
     });
   });
 
   //test that when view course button is clicked
   test('clicking View Course button navigates to view course page', async () => {
     const { getAllByRole } = render(<MemoryRouter>
-      <TeacherPage />
+      <StudentPage />
     </MemoryRouter>);
     
     //check that I have existing card on the website
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
-      expect(getAllByRole('heading', { name: /Introduction to Programming|Advanced Programming/ })).toHaveLength(2);
+      expect(getAllByRole('heading', { name: /COSC 101|COSC 111/ })).toHaveLength(2);
     });
 
 
@@ -85,7 +81,7 @@ describe('TeacherPage component', () => {
 
     // Check if navigation occurred
     await waitFor(() => {
-      expect(window.location.href).toBe('http://localhost/viewCourseTeacher');
+      expect(window.location.href).toBe('http://localhost/viewCourseStudent');
     })
   });
 
