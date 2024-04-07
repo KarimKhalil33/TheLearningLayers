@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css'; // Make sure you have the CSS file for styling
 import StudentMenu from './StudentMenu';
-
+import { Nav } from 'react-bootstrap';
 function StudentAssignments() {
     const navigate = useNavigate();
     const [assignments, setAssignments] = useState([
@@ -46,6 +46,11 @@ function StudentAssignments() {
     return (
         <>
             <StudentMenu />
+            <article className='side-nav'>
+                <Nav variant="underline" defaultActiveKey="/viewCourseStudent" className="flex-column ">
+                    <Nav.Link className="sidebar" href='/viewCourseStudent'>View Course</Nav.Link>
+                </Nav>
+            </article>
             <div className="assignments-container">
                 <div className="title-area">
                     <h1>Assignments</h1>

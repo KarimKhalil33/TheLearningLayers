@@ -98,12 +98,10 @@ function ViewCourseStudent() {
                 <Nav variant="underline" defaultActiveKey="/viewCourseStudent" className="flex-column ">
                     <Nav.Link className="sidebar" eventKey="/viewCourseStudent">View Course</Nav.Link>
                     <Nav.Link href={`/StudentAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`} className="sidebar" eventKey="">Assignments</Nav.Link>
-                    <Nav.Link href="/Grades" className="sidebar" eventKey="link-3">Grades</Nav.Link>
                 </Nav>
             </article>
             <article className='upcoming'>
                 {/*Section for teachers to be able to monitor upcoming assignments  */}
-                <h3><strong>Upcoming</strong></h3>
                 <ul>
                     {assignments && assignments.length > 0 && assignments.map((assignment, index) => (
                         <li key={index}>
