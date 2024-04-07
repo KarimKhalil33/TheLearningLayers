@@ -8,7 +8,7 @@ const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
 const Assignment = require('../models/assignments');
-const Grades=require('..models/grades');
+const Grades=require('../models/grades');
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
@@ -288,7 +288,7 @@ router.get('/getAssignments',async(req,res)=>{
     const name = req.query.name;
     const courseId = req.query.courseId;
     const course=name+" "+courseId;
-    const assignment = await Assignment.findOne({ course });
+    const assignment = await Assignment.find({ course });
     res.json(assignment);
 }
 catch(error){

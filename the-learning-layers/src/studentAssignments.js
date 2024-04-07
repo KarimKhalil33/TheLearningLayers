@@ -23,6 +23,7 @@ function StudentAssignments() {
             // Make fetch request to fetch assignments based on query parameters
             const response = await fetch(`http://localhost:4000/user/getAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
             const data = await response.json();
+            console.log(data);
             setAssignments(data);
         } catch (error) {
             console.error('Error fetching assignments:', error);
@@ -49,6 +50,7 @@ function StudentAssignments() {
             return <span className="status grade">{assignment.grade}%</span>;
         }
     };
+    console.log(assignments);
 
     const viewAssignment = (assignmentId) => {
         navigate(`/assignments/${assignmentId}`);
