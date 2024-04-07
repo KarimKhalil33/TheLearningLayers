@@ -21,19 +21,19 @@ function TeacherAssignments(){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    // to retrieve course id and name from previous page
-    const { courseId, courseName } = useParams();
-    const decodedCourseName = decodeURIComponent(courseName);
+    // Access query parameters from window.location.search
+    const params = new URLSearchParams(window.location.search);
+    const courseName = params.get('name');
+    const courseId = params.get('courseId');
+
     const course = `${courseName} ${courseId}`;
 
-    TeacherCourseNavigation(courseId, courseName);
+    TeacherCourseNavigation( courseName, courseId );
 
     let navigate = useNavigate();
     const routeChange = (path) => {
         navigate(path);
     };
-    
-    // async () => (
 
     const [assignments,setAssignments]=useState([]);
 
@@ -88,21 +88,19 @@ function TeacherAssignments(){
         }
         else {
             try {
-                const serverURL = 'http://localhost:4000';
-                const endpoint = '/user/teacherAssignments';
-                const fetchURL = `${serverURL}${endpoint}`;
+                const fetchURL = `http://localhost:4000/api/teacherRoute/teacherAssignments?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(name)}`;
+                
                 const response = await fetch(fetchURL, {
                 method: 'POST',
                 body: formData, // Send formData
                 });
 
+                console.log(response);
                 if (response) {
-                    alert("here 1");
                 console.log("Response made");
                 }
 
                 if (response.status === 200) {
-                    alert("here 2");
                 console.log('Assignment successfully created');
         
                 } else {
@@ -124,7 +122,7 @@ function TeacherAssignments(){
     return(
         <>
              <TeacherMenu></TeacherMenu>
-             <TeacherCourseNavigation courseId={courseId} courseName={decodedCourseName} />
+             <TeacherCourseNavigation/>
             {/* A button opens a modal which allows the teacher to create an assignment */}
             <div className='newAssessments'>
                 <p><Button variant="primary" onClick={handleShow}>
@@ -213,15 +211,13 @@ function TeacherAssignments(){
                     Assignment Name
                     <div className='assignActions'>
                     <Button variant='danger'>Delete</Button>
-                    <Button variant='success' onClick={()=>routeChange('/gradeAssignment')}>Grade</Button>
-                    <Button variant='info'>Edit</Button></div>
+                    <Button variant='success' onClick={()=>routeChange('/gradeAssignment')}>Grade</Button></div>
                 </Row>
                 <Row className="existingAssignment">
                     Assignment Name
                     <div className='assignActions'>
                     <Button variant='danger'>Delete</Button>
-                    <Button variant='success'>Grade</Button>
-                    <Button variant='info'>Edit</Button></div>
+                    <Button variant='success'>Grade</Button></div>
                 </Row>
             </article>
             
