@@ -8,7 +8,7 @@ function AssignmentDetails() {
   useEffect(() => {
     // Fetch the assignment details from the server
     const fetchAssignmentDetails = async () => {
-      const response = await fetch(`http://localhost:4000/assignments/${assignmentId}`);
+      const response = await fetch(`http://localhost:4000/user/assignments/${assignmentId}`);
       const data = await response.json();
       setAssignment(data);
     };

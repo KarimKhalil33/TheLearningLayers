@@ -129,11 +129,12 @@ router.get('/pending', async (req, res) => {
 //accept an enrollment
 router.post('/accept', async (req, res) => {
     console.log("i'm in");
+
+
     try {
-        const { key, studentNum , title} = req.body;
+        const {studentNum , title} = req.body;
 
         console.log(title);
-        console.log(key);
         console.log(studentNum);
 
         // Find the course by title and update it student array
@@ -142,7 +143,6 @@ router.post('/accept', async (req, res) => {
             { students: studentNum},
             { new: true }
         );
-
         console.log("course student array attempt");
 
         // Save the course with the updated students array
@@ -151,7 +151,7 @@ router.post('/accept', async (req, res) => {
         console.log("course saved");
 
         // Find the enrollment by key
-        let enrollment = await Enrollments.findOne({_id: key});
+        let enrollment = await Enrollments.findOne({studentNum, title});
 
         console.log("enrollment trace found");
 
@@ -178,16 +178,31 @@ router.post('/accept', async (req, res) => {
 router.post('/reject', async (req, res) => {
     console.log("I'm in the rejection function");
     try {
-        const { key } = req.body;
+             // Retrieve data from FormData
+             const id = req.body.id;
+             const title = req.body.title;
+             const studentNum = req.body.studentNum;
 
-        // Find and delete the enrollment by key
-        const enrollment = await Enrollments.findOneAndDelete({ _id: key });
+             console.log(id);
+             console.log(title);
+             console.log(studentNum);
+   
+        // Find and delete the enrollment 
+        const enrollment = await Enrollments.findOne({id, title, studentNum});
+        
+
+        console.log("Enrollment found");
+        console.log(enrollment);
 
         // If enrollment object exists, update its status to 'Rejected'
         if (enrollment) {
             // Update status to 'Rejected'
             enrollment.status = 'Rejected';
             await enrollment.save();
+            console.log("Status changed");
+
+            const enrollment = await Enrollments.findOneAndDelete({ _id: id});
+            console.log("Enrollment deleted ");
         } else {
             return res.status(404).json({ error: 'Enrollment not found' });
         }
@@ -202,5 +217,4 @@ router.post('/reject', async (req, res) => {
 
 
 module.exports = router;
-
 
