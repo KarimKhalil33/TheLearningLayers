@@ -70,8 +70,8 @@ function App() {
         <Route element={<PrivateRoute roles={['Teacher']} />}>
           <Route path="/teacherPage" element={<TeacherPage/>}/>
           <Route path="/home" element={<Home />} />
-          <Route path="/viewCourseTeacher/:courseId/:courseName" element={<ViewCourseTeacher/>}/>
-          <Route path="/teacherAssignments/:courseId/:courseName" element={<TeacherAssignments/>}/>
+          <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
+          <Route path="/teacherAssignments" element={<TeacherAssignments/>}/>
           <Route path="/gradeAssignment" element ={<GradeAssignment/>}/>
           <Route path="/viewStudents" element={<ViewStudents/>}/> 
           <Route path="/teacherQuizes" element={<TeacherQuizes/>}/> 

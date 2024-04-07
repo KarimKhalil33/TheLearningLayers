@@ -3,7 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import './App.css'; // Update this to your stylesheet
 import StudentMenu from './StudentMenu';
 function AssignmentDetails() {
+
   const navigate = useNavigate();
+
+  const { assignmentId } = useParams();
+  const [assignment, setAssignment] = useState(null);
+
+  useEffect(() => {
+    // Fetch the assignment details from the server
+    const fetchAssignmentDetails = async () => {
+      const response = await fetch(`http://localhost:4000/user/assignments/${assignmentId}`);
+      const data = await response.json();
+      setAssignment(data);
+    };
+
 
   // Simulate a function to navigate to the submission page
   const goToSubmissionPage = () => {
