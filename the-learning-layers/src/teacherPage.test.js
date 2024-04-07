@@ -30,8 +30,8 @@ describe('TeacherPage component', () => {
       Promise.resolve({
         json: () =>
           Promise.resolve([
-            { title: 'Introduction to Programming', id: 1 },
-            { title: 'Advanced Programming', id: 2 },
+            { name: 'Introduction to Programming', courseId: 1 },
+            { name: 'Advanced Programming', courseId: 2 },
           ]),
       })
     );

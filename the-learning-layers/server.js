@@ -33,6 +33,7 @@ const bodyParser = require('express').json;
 const userRouter = require('./api/routes'); //  handles user-related routes
 const pendingEnrollmentsRoutes = require('./api/enrollmentRoute'); 
 const adminRoute = require('./api/adminRoute'); 
+const teacherRoute = require('./api/teacherRoute');
 
 // Using bodyParser middleware to parse incoming JSON requests
 app.use(bodyParser());
@@ -45,6 +46,8 @@ app.use('/api/adminRoute', adminRoute);
 
 // Mounting pendingEnrollmentsRoutes for routes starting with '/api/enrolmentRoute'
 app.use('/api/enrollmentRoute', pendingEnrollmentsRoutes);
+
+app.use('/api/teacherRoute', teacherRoute);
 
 // Start the Express server and listen on the specified port
 app.listen(port, () => {
