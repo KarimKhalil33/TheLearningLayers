@@ -17,9 +17,13 @@ describe('PendingEnrollments component', () => {
     );
   });
 
+  afterEach(()=>{
+    jest.clearAllMocks();
+  })
+
   it('renders the component with enrollments', async () => {
     const { getByText } = render(<MemoryRouter><PendingEnrollments /></MemoryRouter>);
-
+    
     // Wait for the component to fetch data and render
     await waitFor(() => {
       expect(getByText('John Doe')).toBeInTheDocument();
@@ -55,7 +59,7 @@ describe('PendingEnrollments component', () => {
     });
 
     // Assert that rejectEnrollment was called
-    expect(global.fetch).toHaveBeenCalledWith('http://localhost:4000/api/enrollmentRoute/reject/1', expect.any(Object));
+    expect(global.fetch).toHaveBeenCalledWith('http://localhost:4000/api/enrollmentRoute/reject', expect.any(Object));
 
     // Ensure that after click reject once, you only have another student left on page
     await waitFor(() => {
