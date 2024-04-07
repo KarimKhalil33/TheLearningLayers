@@ -93,7 +93,7 @@ function TeacherAssignments(){
             }
         } setValidated(true);
     };
-
+    const assignments = ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4"];
     return(
         <>
              <TeacherMenu></TeacherMenu>
@@ -182,25 +182,19 @@ function TeacherAssignments(){
                 <header>
                     <h1><strong>Assignments</strong></h1>
                 </header>
+                {assignments.map((assignment)=>(
                 <Row className="existingAssignment">
-                    Assignment Name
+                    {assignment}
                     <div className='assignActions'>
                     <Button variant='danger'>Delete</Button>
                     <Button variant='success' onClick={()=>routeChange('/gradeAssignment')}>Grade</Button>
-                    <Button variant='info'>Edit</Button></div>
+                    </div>
                 </Row>
-                <Row className="existingAssignment">
-                    Assignment Name
-                    <div className='assignActions'>
-                    <Button variant='danger'>Delete</Button>
-                    <Button variant='success'>Grade</Button>
-                    <Button variant='info'>Edit</Button></div>
-                </Row>
+                ))}
             </article>
-            
+            <AppFooter/>
         </>
     );
-    //this should show
 }
 
 export default TeacherAssignments;

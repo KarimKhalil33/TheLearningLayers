@@ -17,10 +17,6 @@ import StudentMenu from './StudentMenu';
 
 function ViewCourseStudent() {
     
-    // const [show , setShow] = useState(false);
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
-
     const [course, setCourse] = useState([]);
     useEffect(() => {
         // Access query parameters from window.location.search
@@ -88,8 +84,6 @@ function ViewCourseStudent() {
             </section>
             
         </article>
-
-        <AppFooter></AppFooter>
         </>
     )
 }

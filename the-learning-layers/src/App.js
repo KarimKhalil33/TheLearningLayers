@@ -22,6 +22,7 @@ import TeacherQuizes from './teacherQuizes';
 import ViewCourseAdmin from './viewCourseAdmin';
 import EditProfile from './editProfile';
 import StudentAssignments from './studentAssignments';
+import GradeQuiz from './gradeQuiz';
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
 }
@@ -70,6 +71,7 @@ function App() {
           <Route path="/viewCourseTeacher/:courseId/:courseName" element={<ViewCourseTeacher/>}/>
           <Route path="/teacherAssignments/:courseId/:courseName" element={<TeacherAssignments/>}/>
           <Route path="/gradeAssignment" element ={<GradeAssignment/>}/>
+          <Route path="/gradeQuiz" element={<GradeQuiz/>}/>
           <Route path="/viewStudents" element={<ViewStudents/>}/>
           <Route path="/teacherQuizes" element={<TeacherQuizes/>}/> 
         </Route>
