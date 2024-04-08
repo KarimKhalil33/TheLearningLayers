@@ -15,17 +15,13 @@ import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
 import Accordion from 'react-bootstrap/Accordion';
-function GradeAssignment(){
+function GradeQuiz(){
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const students = ["Student 1","Student 2","Student 3","Student 4"];
     TeacherCourseNavigation("/teacherAssignment");
-    
-    // async () => (
-        
-    // )
     return(
         <>
              <TeacherMenu></TeacherMenu>
@@ -33,11 +29,11 @@ function GradeAssignment(){
              <article className='main'>
                 {/* Yet to be filled out, this portion of the page displays all assignments for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
                 <header>
-                    <h1><strong>Assignments</strong></h1>
+                    <h1><strong>Quizzes</strong></h1>
                 </header>
                     <div className='assignActions'>
-                    {students.map((student)=>(
-                        <Accordion>
+                    {students.map((student) => (
+                    <Accordion>
                         <Accordion.Item eventKey="0" className='students'>
                             <Accordion.Header>{student}</Accordion.Header>
                             <Accordion.Body>
@@ -77,14 +73,10 @@ function GradeAssignment(){
                             </Form>
                             </Accordion.Body>
                         </Accordion.Item>
-                        </Accordion>
-                    ))}
+                        </Accordion>))}
                     </div>
-                
-            </article>
-            
+            </article>   
         </>
     );
-    //this should show
 }
-export default GradeAssignment;
+export default GradeQuiz;

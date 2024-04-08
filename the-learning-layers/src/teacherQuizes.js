@@ -44,6 +44,13 @@ const addQuestions = (e) => {
 
     const handleSubmit = async (e) => {
         const formData = new FormData();}
+
+        let navigate = useNavigate();
+    const routeChange = (path) => {
+        navigate(path);
+    };
+
+    const quizzes=["Quiz 1", "Quiz 2", "Quiz 3", "Quiz 4"]
     return(
         <>
             <TeacherMenu></TeacherMenu>
@@ -57,23 +64,23 @@ const addQuestions = (e) => {
                     <Modal.Body>
                     <Form id="quiz" noValidate validated={validated} onSubmit={handleSubmit}>
                         <Row>
-                                <Col xs={8}>
-                                    <Form.Group className="mb-4">
-                                        <Form.Label htmlFor='quizName'>Quiz Name</Form.Label>
-                                        <Form.Control type="text" placeholder="Enter Quiz Name" id='quizName' value={name} onChange={e => setName(e.target.value)} required />
-                                        <Form.Control.Feedback type='invalid'>Please enter quiz name</Form.Control.Feedback>
-                                    </Form.Group>
-                                    {/* The teacher is required to name the quiz */}
-                                </Col>
+                            <Col xs={8}>
+                                <Form.Group className="mb-4">
+                                    <Form.Label htmlFor='quizName'>Quiz Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter Quiz Name" id='quizName' value={name} onChange={e => setName(e.target.value)} required />
+                                    <Form.Control.Feedback type='invalid'>Please enter quiz name</Form.Control.Feedback>
+                                </Form.Group>
+                                {/* The teacher is required to name the quiz */}
+                            </Col>
                         </Row>
                         <Row>
-                                <Col xs={5}>
-                                    <Form.Group className="mb-4">
-                                        <Form.Label htmlFor='Ques'>Add Question</Form.Label>
-                                        <Button id='Ques' name='Ques' onClick={addQuestions}  required >Add Question</Button>
-                                    </Form.Group>
-                                    {/* The teacher is required to name the quiz */}
-                                </Col>
+                            <Col xs={5}>
+                                <Form.Group className="mb-4">
+                                    <Form.Label htmlFor='Ques'>Add Question</Form.Label>
+                                    <Button id='Ques' name='Ques' onClick={addQuestions}  required >Add Question</Button>
+                                </Form.Group>
+                                {/* The teacher is required to name the quiz */}
+                            </Col>
                         </Row>
 
                     </Form>
@@ -93,22 +100,19 @@ const addQuestions = (e) => {
                 <header>
                     <h1><strong>Quizzes</strong></h1>
                 </header>
+                {quizzes.map((quiz) =>(
                 <Row className="existingAssignment">
-                    Quiz Name
+                    {quiz}
                     <div className='assignActions'>
                     <Button variant='danger'>Delete</Button>
-                    <Button variant='success'>Grade</Button>
-                    <Button variant='info'>Edit</Button></div>
+                    <Button variant='success'onClick={()=>routeChange('/gradeQuiz')}>Grade</Button>
+                    </div>
                 </Row>
-                <Row className="existingAssignment">
-                    Quiz Name
-                    <div className='assignActions'>
-                    <Button variant='danger'>Delete</Button>
-                    <Button variant='success'>Grade</Button>
-                    <Button variant='info'>Edit</Button></div>
-                </Row>
+                ))}
+
             </article>
         </>
+        
     );
 }
 

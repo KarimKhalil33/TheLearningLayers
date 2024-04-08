@@ -109,6 +109,7 @@ function TeacherAssignments(){
             }
         } setValidated(true);
     };
+
     const listAssignments = assignments.length > 0 ? (
         assignments.map((assignment) => (
             <Row className="existingAssignment">
@@ -121,6 +122,7 @@ function TeacherAssignments(){
     ) : (
         <li>No assignments yet</li>
     );
+  
     return(
         <>
              <TeacherMenu></TeacherMenu>
@@ -209,13 +211,11 @@ function TeacherAssignments(){
                 <header>
                     <h1><strong>Assignments</strong></h1>
                 </header>
-                
                 {listAssignments}
             </article>
-            
+            <AppFooter/>
         </>
     );
-    //this should show
 }
 
 export default TeacherAssignments;
