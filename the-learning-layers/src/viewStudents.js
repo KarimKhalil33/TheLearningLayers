@@ -46,24 +46,31 @@ function GradeAssignment(){
             console.error('Error fetching:', error);
         }
     };
-
-    TeacherCourseNavigation("/teacherAssignment");
     
-    // async () => (
-        
-    // )
+
+    
     return(
         <>
              <TeacherMenu></TeacherMenu>
-             <TeacherCourseNavigation setkey="/teacherAssignment"></TeacherCourseNavigation> 
+             <TeacherCourseNavigation/> 
              <article className='main'>
                 {/* Yet to be filled out, this portion of the page displays all students for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
                 <header>
                     <h1><strong>Students</strong></h1>
                 </header>
+
+                <div>
+                    {students.map(student => (
+                        <div key={student.studentNum}>
+                            {student.firstName} {student.lastName}
+                        </div>
+                    ))}
+                </div>
+
+{/* This section displays the student each student being implemented with an accordion. The accordion contains dropdowns which teachers can use to see students distribution on assignemtns and quizzes */}
+{/*                 
                     <div className='assignActions'>
-                        {/* This section displays the student each student being implemented with an accordion. The accordion contains dropdowns which teachers can use to see students distribution on assignemtns and quizzes */}
-                    <Accordion>
+                        <Accordion>
                         <Accordion.Item eventKey="0" className='students'>
                             <Accordion.Header>Student Name  <div className='overall'>Overall Grade: </div></Accordion.Header>
                             <Accordion.Body>
@@ -122,7 +129,8 @@ function GradeAssignment(){
                         </Accordion.Item>
                         </Accordion>
                     </div>
-                
+*/}
+
             </article>
             
         </>
