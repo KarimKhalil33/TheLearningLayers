@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
  import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
@@ -21,11 +21,37 @@ function TeacherQuizes()
     const [validated, setValidated] = useState(false);
     const [name, setName] = useState('');
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     let countQues = 0;
+
+    // Access query parameters from window.location.search
+    const params = new URLSearchParams(window.location.search);
+    const courseName = params.get('name');
+    const courseId = params.get('courseId');
+
+    TeacherCourseNavigation(courseName, courseId);
+
+
+    const [quizzes,setQuizzes] = useState([]);;
+    
+    useEffect(() => {
+        const course = `${courseName} ${courseId}`;
+        fetch(`http://localhost:4000/api/teacherRoute/quizzes?course=${encodeURIComponent(course)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setQuizzes(data);
+            })
+            .catch(error => {
+                console.error('Error fetching quizzes:', error);
+            });
+    }, []);
+    
 
 
 const addQuestions = (e) => {
@@ -50,7 +76,9 @@ const addQuestions = (e) => {
         navigate(path);
     };
 
-    const quizzes=["Quiz 1", "Quiz 2", "Quiz 3", "Quiz 4"]
+   
+
+
     return(
         <>
             <TeacherMenu></TeacherMenu>
@@ -102,7 +130,7 @@ const addQuestions = (e) => {
                 </header>
                 {quizzes.map((quiz) =>(
                 <Row className="existingAssignment">
-                    {quiz}
+                    {quiz.name}
                     <div className='assignActions'>
                     <Button variant='danger'>Delete</Button>
                     <Button variant='success'onClick={()=>routeChange('/gradeQuiz')}>Grade</Button>
