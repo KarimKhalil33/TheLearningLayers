@@ -212,7 +212,7 @@ router.get('/getAssignments',async(req,res)=>{
     const name = req.query.name;
     const courseId = req.query.courseId;
     const course=name+" "+courseId;
-    const assignment = await Assignment.findOne({ course });
+    const assignment = await Assignment.find({ course });
     res.json(assignment);
 }
 catch(error){
