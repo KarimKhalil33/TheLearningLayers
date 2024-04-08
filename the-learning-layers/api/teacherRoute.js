@@ -76,15 +76,26 @@ router.get('/viewStudents', async (req, res) => {
 
 // Route to get quizzes for a certain course from database
 router.get('/quizzes', async (req, res) => {
-    const studentNumbers = req.query.studentNumbers.split(',').map(num => parseInt(num)); // Assuming studentNumbers are passed as a comma-separated string
+    const { courseName, courseId } = req.query;
+
     try {
-        const students = await Student.find({ 'studentNum': { $in: studentNumbers } });
-        res.json(students);
+        // Find the course by name and ID
+        const course = await Course.findOne({ name: courseName, _id: courseId });
+
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found' });
+        }
+        
+        // Find all quizzes associated with the courseId
+        const quizzes = await Quiz.find({ courseId: course._id });
+
+        res.json(quizzes);
     } catch (error) {
-        console.error('Error fetching students:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error fetching quizzes:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 
 module.exports = router;

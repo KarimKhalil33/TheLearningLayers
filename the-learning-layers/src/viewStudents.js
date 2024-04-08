@@ -20,6 +20,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 
 function GradeAssignment(){
     const [students, setStudents] = useState([]);
+    const [assignments, setAssignments] = useState([]);
+    const [quizzes, setQuizzes] = useState([]);
 
     useEffect(() => {
         // Access query parameters from window.location.search

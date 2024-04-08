@@ -12,7 +12,7 @@ const quizSchema = new mongoose.Schema({
         type: Number
     },
     courseId: {
-        type: String,
+        type: Object,
         ref: Course,
         required: true
     },
