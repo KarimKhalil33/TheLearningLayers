@@ -7,7 +7,7 @@ function Profile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const username = sessionStorage.getItem("authenticationId");
+        const username = JSON.parse(sessionStorage.getItem("authenticationId"));
         if (username) {
             setUserProfile({ username });
         } else {

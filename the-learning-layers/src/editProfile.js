@@ -5,7 +5,7 @@ function EditProfile() {
   const [userProfile, setUserProfile] = useState({});
   const navigate = useNavigate();
   useEffect(() => {
-    const username = sessionStorage.getItem("authenticationId");
+    const username = JSON.parse(sessionStorage.getItem("authenticationId"));
     if (username) {
         setUserProfile({ username });
     } else {
@@ -23,6 +23,7 @@ function EditProfile() {
     // Here you would handle the form submission to update the profile details
     console.log('Profile updated:', userProfile);
     // After updating, you might want to navigate back to the profile page or show a success message
+    navigate('/profile');
   };
 
   return (
