@@ -48,10 +48,7 @@ function GradeAssignment(){
     };
 
     TeacherCourseNavigation("/teacherAssignment");
-    // populate arrays with actual values from the database. Map functions have been defined to enable the information to be used.
-    const students= ["Student 1", "Student 2", "Student 3", "Student 4"]
-    const assignments= ["Assignment 1", "Assignment 2", "Assignment 3"]
-    const quizzes= ["Quiz 1", "Quiz 2", "Quiz 3"]
+
     return(
         <>
              <TeacherMenu></TeacherMenu>
