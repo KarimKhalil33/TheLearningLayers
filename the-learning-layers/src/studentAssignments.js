@@ -60,7 +60,7 @@ function StudentAssignments() {
             <StudentMenu />
             <article className='side-nav'>
                 <Nav variant="underline" defaultActiveKey="/viewCourseStudent" className="flex-column ">
-                    <Nav.Link className="sidebar" href='/viewCourseStudent'>View Course</Nav.Link>
+                    <Nav.Link className="sidebar" href={`/viewCourseStudent?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`}>View Course</Nav.Link>
                 </Nav>
             </article>
             <div className="assignments-container">
