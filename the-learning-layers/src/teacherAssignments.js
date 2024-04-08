@@ -118,7 +118,6 @@ function TeacherAssignments(){
             }
         } setValidated(true);
     };
-    const assignments = ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4"];
     return(
         <>
              <TeacherMenu></TeacherMenu>
