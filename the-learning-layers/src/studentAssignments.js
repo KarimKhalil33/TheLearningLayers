@@ -23,6 +23,7 @@ function StudentAssignments() {
             // Make fetch request to fetch assignments based on query parameters
             const response = await fetch(`http://localhost:4000/user/getAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
             const data = await response.json();
+            console.log(data);
             setAssignments(data);
         } catch (error) {
             console.error('Error fetching assignments:', error);
@@ -49,6 +50,7 @@ function StudentAssignments() {
             return <span className="status grade">{assignment.grade}%</span>;
         }
     };
+    console.log(assignments);
 
     const viewAssignment = (assignmentId) => {
         navigate(`/assignments/${assignmentId}`);
@@ -58,7 +60,7 @@ function StudentAssignments() {
             <StudentMenu />
             <article className='side-nav'>
                 <Nav variant="underline" defaultActiveKey="/viewCourseStudent" className="flex-column ">
-                    <Nav.Link className="sidebar" href='/viewCourseStudent'>View Course</Nav.Link>
+                    <Nav.Link className="sidebar" href={`/viewCourseStudent?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`}>View Course</Nav.Link>
                 </Nav>
             </article>
             <div className="assignments-container">

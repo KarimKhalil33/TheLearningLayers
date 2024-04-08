@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { React, useEffect, useState } from 'react';
+import { useNavigate, useParams} from 'react-router-dom';
 import './App.css'; // Update this to your stylesheet
 import StudentMenu from './StudentMenu';
 function AssignmentDetails() {
@@ -7,7 +7,7 @@ function AssignmentDetails() {
   const navigate = useNavigate();
 
   const { assignmentId } = useParams();
-  const [assignment, setAssignment] = useState(null);
+  const [assignment, setAssignment] = useState([]);
 
   useEffect(() => {
     // Fetch the assignment details from the server
@@ -15,7 +15,9 @@ function AssignmentDetails() {
       const response = await fetch(`http://localhost:4000/user/assignments/${assignmentId}`);
       const data = await response.json();
       setAssignment(data);
-    }});
+    }
+    fetchAssignmentDetails();
+  },[]);
 
 
   // Simulate a function to navigate to the submission page
@@ -34,22 +36,22 @@ function AssignmentDetails() {
   };
 
   return (
-      <>
+    <>
       <StudentMenu></StudentMenu>
-    <div className="assignment-detail">
-      <header className="assignment-header">
-        <h1>{assignmentDetails.title}</h1>
-        <button className="start-assignment" onClick={goToSubmissionPage}>Start Assignment</button>
-      </header>
-      <div className="assignment-meta">
-        <span>Due {assignmentDetails.dueDate}</span>
-        <span>Points {assignmentDetails.points}</span>
-        <span>Submitting {assignmentDetails.submitting}</span>
+      <div className="assignment-detail">
+        <header className="assignment-header">
+          <h1>{assignment.name}</h1>
+          <button className="start-assignment" onClick={goToSubmissionPage}>Start Assignment</button>
+        </header>
+        <div className="assignment-meta">
+          <span>Due: {assignment.dueDate}</span>
+          <span>Weight: {assignment.weight}</span>
+          <span>Submitting: A file upload</span>
+        </div>
+        <article className="assignment-description">
+          {assignment.description}
+        </article>
       </div>
-      <article className="assignment-description">
-        {assignmentDetails.description}
-      </article>
-    </div>
     </>
   );
 }
