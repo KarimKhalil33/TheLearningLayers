@@ -4,6 +4,7 @@ const router = express.Router();
 const Course = require('../models/courses');
 const Student = require('../models/student');
 const Assignment = require('../models/assignments');
+const Quiz = require('../models/quiz');
 
 //when the user clicks view course, get the course details
 router.get('/viewCourseTeacher', async(req,res) =>{
@@ -63,6 +64,18 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
 
 // Route to get student details by their student numbers
 router.get('/viewStudents', async (req, res) => {
+    const studentNumbers = req.query.studentNumbers.split(',').map(num => parseInt(num)); // Assuming studentNumbers are passed as a comma-separated string
+    try {
+        const students = await Student.find({ 'studentNum': { $in: studentNumbers } });
+        res.json(students);
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Route to get quizzes for a certain course from database
+router.get('/quizzes', async (req, res) => {
     const studentNumbers = req.query.studentNumbers.split(',').map(num => parseInt(num)); // Assuming studentNumbers are passed as a comma-separated string
     try {
         const students = await Student.find({ 'studentNum': { $in: studentNumbers } });
