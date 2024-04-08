@@ -137,11 +137,12 @@ router.post('/accept', async (req, res) => {
         console.log(title);
         console.log(studentNum);
 
-        // Find the course by title and update it student array
-       const course = await Course.findOneAndUpdate(
-            { title : title},
-            { students: studentNum}
-        );
+   // Find the course by title and update its student array
+const course = await Course.findOneAndUpdate(
+    { title: title },
+    { $push: { students: studentNum } },
+    { new: true } // Ensures that the updated document is returned
+);
         console.log("course student array attempt");
 
         // Save the course with the updated students array

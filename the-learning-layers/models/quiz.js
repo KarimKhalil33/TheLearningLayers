@@ -17,7 +17,7 @@ const quizSchema = new mongoose.Schema({
         required: true
     },
     questions: {
-        type: [String], // Array of strings for questions
+        type: Object, // Array of strings for questions
         required: true
     },
 
