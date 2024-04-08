@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css'; // Make sure you have the CSS file for styling
 import StudentMenu from './StudentMenu';
-
+import { Nav } from 'react-bootstrap';
 function StudentAssignments() {
     const navigate = useNavigate();
     const [assignments, setAssignments] = useState([]);
@@ -23,6 +23,7 @@ function StudentAssignments() {
             // Make fetch request to fetch assignments based on query parameters
             const response = await fetch(`http://localhost:4000/user/getAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
             const data = await response.json();
+            console.log(data);
             setAssignments(data);
         } catch (error) {
             console.error('Error fetching assignments:', error);
@@ -49,6 +50,7 @@ function StudentAssignments() {
             return <span className="status grade">{assignment.grade}%</span>;
         }
     };
+    console.log(assignments);
 
     const viewAssignment = (assignmentId) => {
         navigate(`/assignments/${assignmentId}`);
@@ -56,6 +58,11 @@ function StudentAssignments() {
     return (
         <>
             <StudentMenu />
+            <article className='side-nav'>
+                <Nav variant="underline" defaultActiveKey="/viewCourseStudent" className="flex-column ">
+                    <Nav.Link className="sidebar" href={`/viewCourseStudent?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`}>View Course</Nav.Link>
+                </Nav>
+            </article>
             <div className="assignments-container">
                 <div className="title-area">
                     <h1>Assignments</h1>

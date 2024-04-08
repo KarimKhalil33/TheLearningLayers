@@ -47,29 +47,20 @@ function TeacherAssignments(){
     const [file, setFile] = useState(null);
     
     useEffect(() => {
-        // Function to fetch courses student is enrolled in
-        const fetchAssignments = async () => {
-            try {
-                const response = await fetch('http://localhost:4000/user/getAssignments', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                       name:courseName,
-                       courseId
-                    }),
-                });
-                const data = await response.json();
-          
-                setAssignments(data); // Update state with fetched courses
-            } catch (error) {
-                console.error('Error fetching courses:', error);
-            }
-        };
-    
-        fetchAssignments(); // Call the fetch function
+        fetchAssignments(courseName,courseId); // Call the fetch function
     }, []);
+
+    const fetchAssignments = async (name, courseId) => {
+        try {
+            // Make fetch request to fetch assignments based on query parameters
+            const response = await fetch(`http://localhost:4000/user/getAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
+            const data = await response.json();
+            console.log(data);
+            setAssignments(data);
+        } catch (error) {
+            console.error('Error fetching assignments:', error);
+        }
+    }
 
     const handleSubmit = async (e) => {
         const formData = new FormData();
@@ -118,6 +109,20 @@ function TeacherAssignments(){
             }
         } setValidated(true);
     };
+
+    const listAssignments = assignments.length > 0 ? (
+        assignments.map((assignment) => (
+            <Row className="existingAssignment">
+            {assignment.name}
+            <div className='assignActions'>
+            <Button variant='danger'>Delete</Button>
+            <Button variant='success' onClick={()=>routeChange('/gradeAssignment')}>Grade</Button></div>
+        </Row>
+        ))
+    ) : (
+        <li>No assignments yet</li>
+    );
+  
     return(
         <>
              <TeacherMenu></TeacherMenu>
@@ -206,15 +211,7 @@ function TeacherAssignments(){
                 <header>
                     <h1><strong>Assignments</strong></h1>
                 </header>
-                {assignments.map((assignment)=>(
-                <Row className="existingAssignment">
-                    {assignment}
-                    <div className='assignActions'>
-                    <Button variant='danger'>Delete</Button>
-                    <Button variant='success' onClick={()=>routeChange('/gradeAssignment')}>Grade</Button>
-                    </div>
-                </Row>
-                ))}
+                {listAssignments}
             </article>
             <AppFooter/>
         </>

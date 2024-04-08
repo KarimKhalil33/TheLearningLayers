@@ -24,6 +24,7 @@ import EditProfile from './editProfile';
 import StudentAssignments from './studentAssignments';
 import GradeQuiz from './gradeQuiz';
 import AssignmentDetails from './assignmentDetails';
+import SubmitAssignment from './SubmitAssignment';
 
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
@@ -73,8 +74,10 @@ function App() {
           <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
           <Route path="/teacherAssignments" element={<TeacherAssignments/>}/>
           <Route path="/gradeAssignment" element ={<GradeAssignment/>}/>
+
           <Route path="/gradeQuiz" element={<GradeQuiz/>}/>
           <Route path="/viewStudents" element={<ViewStudents/>}/>
+
           <Route path="/teacherQuizes" element={<TeacherQuizes/>}/> 
         </Route>
         {/* For when a student logs in, they should only be able to access certain pages */}
@@ -85,6 +88,7 @@ function App() {
           <Route path="/Grades" element={<Grades/>}/>
           <Route path="/StudentAssignments" element={<StudentAssignments/>}/>
           <Route path="/assignments/:assignmentId" element={<AssignmentDetails />} />
+          <Route path="/SubmitAssignment" element={<SubmitAssignment />} />
         </Route>
         {/* For when an admin logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Admin']} />}>
