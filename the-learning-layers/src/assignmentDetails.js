@@ -15,7 +15,7 @@ function AssignmentDetails() {
       const response = await fetch(`http://localhost:4000/user/assignments/${assignmentId}`);
       const data = await response.json();
       setAssignment(data);
-    };
+    }});
 
 
   // Simulate a function to navigate to the submission page
