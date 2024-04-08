@@ -20,6 +20,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 
 function GradeAssignment(){
     const [students, setStudents] = useState([]);
+    const [assignments, setAssignments] = useState([]);
+    const [quizzes, setQuizzes] = useState([]);
 
     useEffect(() => {
         // Access query parameters from window.location.search
@@ -72,69 +74,26 @@ function GradeAssignment(){
                     <div className='assignActions'>
                         <Accordion>
                         <Accordion.Item eventKey="0" className='students'>
-                            <Accordion.Header>Student Name  <div className='overall'>Overall Grade: </div></Accordion.Header>
+                            <Accordion.Header>{student}  <div className='overall'>Overall Grade: </div></Accordion.Header>{/*Add code student course grade here within the overall div */}
                             <Accordion.Body>
                             <div className='studentButtons'>
                             <DropdownButton id="dropdown-basic-button" title="Assignment Grade">
-                                <Dropdown.Item href="#/action-1">Assignment 1</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Assignment 2</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Assignment 3</Dropdown.Item>
+                                {assignments.map((assignment)=>(<Dropdown.Item href="#/action-1">{assignment}</Dropdown.Item>))}
                             </DropdownButton>
                             <DropdownButton id="dropdown-basic-button" title="Quiz Grade">
-                            <Dropdown.Item href="#/action-1">Assignment 1</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Assignment 2</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Assignment 3</Dropdown.Item>
+                            {quizzes.map((quiz)=>(<Dropdown.Item href="#/action-1">{quiz}</Dropdown.Item>))}
                             </DropdownButton>
                             </div>
                             </Accordion.Body>
                         </Accordion.Item>
-                        </Accordion>
-                        <Accordion>
-                        <Accordion.Item eventKey="0" className = "students">
-                            <Accordion.Header>Student Name  <span>Overall Grade: </span></Accordion.Header>
-                            <Accordion.Body>
-                            <div className='studentButtons'>
-                            <DropdownButton id="dropdown-basic-button" title="Assignment Grade">
-                                <Dropdown.Item href="#/action-1">Assignment 1</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Assignment 2</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Assignment 3</Dropdown.Item>
-                            </DropdownButton>
-                            <DropdownButton id="dropdown-basic-button" title="Quiz Grade">
-                            <Dropdown.Item href="#/action-1">Assignment 1</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Assignment 2</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Assignment 3</Dropdown.Item>
-                            </DropdownButton>
-                            </div>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        </Accordion>
-
-                        <Accordion>
-                        <Accordion.Item eventKey="0" className='students'>
-                            <Accordion.Header>Student Name  <span>Overall Grade: </span></Accordion.Header>
-                            <Accordion.Body>
-                            <div className='studentButtons'>
-                            <DropdownButton id="dropdown-basic-button" title="Assignment Grade">
-                                <Dropdown.Item href="#/action-1">Assignment 1</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Assignment 2</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Assignment 3</Dropdown.Item>
-                            </DropdownButton>
-                            <DropdownButton id="dropdown-basic-button" title="Quiz Grade">
-                            <Dropdown.Item href="#/action-1">Assignment 1</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Assignment 2</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Assignment 3</Dropdown.Item>
-                            </DropdownButton>
-                            </div>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        </Accordion>
+                        </Accordion>))}
+                    
+                        
                     </div>
 */}
 
             </article>
-            
         </>
     );
-    //this should show
 }
 export default GradeAssignment;

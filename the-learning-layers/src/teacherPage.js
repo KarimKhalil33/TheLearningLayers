@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import TeacherMenu from './TeacherMenu';
 import { Route } from 'react-router-dom';
+import AppFooter from './appFooter';
 
 function TeacherPage() {
   const [courses, setCourses] = useState([]); // State to hold courses
@@ -71,9 +72,7 @@ function TeacherPage() {
           </Row>
         </div>
       </Container>
-      <footer className=" mt-auto py-3 bg-light text-center">
-        <span className="text-muted">© 2023 E-Learning Platform, Inc. All rights reserved.</span>
-      </footer>
+      <AppFooter/>
 
     </>
   );
