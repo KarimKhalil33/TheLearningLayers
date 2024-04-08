@@ -12,9 +12,9 @@ function PendingEnrollments() {
                 const response = await fetch('http://localhost:4000/api/enrollmentRoute/pending');
                 const data = await response.json();
                 // Convert array to object with _id as key
-               
+                const enrollmentsObject = {};
                 data.forEach(enrollment => {
-                    data[enrollment._id] = enrollment;
+                    enrollmentsObject[enrollment._id] = enrollment;
                 });
                 setEnrollments(data); // Update state with fetched enrollments
             } catch (error) {
