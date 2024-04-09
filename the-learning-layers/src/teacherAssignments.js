@@ -116,7 +116,7 @@ function TeacherAssignments(){
             {assignment.name}
             <div className='assignActions'>
             <Button variant='danger'>Delete</Button>
-            <Button variant='success' onClick={()=>routeChange('/gradeAssignment')}>Grade</Button></div>
+            <Button variant='success' onClick={()=>routeChange(`/gradeAssignment?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}`)}>Grade</Button></div>
         </Row>
         ))
     ) : (
