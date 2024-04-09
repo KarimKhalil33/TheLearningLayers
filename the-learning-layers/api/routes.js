@@ -6,13 +6,14 @@ const Teacher = require("../models/teacher");
 const Course = require("../models/courses");
 const Admin = require("../models/admin");
 const Assignment = require('../models/assignments');
-const Grades=require('../models/grades');
+const Grades = require('../models/grades');
+const Submission = require('../models/submissions');
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
 
   // Find the email or username in the database
-  const existingUser = await User.findOne({username: userData.username });
+  const existingUser = await User.findOne({ username: userData.username });
 
 
   if (existingUser) {
@@ -78,7 +79,7 @@ router.post('/login', async (req, res) => {
       for (const collectionName of collectionNames) {
 
         const Collection = mongoose.model(collectionName);
-        const user = await Collection.findOne({username}); //find the username in one of these collections
+        const user = await Collection.findOne({ username }); //find the username in one of these collections
 
         if (user) {
 
@@ -88,8 +89,8 @@ router.post('/login', async (req, res) => {
             userFound = true;
             collection = collectionName; //set the collectionName so they can be redirected on frontend
 
-             // If the user is a student, store the student number in the session
-             if (collectionName === 'User') {
+            // If the user is a student, store the student number in the session
+            if (collectionName === 'User') {
               req.session.studentNum = user.studentNum;
 
               console.log(req.session.studentNum)
@@ -119,7 +120,7 @@ router.post('/login', async (req, res) => {
         message: "An error occurred while checking for existing user"
       });
     }
-    
+
   }
 });
 
@@ -158,21 +159,21 @@ router.get('/course', async (req, res) => {
 router.get('/profile/:username', async (req, res) => {
   const { username } = req.params;
   try {
-      // You can extend this to search in different collections based on user role
-      let user = await User.findOne({ username });
-      if (!user) {
-          user = await Teacher.findOne({ username });
-      }
-      if (!user) {
-          user = await Admin.findOne({ username });
-      }
-      if (user) {
-          res.json(user);
-      } else {
-          res.status(404).json({ message: 'User not found' });
-      }
+    // You can extend this to search in different collections based on user role
+    let user = await User.findOne({ username });
+    if (!user) {
+      user = await Teacher.findOne({ username });
+    }
+    if (!user) {
+      user = await Admin.findOne({ username });
+    }
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
   } catch (error) {
-      res.status(500).json({ message: 'Error fetching user profile' });
+    res.status(500).json({ message: 'Error fetching user profile' });
   }
 });
 
@@ -193,6 +194,20 @@ router.post('/teacherPage', async (req, res) => {
   }
 });
 
+router.get('/studentNum', async (req, res) => {
+  const authenticationId = req.headers.authorization; // Assuming the authentication ID is sent in the Authorization header
+  try {
+    let student = await User.findOne({ username: authenticationId });
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.json(student.studentNum);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching studentNumber', error: error });
+  }
+})
+
 // Route to get a specific assignment
 router.get('/assignments/:assignmentId', async (req, res) => {
   try {
@@ -207,34 +222,86 @@ router.get('/assignments/:assignmentId', async (req, res) => {
   }
 });
 
-router.get('/getAssignments',async(req,res)=>{
-  try{
+router.get('/getAssignments', async (req, res) => {
+  try {
     const name = req.query.name;
     const courseId = req.query.courseId;
-    const course=name+" "+courseId;
+    const course = name + " " + courseId;
     const assignment = await Assignment.find({ course });
     res.json(assignment);
-}
-catch(error){
+  }
+  catch (error) {
     res.status(500).json({ error: 'Internal server error' });
-}
+  }
 })
 
-router.get('/getGrades',async(req,res)=>{
-  try{
+router.get('/getGrades', async (req, res) => {
+  try {
     const name = req.query.name;
     const courseId = req.query.courseId;
-    const course=name+" "+courseId;
-    const studentNum= req.body.studentNum;
+    const course = name + " " + courseId;
+    const studentNum = req.body.studentNum;
 
-    const grades = await Grades.findOne({course,studentNum});
+    const grades = await Grades.findOne({ course, studentNum });
     res.json(grades);
   }
-  catch(error){
+  catch (error) {
     res.status(500).json({ error: 'Internal server error' });
-}
+  }
 })
 
+router.post('/submitAssignment', async (req, res) => {
+  try {
+    const assignmentId = req.query.assignmentId;
+    const { studentNumber, submissionDate, submissionType, content } = req.body;
+
+    // Check if a submission exists for the given assignmentId and studentNumber
+    let existingSubmission = await Submission.findOne({ assignmentId, 'submissions.studentNumber': studentNumber });
+
+    if (existingSubmission) {
+      // If a submission exists, update it
+      await Submission.findOneAndUpdate(
+        { assignmentId, 'submissions.studentNumber': studentNumber },
+        {
+          $set: {
+            'submissions.$.submissionDate': submissionDate,
+            'submissions.$.submissionType': submissionType,
+            'submissions.$.content': content
+          }
+        }
+      );
+      const status = "Submitted"
+      let grades = await Grades.findOne({ studentNum: studentNumber });
+      if (grades) {
+        await Grades.findOneAndUpdate(
+          { studentNum: studentNumber, 'assignmentGrades.assignmentName': assignmentNameToUpdate },
+          { $set: { 'assignmentGrades.$.status': status } }
+        );
+      }
+      res.json(status);
+    } else {
+      // If no submission exists, create a new submission
+      await Submission.findOneAndUpdate(
+        { assignmentId },
+        {
+          $push: {
+            submissions: {
+              studentNumber,
+              submissionDate,
+              submissionType,
+              content
+            }
+          }
+        },
+        { upsert: true } // Create a new document if no document matches the query
+      );
+      const status = "Submitted"
+      res.json(status);
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 module.exports = router;
