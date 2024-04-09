@@ -5,6 +5,10 @@ import StudentMenu from './StudentMenu';
 import { Nav } from 'react-bootstrap';
 function StudentQuizzes() {
   const navigate = useNavigate();
+  // Access query parameters from window.location.search
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  const courseId = params.get('courseId');
 
   const quizzes = [
     {
@@ -72,7 +76,7 @@ function StudentQuizzes() {
     <StudentMenu />
     <article className='side-nav'>
         <Nav variant="underline" defaultActiveKey="/viewCourseStudent" className="flex-column ">
-            <Nav.Link className="sidebar" href={``}>View Course</Nav.Link> {/* add link here */ }
+            <Nav.Link className="sidebar" href={`/viewCourseStudent?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`}>View Course</Nav.Link> {/* add link here */ }
         </Nav>
     </article>
     <div className="quizzes-container">
