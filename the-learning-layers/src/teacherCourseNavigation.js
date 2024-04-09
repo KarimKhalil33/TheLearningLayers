@@ -21,7 +21,7 @@ function TeacherCourseNavigation(){
             <Nav variant="underline" className="flex-column teachernav">
                 <Nav.Link className ="sidebar" eventKey="/viewCourseTeacher" onClick={() => routeChange(`/viewCourseTeacher?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`)}>View Course</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="/teacherAssignment" onClick={() => routeChange(`/teacherAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`)}>Assignments</Nav.Link>
-                <Nav.Link className ="sidebar" eventKey="/teacherQuizes" onClick={()=>routeChange('/teacherQuizes')} >Quizzes</Nav.Link>
+                <Nav.Link className ="sidebar" eventKey="/teacherQuizes" onClick={()=>routeChange(`/teacherQuizes?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`)} >Quizzes</Nav.Link>
                 <Nav.Link className ="sidebar" eventKey="/viewStudents" onClick={() => routeChange(`/viewStudents?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`)}>Students</Nav.Link>
             </Nav>
         </article>
