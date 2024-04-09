@@ -4,6 +4,7 @@ const router = express.Router();
 const Course = require('../models/courses');
 const Student = require('../models/student');
 const Assignment = require('../models/assignments');
+const Quiz = require('../models/quiz');
 
 //when the user clicks view course, get the course details
 router.get('/viewCourseTeacher', async(req,res) =>{
@@ -72,6 +73,29 @@ router.get('/viewStudents', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+// Route to get quizzes for a certain course from database
+router.get('/quizzes', async (req, res) => {
+    const { courseName, courseId } = req.query;
+
+    try {
+        // Find the course by name and ID
+        const course = await Course.findOne({ name: courseName, _id: courseId });
+
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found' });
+        }
+        
+        // Find all quizzes associated with the courseId
+        const quizzes = await Quiz.find({ courseId: course._id });
+
+        res.json(quizzes);
+    } catch (error) {
+        console.error('Error fetching quizzes:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 
 module.exports = router;

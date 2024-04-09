@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
  import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
@@ -21,11 +21,37 @@ function TeacherQuizes()
     const [validated, setValidated] = useState(false);
     const [name, setName] = useState('');
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     let countQues = 0;
+
+    // Access query parameters from window.location.search
+    const params = new URLSearchParams(window.location.search);
+    const courseName = params.get('name');
+    const courseId = params.get('courseId');
+
+    TeacherCourseNavigation(courseName, courseId);
+
+
+    const [quizzes,setQuizzes] = useState([]);;
+    
+    useEffect(() => {
+        const course = `${courseName} ${courseId}`;
+        fetch(`http://localhost:4000/api/teacherRoute/quizzes?course=${encodeURIComponent(course)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setQuizzes(data);
+            })
+            .catch(error => {
+                console.error('Error fetching quizzes:', error);
+            });
+    }, []);
+    
 
 
 const addQuestions = (e) => {
@@ -44,6 +70,15 @@ const addQuestions = (e) => {
 
     const handleSubmit = async (e) => {
         const formData = new FormData();}
+
+        let navigate = useNavigate();
+    const routeChange = (path) => {
+        navigate(path);
+    };
+
+   
+
+
     return(
         <>
             <TeacherMenu></TeacherMenu>
@@ -57,23 +92,23 @@ const addQuestions = (e) => {
                     <Modal.Body>
                     <Form id="quiz" noValidate validated={validated} onSubmit={handleSubmit}>
                         <Row>
-                                <Col xs={8}>
-                                    <Form.Group className="mb-4">
-                                        <Form.Label htmlFor='quizName'>Quiz Name</Form.Label>
-                                        <Form.Control type="text" placeholder="Enter Quiz Name" id='quizName' value={name} onChange={e => setName(e.target.value)} required />
-                                        <Form.Control.Feedback type='invalid'>Please enter quiz name</Form.Control.Feedback>
-                                    </Form.Group>
-                                    {/* The teacher is required to name the quiz */}
-                                </Col>
+                            <Col xs={8}>
+                                <Form.Group className="mb-4">
+                                    <Form.Label htmlFor='quizName'>Quiz Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter Quiz Name" id='quizName' value={name} onChange={e => setName(e.target.value)} required />
+                                    <Form.Control.Feedback type='invalid'>Please enter quiz name</Form.Control.Feedback>
+                                </Form.Group>
+                                {/* The teacher is required to name the quiz */}
+                            </Col>
                         </Row>
                         <Row>
-                                <Col xs={5}>
-                                    <Form.Group className="mb-4">
-                                        <Form.Label htmlFor='Ques'>Add Question</Form.Label>
-                                        <Button id='Ques' name='Ques' onClick={addQuestions}  required >Add Question</Button>
-                                    </Form.Group>
-                                    {/* The teacher is required to name the quiz */}
-                                </Col>
+                            <Col xs={5}>
+                                <Form.Group className="mb-4">
+                                    <Form.Label htmlFor='Ques'>Add Question</Form.Label>
+                                    <Button id='Ques' name='Ques' onClick={addQuestions}  required >Add Question</Button>
+                                </Form.Group>
+                                {/* The teacher is required to name the quiz */}
+                            </Col>
                         </Row>
 
                     </Form>
@@ -93,22 +128,19 @@ const addQuestions = (e) => {
                 <header>
                     <h1><strong>Quizzes</strong></h1>
                 </header>
+                {quizzes.map((quiz) =>(
                 <Row className="existingAssignment">
-                    Quiz Name
+                    {quiz.name}
                     <div className='assignActions'>
                     <Button variant='danger'>Delete</Button>
-                    <Button variant='success'>Grade</Button>
-                    <Button variant='info'>Edit</Button></div>
+                    <Button variant='success'onClick={()=>routeChange('/gradeQuiz')}>Grade</Button>
+                    </div>
                 </Row>
-                <Row className="existingAssignment">
-                    Quiz Name
-                    <div className='assignActions'>
-                    <Button variant='danger'>Delete</Button>
-                    <Button variant='success'>Grade</Button>
-                    <Button variant='info'>Edit</Button></div>
-                </Row>
+                ))}
+
             </article>
         </>
+        
     );
 }
 

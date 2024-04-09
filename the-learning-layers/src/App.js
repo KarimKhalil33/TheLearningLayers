@@ -22,6 +22,7 @@ import TeacherQuizes from './teacherQuizes';
 import ViewCourseAdmin from './viewCourseAdmin';
 import EditProfile from './editProfile';
 import StudentAssignments from './studentAssignments';
+import GradeQuiz from './gradeQuiz';
 import AssignmentDetails from './assignmentDetails';
 import SubmitAssignment from './SubmitAssignment';
 import QuizDetails from './QuizDetails';
@@ -74,7 +75,10 @@ function App() {
           <Route path="/viewCourseTeacher" element={<ViewCourseTeacher/>}/>
           <Route path="/teacherAssignments" element={<TeacherAssignments/>}/>
           <Route path="/gradeAssignment" element ={<GradeAssignment/>}/>
-          <Route path="/viewStudents" element={<ViewStudents/>}/> 
+
+          <Route path="/gradeQuiz" element={<GradeQuiz/>}/>
+          <Route path="/viewStudents" element={<ViewStudents/>}/>
+
           <Route path="/teacherQuizes" element={<TeacherQuizes/>}/> 
         </Route>
         {/* For when a student logs in, they should only be able to access certain pages */}

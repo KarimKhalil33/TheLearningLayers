@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, ListGroup, Button } from 'react-bootstrap';
 
 function PendingEnrollments() {
-    const [enrollments, setEnrollments] = useState([]);
+    const [enrollments, setEnrollments] = useState({});
 
     useEffect(() => {
 
@@ -45,18 +45,15 @@ function PendingEnrollments() {
         }
     };
 
-    const rejectEnrollment = async (id, title, studentNum) => {
+    const rejectEnrollment = async (id, studentNum, title) => {
         try {
-            const formData = new FormData();
-            formData.append('id', id);
-            formData.append('title', title);
-            formData.append('studentNum', studentNum);
-
-            console.log(formData);
+      
     
             await fetch(`http://localhost:4000/api/enrollmentRoute/reject`, {
-                method: 'POST', 
-                body: formData
+                method: 'POST',    headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id, studentNum, title})
             });
     
             const updatedEnrollments = { ...enrollments };
@@ -66,6 +63,7 @@ function PendingEnrollments() {
             console.error('Error rejecting enrollment:', error);
         }
     };
+    
     
 
     return (
@@ -92,3 +90,4 @@ function PendingEnrollments() {
 }
 
 export default PendingEnrollments;
+

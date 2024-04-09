@@ -17,11 +17,6 @@ import StudentMenu from './StudentMenu';
 import { LinkContainer } from 'react-router-bootstrap';
 
 function ViewCourseStudent() {
-
-    // const [show , setShow] = useState(false);
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
-
     const [course, setCourse] = useState([]);
     const [assignments, setAssignments] = useState([]);
 
@@ -69,6 +64,7 @@ function ViewCourseStudent() {
 
     return (
         <>
+
             <StudentMenu />
             {/* sidebar for teachers to be able to work through the different pages of the course */}
             <article className='side-nav'>

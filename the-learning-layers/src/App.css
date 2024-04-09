@@ -126,7 +126,7 @@
   color: #666;
   text-align: center;
   padding: 20px 0;
-  position: absolute;
+  position: sticky;
   bottom: 0;
   width: 100%;
 }
@@ -201,7 +201,7 @@ section{
 
 .main{
   margin-top: 1em;
-  margin-left: 10em;
+  margin-left: 13em;
   margin-right: 15em;
   width: fit-content;
   text-align: center;
@@ -226,13 +226,8 @@ section{
   border-bottom: grey solid 1px;
   margin: 1em;
   text-align: left;
-  /* align-items: ; */
   width: 50em;
 }
-
-/* .existingAssignment p{
-  float: inline-start;
-} */
 
 .assignActions{
   display: flexbox;
@@ -258,7 +253,7 @@ section{
   margin: 1em;
 }
 .overall{
-  float:right;
+  float:inline-end;
 }
 
 .newAssessments{
@@ -273,20 +268,15 @@ section{
   border-bottom: grey solid 1px;
   margin: 1em;
   text-align: left;
-  /* align-items: ; */
   width: 50em;
 }
-
-/* .existingAssignment p{
-  float: inline-start;
-} */
 
 .assignActions{
   display: flexbox;
   justify-content: space-evenly;
   float:inline-end;
-
 } 
+
 .existingAssignment Button{
   margin: 0.2em;
   float: inline-end;
@@ -422,6 +412,18 @@ section{
   width: fit-content;
   margin-left: 13px;
   margin-top: 2px;
+}
+
+
+.overall{
+  float: inline-end;
+  margin-left: 15em;
+}
+
+.submitted-assessment{
+  border-bottom:grey solid 1px;
+  padding-bottom: 2em;
+  margin-bottom: 2em;
 }
 
 .assignment-detail {
@@ -627,3 +629,4 @@ button {
 .submit-quiz:hover {
   background-color: #0056b3;
 }
+
