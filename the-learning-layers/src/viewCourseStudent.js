@@ -71,9 +71,7 @@ function ViewCourseStudent() {
                 <Nav variant="underline" defaultActiveKey="/viewCourseStudent" className="flex-column ">
                     <Nav.Link className="sidebar" eventKey="/viewCourseStudent">View Course</Nav.Link>
                     <Nav.Link href={`/StudentAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`} className="sidebar" eventKey="">Assignments</Nav.Link>
-                    <LinkContainer to={`/StudentQuizzes`}>
-            <Nav.Link className="sidebar" eventKey="">Quizzes</Nav.Link>
-        </LinkContainer>
+                    <Nav.Link href={`/StudentQuizzes?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`} className="sidebar" eventKey="">Quizzes</Nav.Link>
                 </Nav>
             </article>
             <article className='upcoming'>

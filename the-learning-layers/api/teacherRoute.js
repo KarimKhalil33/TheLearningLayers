@@ -7,6 +7,7 @@ const Assignment = require('../models/assignments');
 const Quiz = require('../models/quiz');
 const Submission=require('../models/submissions');
 
+
 //when the user clicks view course, get the course details
 router.get('/viewCourseTeacher', async(req,res) =>{
     try{
@@ -77,25 +78,88 @@ router.get('/viewStudents', async (req, res) => {
 
 // Route to get quizzes for a certain course from database
 router.get('/quizzes', async (req, res) => {
-    const { courseName, courseId } = req.query;
+    console.log("We are looking for quizzes for thsi course");
+
+    const { courseId, courseName } = req.query;
 
     try {
         // Find the course by name and ID
-        const course = await Course.findOne({ name: courseName, _id: courseId });
+        const course = await Course.findOne({ name: courseName, courseId: courseId });
+        console.log(course);
 
         if (!course) {
             return res.status(404).json({ message: 'Course not found' });
         }
         
         // Find all quizzes associated with the courseId
-        const quizzes = await Quiz.find({ courseId: course._id });
+        const quizzes = await Quiz.find({courseId : course._id });
 
+        
+        console.log(quizzes);
         res.json(quizzes);
+
     } catch (error) {
         console.error('Error fetching quizzes:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+
+router.post('/quizzes', async (req, res) => {
+    console.log("Trying to save a new quiz");
+    try {
+        const { name, courseName, courseId, questions } = req.body;
+
+        console.log(name);
+        console.log(courseId);
+
+
+          // Find the course by name and ID
+          const course = await Course.findOne({ name: courseName, courseId: courseId });
+
+          console.log(course);
+          console.log(course._id);
+        console.log(questions);
+
+        // Create a new quiz object
+        const newQuiz = new Quiz({
+            name: name,
+            courseId: course._id,
+            questions: questions
+        });
+
+        console.log("quiz created");
+
+        // Save the quiz to the database
+        const savedQuiz = await newQuiz.save();
+        console.log("quiz saved");
+
+        // Respond with the saved quiz object
+        res.status(201).json(savedQuiz);
+
+    } catch (error) {
+        console.error('Error adding quiz:', error);
+        res.status(500).json({ error: 'Failed to add quiz' });
+    }
+});
+
+
+router.post('/delete', async (req, res) => {
+    console.log("I'm in the quiz deletion function");
+    try {
+             // Retrieve data from body
+             const {id} = req.body;
+   
+        // Find and delete the enrollment 
+         await Quiz.findOneAndDelete({_id: id});
+
+        res.status(200).json({ message: 'Enrollment rejected successfully' });
+    } catch (error) {
+        console.error('Error rejecting enrollment:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 router.get('/getAssignmentDetails',async(req,res)=>{
     try{

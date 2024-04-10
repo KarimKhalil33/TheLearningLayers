@@ -12,14 +12,11 @@ const quizSchema = new mongoose.Schema({
         type: Number
     },
     courseId: {
-        type: Object,
+        type: mongoose.Schema.Types.ObjectId,
         ref: Course,
         required: true
     },
-    questions: {
-        type: [String], // Array of strings for questions
-        required: true
-    },
+    questions: [{ question: String, options: [String] }],
 
     status: { type: String, enum: ['Submitted', 'InProgress'] , default:'InProgress'},
 
@@ -31,4 +28,6 @@ const quizSchema = new mongoose.Schema({
 
 // Create and export the Quiz model
 const Quiz = mongoose.model('Quiz', quizSchema);
+
+
 module.exports = Quiz;
