@@ -8,6 +8,7 @@ const Admin = require("../models/admin");
 const Assignment = require('../models/assignments');
 const Grades = require('../models/grades');
 const Submission = require('../models/submissions');
+const Quiz = require('../models/quiz'); // Assuming you have a Quiz model
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
@@ -302,6 +303,31 @@ router.post('/submitAssignment', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+router.get('/quizzes', async (req, res) => {
+  const { courseId, courseName } = req.query;
+
+  try {
+      // Find the course by courseId and courseName
+      const course = await Course.findOne({ courseId: courseId, name: courseName });
+
+      if (!course) {
+          return res.status(404).json({ message: 'Course not found' });
+      }
+      
+      // Find all quizzes associated with the courseId
+      const quizzes = await Quiz.find({ courseId: course._id });
+
+      res.json(quizzes);
+  } catch (error) {
+      console.error('Error fetching quizzes:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
 
 
 module.exports = router;
