@@ -25,6 +25,9 @@ function GradeAssignment(){
     // Access query parameters from window.location.search
     const params = new URLSearchParams(window.location.search);
     const assignmentId = params.get('assignmentId');
+    const name=params.get('name');
+    const courseId=params.get('courseId');
+    const courseName=name+ " "+ courseId;
 
     const [assignmentName,setAssignmentName]=useState("");
     const [students,setStudents] = useState([]);
@@ -41,7 +44,7 @@ function GradeAssignment(){
                 // Fetch submissions for the assignment
                 const submissionsResponse = await fetch(`http://localhost:4000/api/teacherRoute/getSubmissions?assignmentId=${encodeURIComponent(assignmentId)}`);
                 const submissionsData = await submissionsResponse.json();
-                console.log(submissionsData.submissions)
+                console.log(submissionsData)
                 setStudents(submissionsData);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -51,7 +54,29 @@ function GradeAssignment(){
         fetchData();
     }, [assignmentId]);
     
-    
+    const handleGradeSubmit = async (studentNum, grade, comment) => {
+        try {
+            const response = await fetch('http://localhost:4000/api/teacherRoute/storeGrades', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    courseName:courseName,
+                    assignmentName:assignmentName,
+                    studentGrades: [{
+                        studentNum: studentNum,
+                        grade: grade,
+                        comment: comment
+                    }]
+                }),
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Error submitting grades:', error);
+        }
+    };
     // async () => (
         
     // )
@@ -68,17 +93,23 @@ function GradeAssignment(){
                     {students.map((student,index)=>(
                          <Accordion key={index}>
                         <Accordion.Item eventKey={index} className='students'>
-                            <Accordion.Header>Student Number: {student.submissions[0].studentNumber}</Accordion.Header>
+                            <Accordion.Header>Student Number: {student.studentNumber}</Accordion.Header>
                             <Accordion.Body>
                             <div className='submitted-assessment'>
-                            {student.submissions[0].content}
+                            {student.content}
                             </div>
-                            <Form>
+                            <Form onSubmit={(e) => {
+                                        e.preventDefault();
+                                        const formData = new FormData(e.target);
+                                        const grade = formData.get('grade');
+                                        const comment = formData.get('comment');
+                                        handleGradeSubmit(student.studentNumber, grade, comment);
+                                    }}>
                             <Row className="align-items-center">
                                 <Col xs="auto">
                                 <InputGroup>
                                     <InputGroup.Text>Comments</InputGroup.Text>
-                                    <Form.Control as="textarea" aria-label="Comments" />
+                                    <Form.Control as="textarea" name="comment" aria-label="Comments" />
                                 </InputGroup>
                                 </Col>
                                 <Col xs="auto">
@@ -87,7 +118,7 @@ function GradeAssignment(){
                                 </Form.Label>
                                 <InputGroup className="mb-2">
                                     
-                                    <Form.Control id="inlineFormInputGroup" placeholder="Grade" />
+                                    <Form.Control name="grade" id="inlineFormInputGroup" placeholder="Grade" />
                                     <InputGroup.Text>%</InputGroup.Text>
                                 </InputGroup>
                                 </Col>

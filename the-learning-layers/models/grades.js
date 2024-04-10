@@ -4,14 +4,14 @@ const mongoose=require('mongoose'); //use to import MongoDB methods
 const grades = new mongoose.Schema({
     course:{type: String},
     assignmentGrades: [{
-        studentNum: Number,
+        studentNum: Number ,
         assignmentName: String,
         grade: Number,
         status: { type: String, default: 'missing' },
-        comment: String,
+        comment:String
     }],
     quizGrades:[{
-        studentNum: Number,
+        studentNum:Number,
         quizName: String,
         grade:Number
     }]

@@ -5,6 +5,8 @@ function SubmitAssignment() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const assignmentId = queryParams.get('assignmentId');
+  const courseName=queryParams.get('name');
+  const courseId=queryParams.get('courseId');
   const [submission, setSubmission] = useState('');
   const [studentNumber,setStudentNumber]=useState(1);
   const [submissionDate,setSubmissionDate]=useState(1);
@@ -55,7 +57,8 @@ function SubmitAssignment() {
       if (response.ok) {
         // If the response is successful
         const responseData = await response.json(); // Parsing the JSON response
-        // navigate('/assignment-submitted');
+        alert("Assignment submitted");
+        navigate(`/StudentAssignments?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}`)
       } else {
         // If the response is not successful
         console.error('Error saving assignments:', response.statusText);
