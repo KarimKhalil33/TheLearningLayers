@@ -93,7 +93,6 @@ function TeacherAssignments(){
 
                 if (response.status === 200) {
                 console.log('Assignment successfully created');
-                navigate(`/teacherAssignments?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}`);
         
                 } else {
                 const responseData = await response.json();
@@ -109,6 +108,7 @@ function TeacherAssignments(){
                 console.error('Error creating assignment', error.message);
             }
         } setValidated(true);
+        navigate(`/teacherAssignments?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}`);
     };
 
     const listAssignments = assignments.length > 0 ? (
