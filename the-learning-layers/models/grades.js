@@ -11,6 +11,7 @@ const grades = new mongoose.Schema({
         comment:String
     }],
     quizGrades:[{
+        studentNum:Number,
         quizName: String,
         grade:Number
     }]
