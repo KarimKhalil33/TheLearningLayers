@@ -15,7 +15,7 @@ function StudentAssignments() {
     useEffect(() => {
         // Fetch assignments data from server or local storage
         fetchAssignments(name, courseId);
-        // fetchGrades(name,courseId);
+        fetchGrades(name,courseId);
     }, []);
 
     const fetchAssignments = async (name, courseId) => {
@@ -23,23 +23,23 @@ function StudentAssignments() {
             // Make fetch request to fetch assignments based on query parameters
             const response = await fetch(`http://localhost:4000/user/getAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
             const data = await response.json();
-            console.log(data);
             setAssignments(data);
         } catch (error) {
             console.error('Error fetching assignments:', error);
         }
     }
 
-    // const fetchGrades=async(name,courseId)=>{
-    //     try {
-    //         // Make fetch request to fetch assignments based on query parameters
-    //         const response = await fetch(`http://localhost:4000/user/getGrades?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
-    //         const data = await response.json();
-    //         setGrades(data);
-    //     } catch (error) {
-    //         console.error('Error fetching grades:', error);
-    //     }
-    // }
+    const fetchGrades=async(name,courseId)=>{
+        try {
+            // Make fetch request to fetch assignments based on query parameters
+            const response = await fetch(`http://localhost:4000/user/getGrades?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
+            const data = await response.json();
+            console.log(data);
+            setGrades(data);
+        } catch (error) {
+            console.error('Error fetching grades:', error);
+        }
+    }
 
     const getStatusLabel = (assignment) => {
         if (assignment.status === "submitted") {
@@ -75,8 +75,8 @@ function StudentAssignments() {
                             <div className="assignment-card" key={index} onClick={() => viewAssignment(assignment._id)}>
                                 <h2>{assignment.name}</h2>
                                 <p>Due Date: {assignment.dueDate}</p>
-                                {/* <p>Grade: {grades[index] ? grades[index].grade : 'Not graded'}</p> */}
-                                {getStatusLabel(assignment) /*change to grades[index]*/}
+                                <p>Grade: {grades[index] ? grades[index].grade : 'Not graded'}</p>
+                                {getStatusLabel(grades[index] ? grades[index].grade : 'Not graded') /*change to grades[index]*/}
                             </div>
                         ))}
                     </div>

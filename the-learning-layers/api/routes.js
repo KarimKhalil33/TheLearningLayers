@@ -244,7 +244,7 @@ router.get('/getGrades', async (req, res) => {
     const studentNum = req.body.studentNum;
 
     const grades = await Grades.findOne({ course, studentNum });
-    res.json(grades);
+    res.json(grades.assignmentGrades);
   }
   catch (error) {
     res.status(500).json({ error: 'Internal server error' });
