@@ -180,8 +180,8 @@ router.get('/getAssignmentDetails',async(req,res)=>{
 router.get('/getSubmissions',async(req,res)=>{
     try{
         const assignmentId=req.query.assignmentId;
-        const submissions=await Submission.find({assignmentId});
-        res.json(submissions);
+        const submissions=await Submission.findOne({assignmentId});
+        res.json(submissions.submissions);
     }
     catch(error){
         res.status(500).json({ message: 'Internal server error' });

@@ -41,7 +41,7 @@ function GradeAssignment(){
                 // Fetch submissions for the assignment
                 const submissionsResponse = await fetch(`http://localhost:4000/api/teacherRoute/getSubmissions?assignmentId=${encodeURIComponent(assignmentId)}`);
                 const submissionsData = await submissionsResponse.json();
-                console.log(submissionsData.submissions)
+                console.log(submissionsData)
                 setStudents(submissionsData);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -68,10 +68,10 @@ function GradeAssignment(){
                     {students.map((student,index)=>(
                          <Accordion key={index}>
                         <Accordion.Item eventKey={index} className='students'>
-                            <Accordion.Header>Student Number: {student.submissions[0].studentNumber}</Accordion.Header>
+                            <Accordion.Header>Student Number: {student.studentNumber}</Accordion.Header>
                             <Accordion.Body>
                             <div className='submitted-assessment'>
-                            {student.submissions[0].content}
+                            {student.content}
                             </div>
                             <Form>
                             <Row className="align-items-center">
