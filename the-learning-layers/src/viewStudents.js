@@ -93,12 +93,14 @@ function GradeAssignment(){
                         <Accordion.Header>{student.firstName} {student.lastName}  <div className='overall'>Overall Grade: </div></Accordion.Header>{/*Add code student course grade here within the overall div */}
                         <Accordion.Body>
                         <div className='studentButtons'>
-                            <DropdownButton id="dropdown-basic-button" title="Assignment Grade">
-                                {assignments.map((assignment)=>(<Dropdown.Item href="#/action-1">{assignment}</Dropdown.Item>))}
-                            </DropdownButton>
-                            <DropdownButton id="dropdown-basic-button" title="Quiz Grade">
-                                {quizzes.map((quiz)=>(<Dropdown.Item href="#/action-1">{quiz}</Dropdown.Item>))}
-                            </DropdownButton>
+                            <div>
+                                <h5>Assignment Grades</h5>
+                                {assignments.map((assignment)=>(<div>{assignment}</div>))}
+                            </div>
+                            <div>
+                                <h5>Quiz Grades</h5>
+                                {quizzes.map((quiz)=>(<div>{quiz}</div>))}
+                            </div>
                         </div>
                         </Accordion.Body>
                     </Accordion.Item>
