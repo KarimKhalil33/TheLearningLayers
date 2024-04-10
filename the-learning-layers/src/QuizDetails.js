@@ -13,34 +13,6 @@ function QuizDetails() {
   const name = params.get('name');
   const courseId = params.get('courseId');
 
-
-
-  // const [quiz] = useState({
-  //   id: quizId,
-  //   title: 'Sample Quiz',
-  //   questions: [
-  //     {
-  //       id: 'q1',
-  //       text: 'What is the capital of France?',
-  //       options: [
-  //         { id: 'q1a1', text: 'Paris' },
-  //         { id: 'q1a2', text: 'London' },
-  //         { id: 'q1a3', text: 'Berlin' },
-  //       ],
-  //     },
-  //     {
-  //       id: 'q2',
-  //       text: 'Who is the CEO of Tesla?',
-  //       options: [
-  //         { id: 'q2a1', text: 'Jeff Bezos' },
-  //         { id: 'q2a2', text: 'Elon Musk' },
-  //         { id: 'q2a3', text: 'Bill Gates' },
-  //       ],
-  //     },
-  //   ],
-  // });
-
-
   const [quiz, setQuiz] = useState({questions: []});
   const [answers, setAnswers] = useState({});
 
