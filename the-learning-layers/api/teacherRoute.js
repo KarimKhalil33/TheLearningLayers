@@ -5,6 +5,7 @@ const Course = require('../models/courses');
 const Student = require('../models/student');
 const Assignment = require('../models/assignments');
 const Quiz = require('../models/quiz');
+const Submission=require('../models/submissions');
 
 
 //when the user clicks view course, get the course details
@@ -103,6 +104,7 @@ router.get('/quizzes', async (req, res) => {
     }
 });
 
+
 router.post('/quizzes', async (req, res) => {
     console.log("Trying to save a new quiz");
     try {
@@ -159,6 +161,35 @@ router.post('/delete', async (req, res) => {
 });
 
 
+router.get('/getAssignmentDetails',async(req,res)=>{
+    try{
+         var assignmentName="";
+         const assignmentId=req.query.assignmentId;
+         const assignment=await Assignment.findOne({_id:assignmentId});
+         if(assignment){
+              assignmentName=assignment.name;
+         }
+         res.json(assignmentName);
+    }
+    catch(error){
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
 
+router.get('/getSubmissions',async(req,res)=>{
+    try{
+        // var assignmentName="";
+        const assignmentId=req.query.assignmentId;
+        // const assignment=await Assignment.findOne({_id:assignmentId});
+        // if(assignment){
+        //      assignmentName=assignment.name;
+        // }
+        const submissions=await Submission.find({assignmentId});
+        res.json(submissions);
+    }
+    catch(error){
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
 
 module.exports = router;

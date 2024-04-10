@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
  import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import AppFooter from './appFooter';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
@@ -20,8 +20,37 @@ function GradeAssignment(){
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const students = ["Student 1","Student 2","Student 3","Student 4"];
+
+
+    // Access query parameters from window.location.search
+    const params = new URLSearchParams(window.location.search);
+    const assignmentId = params.get('assignmentId');
+
+    const [assignmentName,setAssignmentName]=useState("");
+    const [students,setStudents] = useState([]);
     TeacherCourseNavigation("/teacherAssignment");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch assignment details
+                const assignmentResponse = await fetch(`http://localhost:4000/api/teacherRoute/getAssignmentDetails?assignmentId=${encodeURIComponent(assignmentId)}`);
+                const assignmentData = await assignmentResponse.json();
+                setAssignmentName(assignmentData);
+    
+                // Fetch submissions for the assignment
+                const submissionsResponse = await fetch(`http://localhost:4000/api/teacherRoute/getSubmissions?assignmentId=${encodeURIComponent(assignmentId)}`);
+                const submissionsData = await submissionsResponse.json();
+                console.log(submissionsData.submissions)
+                setStudents(submissionsData);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+    }, [assignmentId]);
+    
     
     // async () => (
         
@@ -33,22 +62,16 @@ function GradeAssignment(){
              <article className='main'>
                 {/* Yet to be filled out, this portion of the page displays all assignments for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
                 <header>
-                    <h1><strong>Assignments</strong></h1>
+                    <h1><strong>{assignmentName}</strong></h1>
                 </header>
                     <div className='assignActions'>
-                    {students.map((student)=>(
-                        <Accordion>
-                        <Accordion.Item eventKey="0" className='students'>
-                            <Accordion.Header>{student}</Accordion.Header>
+                    {students.map((student,index)=>(
+                         <Accordion key={index}>
+                        <Accordion.Item eventKey={index} className='students'>
+                            <Accordion.Header>Student Number: {student.submissions[0].studentNumber}</Accordion.Header>
                             <Accordion.Body>
                             <div className='submitted-assessment'>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum.
+                            {student.submissions[0].content}
                             </div>
                             <Form>
                             <Row className="align-items-center">
