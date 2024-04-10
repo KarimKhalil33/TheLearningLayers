@@ -10,50 +10,6 @@ function StudentQuizzes() {
   const name = params.get('name');
   const courseId = params.get('courseId');
 
-  // const quizzes = [
-  //   {
-  //     id: 'quiz1',
-  //     title: 'Quiz 1',
-  //     description: 'Test your knowledge of world geography!',
-  //     grade: '85%',
-  //     dueDate: '2023-12-31',
-  //     status: 'Submitted',
-  //   },
-  //   {
-  //       id: 'quiz2',
-  //       title: 'Quiz 2',
-  //       description: 'Test your knowledge of world geography!',
-  //       grade: null,
-  //       dueDate: '2023-12-31',
-  //       status: 'Missing',
-  //     },
-  //     {
-  //       id: 'quiz3',
-  //       title: 'Quiz 3',
-  //       description: 'Test your knowledge of world geography!',
-  //       grade: null,
-  //       dueDate: '2023-12-31',
-  //       status: 'GradingPending',
-  //     },
-  //     {
-  //       id: 'quiz4',
-  //       title: 'Quiz 4',
-  //       description: 'Test your knowledge of world geography!',
-  //       grade: null,
-  //       dueDate: '2023-12-31',
-  //       status: 'GradingPending',
-  //     },
-  //     {
-  //       id: 'quiz5',
-  //       title: 'Quiz 5',
-  //       description: 'Test your knowledge of world geography!',
-  //       grade: '75%',
-  //       dueDate: '2023-12-31',
-  //       status: 'Submitted',
-  //     },
-  //   // Additional quizzes...
-  // ];
-
   const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
@@ -73,7 +29,7 @@ function StudentQuizzes() {
   }, [courseId, name]);
 
   const handleQuizSelection = (quizId) => {
-    navigate(`/quiz/${quizId}`);
+    navigate(`/quiz/${quizId}?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
   };
 
   const getStatusClass = (status) => {

@@ -326,6 +326,29 @@ router.get('/quizzes', async (req, res) => {
   }
 });
 
+// Route to get quiz details by ID
+router.get('/liveQuiz', async (req, res) => {
+  console.log("Live quiz started")
+  const { id } = req.query;
+
+  try {
+    // Fetch the quiz from the database using the provided ID
+    const quiz = await Quiz.findById(id);
+    console.log("quiz found");
+   
+    if (!quiz) {
+      // If quiz is not found, return a 404 status and error message
+      return res.status(404).json({ message: 'Quiz not found' });
+    }
+    console.log(quiz);
+    // If quiz is found, return it in the response
+    res.json(quiz);
+  } catch (error) {
+    // If an error occurs during database query, return a 500 status and error message
+    console.error('Error fetching quiz:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 
