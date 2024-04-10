@@ -1,5 +1,4 @@
-import React from 'react';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
@@ -8,36 +7,56 @@ import { useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
- import TeacherMenu from './TeacherMenu';
+import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState , useEffect} from 'react';
-import AppFooter from './appFooter';
-import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
-import { click } from '@testing-library/user-event/dist/click';
 
-function TeacherQuizes()
-{
+function TeacherQuizes() {
     const [validated, setValidated] = useState(false);
     const [name, setName] = useState('');
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [questions, setQuestions] = useState([]);
+    const [quizzes,setQuizzes] = useState([]);;
+
+
+       // Access query parameters from window.location.search
+   const params = new URLSearchParams(window.location.search);
+   const courseName = params.get('name');
+   const courseId = params.get('courseId');
+
     let countQues = 0;
 
-    // Access query parameters from window.location.search
-    const params = new URLSearchParams(window.location.search);
-    const courseName = params.get('name');
-    const courseId = params.get('courseId');
+    let navigate = useNavigate();
+    const routeChange = (path) => {
+        navigate(path);
+    };
 
-    TeacherCourseNavigation(courseName, courseId);
-
-
-    const [quizzes,setQuizzes] = useState([]);;
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     
+//handle changes to question fields dynamically
+    const handleQuestionChange = (index, value) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[index] = {
+            ...updatedQuestions[index],
+            question: value
+        };
+        setQuestions(updatedQuestions);
+    };
+//handle changes to option fields dynamically
+    const handleOptionChange = (questionIndex, optionIndex, value) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].options[optionIndex] = value;
+        setQuestions(updatedQuestions);
+    };
+//add another question field
+    const addQuestion = () => {
+        countQues++;
+        setQuestions([...questions, { question: '', options: ['', '', '', ''] }]);
+    };
+//set quizzes for course
     useEffect(() => {
-        const course = `${courseName} ${courseId}`;
-        fetch(`http://localhost:4000/api/teacherRoute/quizzes?course=${encodeURIComponent(course)}`)
+        fetch(`http://localhost:4000/api/teacherRoute/quizzes?courseId=${encodeURIComponent(courseId)}&courseName=${encodeURIComponent(courseName)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -53,96 +72,136 @@ function TeacherQuizes()
     }, []);
     
 
-
-const addQuestions = (e) => {
-    countQues++;
-    const quiz = document.getElementById('quiz');
-    let questionHTML = '<div class="row"><div class="col-xs-8"><div class="form-group mb-6"><label for="Question'+countQues+'">Question'+countQues+'</label><input type="text" class="form-control" placeholder="Enter Question" id="Question'+countQues+'" required /><div class="invalid-feedback">Please enter Question</div></div></div><div id="options"><label for="Question'+countQues+'.1">Option1</label><input type="text" class="form-control" placeholder="Enter Option1" id="Question'+countQues+'option1" required /><div class="invalid-feedback">Please enter Option</div><label for="Question'+countQues+'.2">Option2</label><input type="text" class="form-control" placeholder="Enter Option2" id="Question'+countQues+'option2" required /><div class="invalid-feedback">Please enter Option</div><label for="Question'+countQues+'.3">Option3</label><input type="text" class="form-control" placeholder="Enter Option3" id="Question'+countQues+'option3" required /><div class="invalid-feedback">Please enter Option</div><label for="Question'+countQues+'.4">Option4</label><input type="text" class="form-control" placeholder="Enter Option4" id="Question'+countQues+'option4" required /><div class="invalid-feedback">Please enter Option</div></div></div></div></div>';
+    //function to delete a quiz using quiz id
+    const deleteQuiz = async (id ) => {
+        try {
     
-    // Create a new div element
-    let newElement = document.createElement('div');
-    // Set its innerHTML to your HTML string
-    newElement.innerHTML = questionHTML;
-    // Append the new element to quiz
-    quiz.append(newElement);
-}
-
-
-    const handleSubmit = async (e) => {
-        const formData = new FormData();}
-
-        let navigate = useNavigate();
-    const routeChange = (path) => {
-        navigate(path);
+            await fetch(`http://localhost:4000/api/teacherRoute/delete`, {
+                method: 'POST',    
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id})
+            });
+    
+            //update the displayed quizzes
+            const updatedQuizzes = quizzes.filter(quiz => quiz._id !== id);
+            setQuizzes(updatedQuizzes);
+        } catch (error) {
+            console.error('Error rejecting enrollment:', error);
+        }
     };
 
-   
+//this funtion deals with form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const form = e.currentTarget;
 
+        //Form should not submit without a name
+        if (questions.length === 0) {
+            alert('Please add at least one question before submitting the quiz.');
+            return;
+        }
+   //Form should not submit without questions
+        if (questions.length === 0) {
+            alert('Please add at least one question before submitting the quiz.');
+            return;
+        }
+    //All field should be filled
+        if (!form.checkValidity()) {
+            setValidated(true);
+            return;
+        }
 
-    return(
+        //Send a post request to database with form data
+        try {
+            const response = await fetch('http://localhost:4000/api/teacherRoute/quizzes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    courseName: courseName,
+                    courseId: courseId,
+                    questions: questions
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add quiz');
+            }
+
+            const data = await response.json();
+            console.log('Quiz added successfully:', data);
+
+     // Merge the newly added quiz with the existing quizzes
+        setQuizzes(prevQuizzes => [...prevQuizzes, data]);
+
+            handleClose();
+        } catch (error) {
+            console.error('Error adding quiz:', error);
+        }
+    };
+
+    return (
         <>
-            <TeacherMenu></TeacherMenu>
-            <TeacherCourseNavigation></TeacherCourseNavigation>
-            <div className='newAssessments'>
-            <Button onClick={handleShow}>Create Quiz</Button>
+            <TeacherMenu />
+            <TeacherCourseNavigation />
+            <Container className='newAssessments'>
+                <Button onClick={handleShow}>Create Quiz</Button>
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
-                    <Modal.Title>Create Quiz</Modal.Title>
+                        <Modal.Title>Create Quiz</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                    <Form id="quiz" noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Row>
-                            <Col xs={8}>
-                                <Form.Group className="mb-4">
-                                    <Form.Label htmlFor='quizName'>Quiz Name</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter Quiz Name" id='quizName' value={name} onChange={e => setName(e.target.value)} required />
-                                    <Form.Control.Feedback type='invalid'>Please enter quiz name</Form.Control.Feedback>
-                                </Form.Group>
-                                {/* The teacher is required to name the quiz */}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs={5}>
-                                <Form.Group className="mb-4">
-                                    <Form.Label htmlFor='Ques'>Add Question</Form.Label>
-                                    <Button id='Ques' name='Ques' onClick={addQuestions}  required >Add Question</Button>
-                                </Form.Group>
-                                {/* The teacher is required to name the quiz */}
-                            </Col>
-                        </Row>
-
-                    </Form>
+                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                            <Form.Group>
+                                <Form.Label htmlFor='quizName'>Quiz Name</Form.Label>
+                                <Form.Control type="text" placeholder="Enter Quiz Name" id='quizName' value={name} onChange={e => setName(e.target.value)} required />
+                                <Form.Control.Feedback type='invalid'>Please enter quiz name</Form.Control.Feedback>
+                            </Form.Group>
+                            {questions.map((question, index) => (
+                                <div key={index}>
+                                    <Form.Group>
+                                        <Form.Label htmlFor={`question-${index}`}>Question {index + 1}</Form.Label>
+                                        <Form.Control type="text" id={`question-${index}`} value={question.question} onChange={(e) => handleQuestionChange(index, e.target.value)} required />
+                                        <Form.Control.Feedback type='invalid'>Please enter a question</Form.Control.Feedback>
+                                    </Form.Group>
+                                    <Form.Group>
+                                        {question.options.map((option, optionIndex) => (
+                                            <div key={optionIndex}>
+                                                <Form.Label htmlFor={`option-${index}-${optionIndex}`}>Option {optionIndex + 1}</Form.Label>
+                                                <Form.Control type="text" id={`option-${index}-${optionIndex}`} value={option} onChange={(e) => handleOptionChange(index, optionIndex, e.target.value)} required />
+                                                <Form.Control.Feedback type='invalid'>Please enter an option</Form.Control.Feedback>
+                                            </div>
+                                        ))}
+                                    </Form.Group>
+                                </div>
+                            ))}
+                            <Button onClick={addQuestion}>Add Question</Button>
+                            <Button variant="secondary" onClick={handleClose}>Close</Button>
+                            <Button variant="primary" type="submit">Save Changes</Button>
+                        </Form>
                     </Modal.Body>
-                    <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                    </Button>
-                    </Modal.Footer>
                 </Modal>
-                </div>
-                <article className='main'>
-                {/* Yet to be filled out, this portion of the page displays all assignments for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
+            </Container>
+            <Container className='main'>
                 <header>
                     <h1><strong>Quizzes</strong></h1>
                 </header>
-                {quizzes.map((quiz) =>(
-                <Row className="existingAssignment">
-                    {quiz.name}
-                    <div className='assignActions'>
-                    <Button variant='danger'>Delete</Button>
-                    <Button variant='success'onClick={()=>routeChange('/gradeQuiz')}>Grade</Button>
-                    </div>
-                </Row>
+                {quizzes.map((quiz, index) => (
+                    <Row key={index} className="existingAssignment">
+                        {quiz.name}
+                        <div className='assignActions'>
+                            <Button variant='danger' onClick={() => deleteQuiz(quiz._id)}>Delete</Button>
+                            <Button variant='success' onClick={() => routeChange(`/gradeQuiz?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(courseName)}`)}>Grade</Button>
+                        </div>
+                    </Row>
                 ))}
-
-            </article>
+            </Container>
         </>
-        
     );
 }
-
 
 export default TeacherQuizes;

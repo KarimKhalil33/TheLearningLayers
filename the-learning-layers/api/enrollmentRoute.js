@@ -139,6 +139,7 @@ router.post('/accept', async (req, res) => {
 
    // Find the course by title and update its student array
    const course = await Course.findOne({ title: title });
+
    course.students.push(studentNum);
 
         console.log("course student array attempt");
