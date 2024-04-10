@@ -30,6 +30,7 @@ function GradeAssignment(){
         const courseId = params.get('courseId');
 
         fetchCourse( name, courseId);
+        fetchGradesForStudents(students, name, courseId);
     }, []); // Effect runs only once when component mounts
 
     const fetchCourse = async (name, courseId) => {
@@ -49,7 +50,31 @@ function GradeAssignment(){
         }
     };
     
-
+    const fetchGradesForStudents = async (students, courseName, courseId) => {
+        try {
+            // The course field in the grades schema is a combination of courseName and courseId
+            const courseIdentifier = `${courseName} ${courseId}`;
+    
+            // Map over each student and fetch their grades using their student number and courseIdentifier
+            const gradesRes = students.map(student =>
+                fetch(`http://localhost:4000/api/teacherRoute/studentGrades?studentNum=${student.studentNum}&course=${encodeURIComponent(courseIdentifier)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch grades');
+                        }
+                        return response.json(); // Assuming the endpoint returns JSON
+                    })
+            );
+    
+            // Wait for all the grade fetches to complete
+            const grades = await Promise.all(gradesRes);
+    
+            // grades now contains an array of grades for each student in the specific course
+            console.log(grades);
+        } catch (error) {
+            console.error('Error fetching grades:', error);
+        }
+    };
     
     return(
         <>
