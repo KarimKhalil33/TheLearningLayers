@@ -48,39 +48,40 @@ function GradeAssignment(){
             console.error('Error fetching:', error);
         }
     };
+    
 
-    TeacherCourseNavigation("/teacherAssignment");
-
+    
     return(
         <>
-             <TeacherMenu></TeacherMenu>
-             <TeacherCourseNavigation setkey="/teacherAssignment"></TeacherCourseNavigation> 
-             <article className='main'>
-                {/* Yet to be filled out, this portion of the page displays all students for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
-                <header>
-                    <h1><strong>Students</strong></h1>
-                </header>
-                    <div className='assignActions'>
-                        {/* This section displays the student each student being implemented with an accordion. The accordion contains dropdowns which teachers can use to see students distribution on assignemtns and quizzes */}
-                    {students.map((student)=>(<Accordion>
-                        <Accordion.Item eventKey="0" className='students'>
-                            <Accordion.Header>{student}  <div className='overall'>Overall Grade: </div></Accordion.Header>{/*Add code student course grade here within the overall div */}
-                            <Accordion.Body>
-                            <div className='studentButtons'>
-                            <DropdownButton id="dropdown-basic-button" title="Assignment Grade">
-                                {assignments.map((assignment)=>(<Dropdown.Item href="#/action-1">{assignment}</Dropdown.Item>))}
-                            </DropdownButton>
-                            <DropdownButton id="dropdown-basic-button" title="Quiz Grade">
-                            {quizzes.map((quiz)=>(<Dropdown.Item href="#/action-1">{quiz}</Dropdown.Item>))}
-                            </DropdownButton>
+{/* This section displays the student each student being implemented with an accordion. The accordion contains dropdowns which teachers can use to see students distribution on assignemtns and quizzes */}                
+        <TeacherMenu></TeacherMenu>
+        <TeacherCourseNavigation/> 
+        <article className='main'>
+        {/* Yet to be filled out, this portion of the page displays all students for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
+            <header>
+                <h1><strong>Students</strong></h1>
+            </header>
+            <div className='assignActions'>
+                {/* This section displays the student each student being implemented with an accordion. The accordion contains dropdowns which teachers can use to see students distribution on assignemtns and quizzes */}
+                {students.map((student)=>(<Accordion>
+                    <Accordion.Item eventKey="0" className='students'>
+                        <Accordion.Header>{student.firstName} {student.lastName}  <div className='overall'>Overall Grade: </div></Accordion.Header>{/*Add code student course grade here within the overall div */}
+                        <Accordion.Body>
+                        <div className='studentButtons'>
+                            <div>
+                                <h5>Assignment Grades</h5>
+                                {assignments.map((assignment)=>(<div>{assignment}</div>))}
                             </div>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        </Accordion>))}
-                    
-                        
-                    </div>
-            </article>
+                            <div>
+                                <h5>Quiz Grades</h5>
+                                {quizzes.map((quiz)=>(<div>{quiz}</div>))}
+                            </div>
+                        </div>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>))}
+            </div>
+        </article>
         </>
     );
 }

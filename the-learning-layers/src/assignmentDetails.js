@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './App.css'; // Update this to your stylesheet
 import StudentMenu from './StudentMenu';
 function AssignmentDetails() {
@@ -17,12 +17,15 @@ function AssignmentDetails() {
       setAssignment(data);
     }
     fetchAssignmentDetails();
-  },[]);
+  }, []);
 
 
   // Simulate a function to navigate to the submission page
   const goToSubmissionPage = () => {
-    navigate('/SubmitAssignment');
+    navigate({
+      pathname: '/SubmitAssignment',
+      search: `?assignmentId=${assignmentId}`
+    });
   };
 
   // Dummy data for assignment details
