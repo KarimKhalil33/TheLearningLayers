@@ -18,7 +18,12 @@ const quizSchema = new mongoose.Schema({
     },
     questions: [{ question: String, options: [String] }],
 
-    status: { type: String, enum: ['Submitted', 'InProgress'] , default:'InProgress'},
+    description: {  type: String,
+        default: "Complete this quiz by due date"
+
+    },
+
+    status: { type: String, enum: ['Submitted', 'Missing', 'Pending', 'Graded'] , default:'InProgress'},
 
     createdAt: {
         type: Date,
