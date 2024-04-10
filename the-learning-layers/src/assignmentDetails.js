@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams,useLocation } from 'react-router-dom';
 import './App.css'; // Update this to your stylesheet
 import StudentMenu from './StudentMenu';
 function AssignmentDetails() {
@@ -7,6 +7,12 @@ function AssignmentDetails() {
   const navigate = useNavigate();
 
   const { assignmentId } = useParams();
+  const location = useLocation();
+  
+  // Extracting query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const courseName = queryParams.get('name');
+  const courseId = queryParams.get('courseId');
   const [assignment, setAssignment] = useState([]);
 
   useEffect(() => {
@@ -17,12 +23,15 @@ function AssignmentDetails() {
       setAssignment(data);
     }
     fetchAssignmentDetails();
-  },[]);
+  }, []);
 
 
   // Simulate a function to navigate to the submission page
   const goToSubmissionPage = () => {
-    navigate('/SubmitAssignment');
+    navigate({
+      pathname: '/SubmitAssignment',
+      search: `?name=${courseName}&courseId=${courseId}&assignmentId=${assignmentId}`
+    });
   };
 
   // Dummy data for assignment details
