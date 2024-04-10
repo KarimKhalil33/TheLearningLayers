@@ -350,8 +350,56 @@ router.get('/liveQuiz', async (req, res) => {
   }
 });
 
+// Endpoint to save graded quiz
+router.post('/saveGradedQuiz', async (req, res) => {
+  console.log("trying to save  QUIZ GRADE");
+  try {
+    // Extract data from the request body
+    const { username, courseId, name, quizId, totalGrade } = req.body;
+
+    const quiz = Quiz.findOne({quizId});
+    const student = User.findOne({username});
+    const course = name + " " + courseId  
 
 
+    console.log("student and quiz found");
+
+
+    const grade = await Grades.findOne( {course});
+    if (grade) {
+      if (grade.quizGrades) {
+        // If quizGrades array exists, push the new quiz grade
+        grade.quizGrades.push({ quizName: quiz.name, grade: parseInt(totalGrade), studentNum: student.studentNum , status: 'Graded'});
+        console.log("Quiz updated");
+        grade.save();
+      } else {
+        // If quizGrades array doesn't exist, update it with the new quiz grade
+        await Grades.updateOne(
+          { courseId: courseId, name: name },
+          { $set: { 'quizGrades': [{ quizName: quiz.name, grade: parseInt(totalGrade), studentNum: student.studentNum , status: 'Graded'}] } }
+        );
+        grade.save();
+        console.log("New quiz grade added");
+      }
+    } else {
+      // If the document doesn't exist, create a new one
+      const newGrade = new Grades({
+        courseId: courseId,
+        name: name,
+        quizGrades: [{ quizName: quiz.name, grade: parseInt(totalGrade), studentNum: student.studentNum, status: 'Graded' }]
+      });
+      await newGrade.save();
+      console.log("New document created with quiz grade");
+    }
+
+  
+
+    res.status(200).json({ message: 'Graded quiz saved successfully' });
+  } catch (error) {
+    console.error('Error saving graded quiz:', error);
+    res.status(500).json({ error: 'Failed to save graded quiz' });
+  }
+});
 
 // Export the router
 module.exports = router;

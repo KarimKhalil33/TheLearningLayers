@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import './App.css'; // Ensure the CSS file is linked
+import './App.css';
 import StudentMenu from './StudentMenu';
-import { Nav } from 'react-bootstrap';
 
 function QuizDetails() {
   const { quizId } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const name = params.get('name');
-  const courseId = params.get('courseId');
-  const username = JSON.parse(sessionStorage.getItem('authenticationId'));
-
   const [quiz, setQuiz] = useState({ questions: [] });
   const [answers, setAnswers] = useState({});
   const [gradingInProgress, setGradingInProgress] = useState(false);
   const [gradedScore, setGradedScore] = useState(null);
+  const [feedback, setFeedback] = useState();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const name = params.get('name');
+  const courseId = params.get('courseId');
 
   useEffect(() => {
     // Fetch quiz data from the backend API
@@ -54,9 +51,6 @@ function QuizDetails() {
       },
       body: JSON.stringify({
         quizId,
-        username,
-        name,
-        courseId,
         questions: quiz.questions,
         answers,
       }),
@@ -68,10 +62,15 @@ function QuizDetails() {
         return response.json();
       })
       .then((data) => {
+        // Parse the graded score JSON and extract the total grade and feedback
+        const { "Total Grade": totalGrade, "Feedback": feedback } = JSON.parse(data);
 
-        // Update state with graded score
-        setGradedScore(data);
+        // Update state with graded score and feedback
+        setGradedScore(totalGrade);
+        setFeedback(feedback);
         setGradingInProgress(false);
+         // Save the graded quiz
+      saveGradedQuiz(totalGrade);
       })
       .catch((error) => {
         console.error('Error grading quiz:', error);
@@ -79,9 +78,39 @@ function QuizDetails() {
       });
   };
 
+  // Function to save the graded quiz
+const saveGradedQuiz = (totalGrade) => {
+  // Get the username from session storage
+  const username = JSON.parse(sessionStorage.getItem('authenticationId'));
+
+  // Make a separate request to save the graded quiz
+  fetch('http://localhost:4000/user/saveGradedQuiz', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username,
+      courseId,
+      name,
+      quizId,
+      totalGrade,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to save graded quiz');
+      }
+      console.log('Graded quiz saved successfully');
+    })
+    .catch((error) => {
+      console.error('Error saving graded quiz:', error);
+    });
+};
+
   return (
     <>
-      <StudentMenu></StudentMenu>
+      <StudentMenu />
       <div className="quiz-details">
         <div className="title-area">
           <h1>{quiz.name}</h1>
@@ -114,12 +143,15 @@ function QuizDetails() {
               </div>
             </div>
           ))}
-          <button type="submit" className="submit-quiz">
+          <button type="submit" className="submit-quiz" disabled={gradingInProgress}>
             {gradingInProgress ? 'Grading...' : 'Submit Quiz'}
           </button>
         </form>
         {gradedScore !== null && (
-          <div className="graded-score">Results: {gradedScore} </div>
+          <div className="graded-score">
+            <p>Results: Total Grade: {gradedScore}</p>
+            <p>Feedback: {feedback}</p>
+          </div>
         )}
       </div>
     </>
