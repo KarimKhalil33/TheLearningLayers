@@ -20,8 +20,6 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 
 function GradeAssignment(){
     const [students, setStudents] = useState([]);
-    const [assignments, setAssignments] = useState([]);
-    const [quizzes, setQuizzes] = useState([]);
 
     useEffect(() => {
         // Access query parameters from window.location.search
@@ -30,7 +28,7 @@ function GradeAssignment(){
         const courseId = params.get('courseId');
 
         fetchCourse( name, courseId);
-        fetchGradesForStudents(students, name, courseId);
+        fetchGradesForCourse(name, courseId);
     }, []); // Effect runs only once when component mounts
 
     const fetchCourse = async (name, courseId) => {
@@ -44,28 +42,38 @@ function GradeAssignment(){
             const studentsResponse = await fetch(`http://localhost:4000/api/teacherRoute/viewStudents?studentNumbers=${studentNumbers}`);
             const studentsData = await studentsResponse.json();
 
-            setStudents(studentsData);
+            // Initialize grades for fetched students
+            const studentsWithGrades = studentsData.map(student => ({
+                ...student,
+                assignmentGrades: [],
+                quizGrades: []
+            }));
+
+            setStudents(studentsWithGrades);
+
+            // Fetch grades for the course and assign them to the students
+            fetchGradesForCourse(name, courseId, studentsWithGrades);
         } catch (error) {
             console.error('Error fetching:', error);
         }
     };
     
-    const fetchGradesForStudents = async (students, courseName, courseId) => {
+    const fetchGradesForCourse = async (courseName, courseId, students) => {
+        const courseIdentifier = `${courseName} ${courseId}`;
         try {
-            const courseIdentifier = `${courseName}-${courseId}`;
-            const gradesRes = await Promise.all(students.map(student =>
-                fetch(`http://localhost:4000/api/teacherRoute/studentGrades?studentNum=${student.studentNum}&course=${encodeURIComponent(courseIdentifier)}`)
-                    .then(response => response.json())
-            ));
-    
-            const updatedStudents = students.map((student, index) => ({
+            const response = await fetch(`http://localhost:4000/api/teacherRoute/studentGrades?course=${encodeURIComponent(courseIdentifier)}`);
+            const gradesData = await response.json();
+
+            // Assign grades to each student based on their student number
+            const updatedStudents = students.map(student => ({
                 ...student,
-                grades: gradesRes[index]
+                assignmentGrades: gradesData.assignmentGrades.filter(grade => grade.studentNum === student.studentNum) || [],
+                quizGrades: gradesData.quizGrades.filter(grade => grade.studentNum === student.studentNum) || []
             }));
-    
-            setStudents(updatedStudents);  // Update the state with students info including their grades
+
+            setStudents(updatedStudents);  // Update the state with students' info including their grades
         } catch (error) {
-            console.error('Error fetching grades:', error);
+            console.error('Error fetching grades for course:', error);
         }
     };
     
@@ -79,23 +87,23 @@ function GradeAssignment(){
                     <h1><strong>Students</strong></h1>
                 </header>
                 {students.map(student => (
-                    <Accordion key={student.studentNum}>
-                        <Accordion.Item eventKey={student.studentNum.toString()} className='students'>
+                    <Accordion key={student.studentNum} className='mb-3'>
+                        <Accordion.Item eventKey={student.studentNum.toString()}>
                             <Accordion.Header>
-                                {student.firstName} {student.lastName} <div className='overall'>Overall Grade: </div>
+                                {student.firstName} {student.lastName}
                             </Accordion.Header>
                             <Accordion.Body>
                                 <h5>Assignment Grades</h5>
                                 <ul>
-                                    {student.grades?.assignmentGrades.map((assignment, index) => (
+                                    {student.assignmentGrades.map((grade, index) => (
                                         <li key={index}>
-                                            {assignment.assignmentName}: {assignment.grade} {assignment.status}
+                                            {grade.assignmentName}: {grade.grade} - Status: {grade.status} - Comment: {grade.comment}
                                         </li>
                                     ))}
                                 </ul>
                                 <h5>Quiz Grades</h5>
                                 <ul>
-                                    {student.grades?.quizGrades.map((quiz, index) => (
+                                    {student.quizGrades.map((quiz, index) => (
                                         <li key={index}>
                                             {quiz.quizName}: {quiz.grade}
                                         </li>
@@ -105,7 +113,7 @@ function GradeAssignment(){
                         </Accordion.Item>
                     </Accordion>
                 ))}
-        </article>
+            </article>
         </>
     );
 }

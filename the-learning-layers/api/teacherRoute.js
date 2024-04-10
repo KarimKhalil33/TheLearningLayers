@@ -99,14 +99,13 @@ router.get('/quizzes', async (req, res) => {
 
 // Route to get individual student grades for assignments and quizzes
 router.get('/studentGrades', async (req, res) => {
-    const { studentNum, course } = req.query;
+    const { course } = req.query;
 
     try {
-        // Assuming the 'course' field in the grades schema is a string concatenation of courseName and courseId
-        const grades = await Grades.findOne({ studentNum: parseInt(studentNum), course: course });
+        const grades = await Grades.findOne({ course: course });
 
         if (!grades) {
-            return res.status(404).json({ message: 'Grades not found for the given student number and course' });
+            return res.status(404).json({ message: 'Grades not found for the given course' });
         }
 
         res.json(grades);
