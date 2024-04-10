@@ -20,6 +20,17 @@ function GradeQuiz(){
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const params = new URLSearchParams(window.location.search);
+    const courseName = params.get('name');
+    const courseId = params.get('courseId');
+
+ 
+     let navigate = useNavigate();
+     const routeChange = (path) => {
+         navigate(path);
+     };
+
     const students = ["Student 1","Student 2","Student 3","Student 4"];
     TeacherCourseNavigation("/teacherAssignment");
     return(
