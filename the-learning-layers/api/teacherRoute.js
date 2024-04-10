@@ -7,7 +7,6 @@ const Assignment = require('../models/assignments');
 const Quiz = require('../models/quiz');
 const Grades = require('../models/grades');
 const Submission=require('../models/submissions');
-const Grades=require('../models/grades');
 
 
 //when the user clicks view course, get the course details

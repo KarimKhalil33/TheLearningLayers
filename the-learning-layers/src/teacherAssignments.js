@@ -93,6 +93,7 @@ function TeacherAssignments(){
 
                 if (response.status === 200) {
                 console.log('Assignment successfully created');
+                navigate(`/teacherAssignments?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}`);
         
                 } else {
                 const responseData = await response.json();

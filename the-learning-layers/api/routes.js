@@ -196,7 +196,7 @@ router.post('/teacherPage', async (req, res) => {
 });
 
 router.get('/studentNum', async (req, res) => {
-  const authenticationId = req.headers.authorization; // Assuming the authentication ID is sent in the Authorization header
+  const authenticationId = req.query.authenticationId; // Assuming the authentication ID is sent in the Authorization header
   try {
     let student = await User.findOne({ username: authenticationId });
     if (!student) {
@@ -241,15 +241,24 @@ router.get('/getGrades', async (req, res) => {
     const name = req.query.name;
     const courseId = req.query.courseId;
     const course = name + " " + courseId;
-    const studentNum = req.body.studentNum;
-
-    const grades = await Grades.findOne({ course, studentNum });
-    res.json(grades);
-  }
-  catch (error) {
+    const studentNum = req.query.studentNum;
+    console.log(course);
+    const grades = await Grades.findOne({ course }); // Only query based on 'course'
+    if (!grades) {
+      return res.status(404).json({ error: 'Grades not found' });
+    }
+    const assignmentGrades = grades.assignmentGrades.find(grade => grade.studentNum == studentNum);
+    if (!assignmentGrades) {
+      return res.status(404).json({ error: 'Grades for student not found' });
+    }
+    console.log(assignmentGrades);
+    res.json(assignmentGrades);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
-})
+});
+
 
 router.post('/submitAssignment', async (req, res) => {
   try {
@@ -349,6 +358,30 @@ router.get('/liveQuiz', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+router.get('/checkStatus', async (req, res) => {
+  try {
+      // Ensure proper authentication before proceeding
+      const studentNumber = req.headers.studentNum;
+
+      // Query the submissions collection to check if a submission exists for the student
+      const submission = await Submission.findOne({ studentNumber });
+
+      if (submission) {
+          // If a submission exists for the student, send a response indicating that the student has submitted
+          return res.status(200).json({ status: 'missing' });
+      }
+      //  else {
+      //     // If no submission exists for the student, send a response indicating that the student has not submitted
+      //     return res.status(200).json({ status: 'missing' });
+      // }
+  } catch (error) {
+      // If an error occurs, send a 500 internal server error response
+      console.error('Error checking submission status:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 
 
