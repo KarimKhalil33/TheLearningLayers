@@ -23,7 +23,7 @@ const quizSchema = new mongoose.Schema({
 
     },
 
-    status: { type: String, enum: ['Submitted', 'Missing', 'Pending', 'Graded', 'In Progress'] , default:'In Progress'},
+    status: { type: String, enum: ['Submitted', 'Missing', 'Pending', 'Graded', 'In Progress'] , default:'Pending'},
 
     createdAt: {
         type: Date,

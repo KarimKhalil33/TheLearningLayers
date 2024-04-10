@@ -13,6 +13,7 @@ const grades = new mongoose.Schema({
     quizGrades:[{
         studentNum:Number,
         quizName: String,
+        status: { type: String, default: 'Submitted' },
         grade:Number
     }]
 }, { collection: 'grades' });
