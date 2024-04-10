@@ -52,25 +52,18 @@ function GradeAssignment(){
     
     const fetchGradesForStudents = async (students, courseName, courseId) => {
         try {
-            // The course field in the grades schema is a combination of courseName and courseId
-            const courseIdentifier = `${courseName} ${courseId}`;
-    
-            // Map over each student and fetch their grades using their student number and courseIdentifier
-            const gradesRes = students.map(student =>
+            const courseIdentifier = `${courseName}-${courseId}`;
+            const gradesRes = await Promise.all(students.map(student =>
                 fetch(`http://localhost:4000/api/teacherRoute/studentGrades?studentNum=${student.studentNum}&course=${encodeURIComponent(courseIdentifier)}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to fetch grades');
-                        }
-                        return response.json(); // Assuming the endpoint returns JSON
-                    })
-            );
+                    .then(response => response.json())
+            ));
     
-            // Wait for all the grade fetches to complete
-            const grades = await Promise.all(gradesRes);
+            const updatedStudents = students.map((student, index) => ({
+                ...student,
+                grades: gradesRes[index]
+            }));
     
-            // grades now contains an array of grades for each student in the specific course
-            console.log(grades);
+            setStudents(updatedStudents);  // Update the state with students info including their grades
         } catch (error) {
             console.error('Error fetching grades:', error);
         }
@@ -82,30 +75,36 @@ function GradeAssignment(){
         <TeacherMenu></TeacherMenu>
         <TeacherCourseNavigation/> 
         <article className='main'>
-        {/* Yet to be filled out, this portion of the page displays all students for the course and gives the teacher the option to grade, view/Edit, or delete the assignment from the course*/}
-            <header>
-                <h1><strong>Students</strong></h1>
-            </header>
-            <div className='assignActions'>
-                {/* This section displays the student each student being implemented with an accordion. The accordion contains dropdowns which teachers can use to see students distribution on assignemtns and quizzes */}
-                {students.map((student)=>(<Accordion>
-                    <Accordion.Item eventKey="0" className='students'>
-                        <Accordion.Header>{student.firstName} {student.lastName}  <div className='overall'>Overall Grade: </div></Accordion.Header>{/*Add code student course grade here within the overall div */}
-                        <Accordion.Body>
-                        <div className='studentButtons'>
-                            <div>
+                <header>
+                    <h1><strong>Students</strong></h1>
+                </header>
+                {students.map(student => (
+                    <Accordion key={student.studentNum}>
+                        <Accordion.Item eventKey={student.studentNum.toString()} className='students'>
+                            <Accordion.Header>
+                                {student.firstName} {student.lastName} <div className='overall'>Overall Grade: </div>
+                            </Accordion.Header>
+                            <Accordion.Body>
                                 <h5>Assignment Grades</h5>
-                                {assignments.map((assignment)=>(<div>{assignment}</div>))}
-                            </div>
-                            <div>
+                                <ul>
+                                    {student.grades?.assignmentGrades.map((assignment, index) => (
+                                        <li key={index}>
+                                            {assignment.assignmentName}: {assignment.grade} {assignment.status}
+                                        </li>
+                                    ))}
+                                </ul>
                                 <h5>Quiz Grades</h5>
-                                {quizzes.map((quiz)=>(<div>{quiz}</div>))}
-                            </div>
-                        </div>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>))}
-            </div>
+                                <ul>
+                                    {student.grades?.quizGrades.map((quiz, index) => (
+                                        <li key={index}>
+                                            {quiz.quizName}: {quiz.grade}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+                ))}
         </article>
         </>
     );
