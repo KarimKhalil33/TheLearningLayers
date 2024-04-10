@@ -5,6 +5,7 @@ const Course = require('../models/courses');
 const Student = require('../models/student');
 const Assignment = require('../models/assignments');
 const Quiz = require('../models/quiz');
+const Grades = require('../models/grades');
 const Submission=require('../models/submissions');
 const Grades=require('../models/grades');
 
@@ -105,6 +106,23 @@ router.get('/quizzes', async (req, res) => {
     }
 });
 
+// Route to get individual student grades for assignments and quizzes
+router.get('/studentGrades', async (req, res) => {
+    const { course } = req.query;
+
+    try {
+        const grades = await Grades.findOne({ course: course });
+
+        if (!grades) {
+            return res.status(404).json({ message: 'Grades not found for the given course' });
+        }
+
+        res.json(grades);
+    } catch (error) {
+        console.error('Error fetching student grades:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 router.post('/quizzes', async (req, res) => {
     console.log("Trying to save a new quiz");
