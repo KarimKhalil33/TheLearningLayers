@@ -53,7 +53,7 @@ function StudentAssignments() {
     console.log(assignments);
 
     const viewAssignment = (assignmentId) => {
-        navigate(`/assignments/${assignmentId}`);
+        navigate(`/assignments/${assignmentId}?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
       };
     return (
         <>
