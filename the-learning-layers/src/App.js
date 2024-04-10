@@ -25,7 +25,8 @@ import StudentAssignments from './studentAssignments';
 import GradeQuiz from './gradeQuiz';
 import AssignmentDetails from './assignmentDetails';
 import SubmitAssignment from './SubmitAssignment';
-
+import QuizDetails from './QuizDetails';
+import StudentQuizzes from './StudentQuizzes';
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
 }
@@ -89,6 +90,8 @@ function App() {
           <Route path="/StudentAssignments" element={<StudentAssignments/>}/>
           <Route path="/assignments/:assignmentId" element={<AssignmentDetails />} />
           <Route path="/SubmitAssignment" element={<SubmitAssignment />} />
+          <Route path="/StudentQuizzes" element={<StudentQuizzes />} />
+          <Route path="/quiz/:quizId" element={<QuizDetails />} />
         </Route>
         {/* For when an admin logs in, they should only be able to access certain pages */}
         <Route element={<PrivateRoute roles={['Admin']} />}>

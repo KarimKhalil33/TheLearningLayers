@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import AppFooter from './appFooter';
 import StudentMenu from './StudentMenu';
+import { LinkContainer } from 'react-router-bootstrap';
 
 function ViewCourseStudent() {
     const [course, setCourse] = useState([]);
@@ -70,6 +71,7 @@ function ViewCourseStudent() {
                 <Nav variant="underline" defaultActiveKey="/viewCourseStudent" className="flex-column ">
                     <Nav.Link className="sidebar" eventKey="/viewCourseStudent">View Course</Nav.Link>
                     <Nav.Link href={`/StudentAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`} className="sidebar" eventKey="">Assignments</Nav.Link>
+                    <Nav.Link href={`/StudentQuizzes?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`} className="sidebar" eventKey="">Quizzes</Nav.Link>
                 </Nav>
             </article>
             <article className='upcoming'>

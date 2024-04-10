@@ -2,14 +2,16 @@ const mongoose=require('mongoose'); //use to import MongoDB methods
 
 //creating the schema for our model
 const grades = new mongoose.Schema({
-    studentNum: { type: Number },
     course:{type: String},
     assignmentGrades: [{
+        studentNum: Number ,
         assignmentName: String,
         grade: Number,
-        status: { type: String, default: 'missing' }
+        status: { type: String, default: 'missing' },
+        comment:String
     }],
     quizGrades:[{
+        studentNum:Number,
         quizName: String,
         grade:Number
     }]
