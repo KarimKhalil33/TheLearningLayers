@@ -19,15 +19,15 @@ function SubmitAssignment() {
     const getStudentInfo = async () => {
       try { 
         const authenticationId=sessionStorage.getItem("authenticationId").replace(/"/g, "");
-        const response=await fetch("http://localhost:4000/user/studentNum",{
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': authenticationId,
-          },
-        });
-        const data = await response.json();
-        setStudentNumber(data);
+        // const response=await fetch("http://localhost:4000/user/studentNum",{
+        //   method: 'GET',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': authenticationId,
+        //   },
+        // });
+        // const data = await response.json();
+        // setStudentNumber(data);
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
