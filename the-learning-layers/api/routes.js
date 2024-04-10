@@ -8,7 +8,7 @@ const Admin = require("../models/admin");
 const Assignment = require('../models/assignments');
 const Grades = require('../models/grades');
 const Submission = require('../models/submissions');
-const Quiz = require('../models/quiz'); // Assuming you have a Quiz model
+const Quiz = require('../models/quiz'); 
 
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
@@ -353,4 +353,8 @@ router.get('/liveQuiz', async (req, res) => {
 
 
 
+// Export the router
 module.exports = router;
+
+
+
