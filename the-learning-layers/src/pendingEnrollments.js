@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'; 
 import { Container, ListGroup, Button } from 'react-bootstrap';
-
+import AdminMenu from './AdminMenu';
 function PendingEnrollments() {
     const [enrollments, setEnrollments] = useState({});
 
@@ -67,6 +67,8 @@ function PendingEnrollments() {
     
 
     return (
+        <>
+        <AdminMenu></AdminMenu>
         <Container className="mt-4">
             <h2 className="text-center mb-3">Pending Enrollments</h2>
             <ListGroup>
@@ -86,6 +88,7 @@ function PendingEnrollments() {
                 })}
             </ListGroup>
         </Container>
+        </>
     );
 }
 
