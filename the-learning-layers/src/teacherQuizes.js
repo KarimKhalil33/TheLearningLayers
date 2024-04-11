@@ -148,7 +148,7 @@ function TeacherQuizes() {
         <>
             <TeacherMenu />
             <TeacherCourseNavigation />
-            <Container className='newAssessments'>
+                <div className='newAssessment'>
                 <Button onClick={handleShow}>Create Quiz</Button>
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -185,7 +185,7 @@ function TeacherQuizes() {
                         </Form>
                     </Modal.Body>
                 </Modal>
-            </Container>
+                </div>
             <Container className='main'>
                 <header>
                     <h1><strong>Quizzes</strong></h1>

@@ -27,6 +27,8 @@ function TeacherAssignments(){
     const courseId = params.get('courseId');
 
     const course = `${courseName} ${courseId}`;
+    
+
 
     TeacherCourseNavigation( courseName, courseId );
 
@@ -184,7 +186,7 @@ function TeacherAssignments(){
                                 <Col>
                                     <Form.Group className="mb-4">
                                         <Form.Label htmlFor='startDate'>Start Date</Form.Label>
-                                        <Form.Control type="Date" id='startDate' required value={startDate} onChange={e => setStartDate(e.target.value)}/>
+                                        <Form.Control type="Date" id='startDate' min={new Date().toISOString().split('T')[0]} required value={startDate} onChange={e => setStartDate(e.target.value)}/>
                                         <Form.Control.Feedback type='invalid'>Please enter a date</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
