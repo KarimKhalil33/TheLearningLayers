@@ -1,22 +1,14 @@
-import React from 'react';
-import './App.css';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import { Navbar, Nav } from 'react-bootstrap';
-import { useNavigate, useParams } from "react-router-dom";
-import dark from './images/1.png';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
- import TeacherMenu from './TeacherMenu';
-import Modal from 'react-bootstrap/Modal';
-import { useState,useEffect } from 'react';
-import AppFooter from './appFooter';
-import InputGroup from 'react-bootstrap/InputGroup';
+import React, { useState, useEffect } from 'react';
+import { Button, Form, Container, Row, Modal, Col, InputGroup } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+import TeacherMenu from './TeacherMenu';
 import TeacherCourseNavigation from './teacherCourseNavigation';
+import AppFooter from './appFooter';
 
 function TeacherAssignments(){
     const [show, setShow] = useState(false);
+    const [assignments, setAssignments]=useState([]);
+    const [validated, setValidated] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -28,16 +20,11 @@ function TeacherAssignments(){
 
     const course = `${courseName} ${courseId}`;
 
-    TeacherCourseNavigation( courseName, courseId );
-
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const routeChange = (path) => {
         navigate(path);
     };
-
-    const [assignments,setAssignments]=useState([]);
-
-    const [validated, setValidated] = useState(false);
+    
     const [name, setName] = useState('');
     const [weight, setWeight] = useState('');
     const [description, setDescription] = useState('');
@@ -47,8 +34,8 @@ function TeacherAssignments(){
     const [file, setFile] = useState(null);
     
     useEffect(() => {
-        fetchAssignments(courseName,courseId); // Call the fetch function
-    }, []);
+        fetchAssignments(courseName, courseId);
+    }, [courseName, courseId]);
 
     const fetchAssignments = async (name, courseId) => {
         try {
@@ -60,7 +47,7 @@ function TeacherAssignments(){
         } catch (error) {
             console.error('Error fetching assignments:', error);
         }
-    }
+    }   
 
     const handleSubmit = async (e) => {
         const formData = new FormData();
@@ -72,12 +59,12 @@ function TeacherAssignments(){
         formData.append('dueDate', dueDate);
         formData.append('file', file); // Append the file
 
-        const form = e.currentTarget;
-        if (form.checkValidity() === false) {
+        const formElement = e.currentTarget;
+        if (formElement.checkValidity() === false) {
             e.preventDefault();
             e.stopPropagation();
-        }
-        else {
+        } else {
+            e.preventDefault();
             try {
                 const fetchURL = `http://localhost:4000/api/teacherRoute/teacherAssignments?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(name)}`;
                 
@@ -87,9 +74,8 @@ function TeacherAssignments(){
                 });
 
                 console.log(response);
-                if (response) {
-                console.log("Response made");
-                }
+                setValidated(true);
+                setShow(false); // Close modal on successful submission
 
                 if (response.status === 200) {
                 console.log('Assignment successfully created');
@@ -107,18 +93,18 @@ function TeacherAssignments(){
             } catch (error) {
                 console.error('Error creating assignment', error.message);
             }
-        } setValidated(true);
-        navigate(`/teacherAssignments?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}`);
+        }
     };
 
-    const listAssignments = assignments.length > 0 ? (
+    const listAssignments = assignments.length ? (
         assignments.map((assignment) => (
-            <Row className="existingAssignment">
-            {assignment.name}
-            <div className='assignActions'>
-            <Button variant='danger'>Delete</Button>
-            <Button variant='success' onClick={()=>routeChange(`/gradeAssignment?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}&assignmentId=${encodeURIComponent(assignment._id)}`)}>Grade</Button></div>
-        </Row>
+            <Row key={assignment._id} className="existingAssignment">
+                {assignment.name}
+                <div className='assignActions'>
+                    <Button variant='danger'>Delete</Button>
+                    <Button variant='success' onClick={() => navigate(`/gradeAssignment?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}&assignmentId=${encodeURIComponent(assignment._id)}`)}>Grade</Button>
+                </div>
+            </Row>
         ))
     ) : (
         <li>No assignments yet</li>
