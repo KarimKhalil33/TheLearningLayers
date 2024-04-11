@@ -386,28 +386,42 @@ router.post('/saveGradedQuiz', async (req, res) => {
   console.log("trying to save  QUIZ GRADE");
   try {
     // Extract data from the request body
-    const { username, courseId, name, quizId, totalGrade } = req.body;
-
+    const { username, courseId, name, quizId, totalGrade, answers } = req.body;
+    console.log(username);
     const quiz = Quiz.findOne({quizId});
-    const student = User.findOne({username});
+    const student = await User.findOne({ username });
+    
     const course = name + " " + courseId  
+    const studentName =  student.firstName + " " + student.lastName;
+    const studentNumber = student.studentNum;
+
+    const answer = JSON.stringify(answers);
+    
+    //Trim answer string 
+    // Remove {} and "" from the string
+const trimmedString = answer.replace(/[{}"]/g, '');
+
+// Split the string by colon (:)
+const parts = trimmedString.split(':');
+
+// Concatenate "Question" at the beginning and "Answer" after the semi colon
+const result = "Question : " + parts[0] + " ?  Answer : " + parts[1];
 
 
     console.log("student and quiz found");
 
-
-    const grade = await Grades.findOne( {course});
+    const grade = await Grades.findOne({course});
     if (grade) {
       if (grade.quizGrades) {
         // If quizGrades array exists, push the new quiz grade
-        grade.quizGrades.push({ quizName: quiz.name, grade: parseInt(totalGrade), studentNum: student.studentNum , status: 'Graded'});
+        grade.quizGrades.push({ studentNumber:studentNumber,  studentName:studentName, quizName: quiz.name, quizId: quizId, status: 'Submitted',  grade: parseInt(totalGrade), answers: result });
         console.log("Quiz updated");
         grade.save();
       } else {
         // If quizGrades array doesn't exist, update it with the new quiz grade
         await Grades.updateOne(
-          { courseId: courseId, name: name },
-          { $set: { 'quizGrades': [{ quizName: quiz.name, grade: parseInt(totalGrade), studentNum: student.studentNum , status: 'Graded'}] } }
+          {course: course},
+          { $set: { 'quizGrades': [{studentNumber:studentNumber,studentName:studentName, quizName: quiz.name, quizId: quizId, status: 'Submitted',  grade: parseInt(totalGrade), answers: result }] } }
         );
         grade.save();
         console.log("New quiz grade added");
@@ -415,9 +429,8 @@ router.post('/saveGradedQuiz', async (req, res) => {
     } else {
       // If the document doesn't exist, create a new one
       const newGrade = new Grades({
-        courseId: courseId,
-        name: name,
-        quizGrades: [{ quizName: quiz.name, grade: parseInt(totalGrade), studentNum: student.studentNum, status: 'Graded' }]
+        course: course,
+        quizGrades: [{studentNumber:studentNumber, studentName:studentName, quizName: quiz.name, quizId: quizId, status: 'Submitted',  grade: parseInt(totalGrade), answers: result }] 
       });
       await newGrade.save();
       console.log("New document created with quiz grade");
@@ -431,6 +444,35 @@ router.post('/saveGradedQuiz', async (req, res) => {
     res.status(500).json({ error: 'Failed to save graded quiz' });
   }
 });
+
+router.get('/getQuizDetails', async (req, res) => {
+  console.log("Im in getting quiz details");
+
+  const {courseId, courseName, quizId } = req.query;
+  const course = courseName + " " + courseId;
+
+
+  try {
+      const grade = await Grades.findOne({ course: course });
+      const quizData = grade.quizGrades;
+
+      console.log("found the grade for the course");
+      console.log(grade);
+
+      if (quizData) {
+          const filteredGrade = grade.quizGrades.filter(quizGrade => quizGrade.quizId == quizId);
+          console.log("Got the quiz grades:", filteredGrade);
+          res.json(filteredGrade);
+      } else {
+          res.status(404).json({ message: 'Quiz grades not found' });
+      }
+  } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 
 router.get('/checkStatus', async (req, res) => {
   try {
