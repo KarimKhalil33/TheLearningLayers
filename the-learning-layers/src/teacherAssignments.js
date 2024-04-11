@@ -108,6 +108,7 @@ function TeacherAssignments(){
                 console.error('Error creating assignment', error.message);
             }
         } setValidated(true);
+        navigate(`/teacherAssignments?name=${encodeURIComponent(courseName)}&courseId=${encodeURIComponent(courseId)}`);
     };
 
     const listAssignments = assignments.length > 0 ? (
@@ -184,7 +185,7 @@ function TeacherAssignments(){
                                 <Col>
                                     <Form.Group className="mb-4">
                                         <Form.Label htmlFor='startDate'>Start Date</Form.Label>
-                                        <Form.Control type="Date" id='startDate' required value={startDate} onChange={e => setStartDate(e.target.value)}/>
+                                        <Form.Control type="Date" id='startDate' min={new Date().toISOString().split('T')[0]} required value={startDate} onChange={e => setStartDate(e.target.value)}/>
                                         <Form.Control.Feedback type='invalid'>Please enter a date</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
