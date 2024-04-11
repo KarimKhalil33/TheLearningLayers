@@ -7,7 +7,8 @@ const submissionSchema = new mongoose.Schema({
         studentNumber: { type: Number },
         submissionDate:{type:Date},
         submissionType: { type: String },
-        content: { type: String } 
+        content: { type: String } ,
+        file:{type:String}
     }]
 }, { collection: 'submission' });
 

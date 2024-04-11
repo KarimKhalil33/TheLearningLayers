@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const mongoose = require('mongoose');
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
@@ -10,6 +11,18 @@ const Grades = require('../models/grades');
 const Submission = require('../models/submissions');
 const Quiz = require('../models/quiz'); 
 
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+      console.log("Destination function called");
+      cb(null, '../Files'); // Save files in the 'Files' directory
+  },
+  filename: function(req, file, cb) {
+      console.log("Filepath log check");
+      cb(null, file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
 
@@ -260,11 +273,17 @@ router.get('/getGrades', async (req, res) => {
 });
 
 
-router.post('/submitAssignment', async (req, res) => {
+router.post('/submitAssignment',upload.single('file'),async (req, res) => {
   try {
     const assignmentId = req.query.assignmentId;
-    const { studentNumber, submissionDate, submissionType, content } = req.body;
-
+    const studentNumber = req.body.studentNumber;
+    const submissionDate = req.body.submissionDate;
+    const submissionType = req.body.submissionType;
+    const content = req.body.content;
+    console.log(assignmentId+""+studentNumber+""+submissionDate+""+submissionType+""+content)
+    // Access uploaded file (if any)
+    const file = req.file.originalname;
+    console.log(file);
     // Check if a submission exists for the given assignmentId and studentNumber
     let existingSubmission = await Submission.findOne({ assignmentId, 'submissions.studentNumber': studentNumber });
 
@@ -276,7 +295,8 @@ router.post('/submitAssignment', async (req, res) => {
           $set: {
             'submissions.$.submissionDate': submissionDate,
             'submissions.$.submissionType': submissionType,
-            'submissions.$.content': content
+            'submissions.$.content': content,
+            'submissions.$.file': file
           }
         }
       );
@@ -299,7 +319,8 @@ router.post('/submitAssignment', async (req, res) => {
               studentNumber,
               submissionDate,
               submissionType,
-              content
+              content,
+              file
             }
           }
         },

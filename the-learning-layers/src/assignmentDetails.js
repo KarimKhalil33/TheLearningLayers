@@ -56,10 +56,13 @@ function AssignmentDetails() {
           <span>Due: {assignment.dueDate}</span>
           <span>Weight: {assignment.weight}</span>
           <span>Submitting: A file upload</span>
+          
         </div>
         <article className="assignment-description">
           {assignment.description}
         </article>
+        <span>Additional file: <a href={`/../Files/${assignment.filepath}`} download>{assignment.filepath}</a>
+</span>
       </div>
     </>
   );

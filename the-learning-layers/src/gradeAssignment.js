@@ -101,6 +101,9 @@ function GradeAssignment() {
                                         <div className='submitted-assessment'>
                                             {student.content}
                                         </div>
+                                        <span>
+                                        File: <a href={`http://localhost:4000/files/${student.file}`} download>{student.file.split('/').pop()}</a>
+                                        </span>
                                         <Form onSubmit={(e) => {
                                             e.preventDefault();
                                             const formData = new FormData(e.target);
