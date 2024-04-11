@@ -7,7 +7,7 @@ function SubmitAssignment() {
   const assignmentId = queryParams.get('assignmentId');
   const courseName=queryParams.get('name');
   const courseId=queryParams.get('courseId');
-  const [submission, setSubmission] = useState('');
+  const authenticationId = sessionStorage.getItem("authenticationId").replace(/"/g, "");
   const [studentNumber,setStudentNumber]=useState(1);
   const [submissionDate,setSubmissionDate]=useState(1);
   const submissionType="Text box";
@@ -20,6 +20,16 @@ function SubmitAssignment() {
     const getStudentInfo = async () => {
       try { 
         const authenticationId=sessionStorage.getItem("authenticationId").replace(/"/g, "");
+      const response=await fetch(`http://localhost:4000/user/studentNum?authenticationId=${encodeURIComponent(authenticationId)}`,{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        console.log(data);
+        setStudentNumber(data);
+      
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
