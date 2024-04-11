@@ -9,7 +9,8 @@ function StudentQuizzes() {
   const params = new URLSearchParams(window.location.search);
   const name = params.get('name');
   const courseId = params.get('courseId');
-
+  const course = name + " " + courseId;
+  const username = JSON.parse(sessionStorage.getItem('authenticationId'));
   const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
@@ -37,14 +38,35 @@ function StudentQuizzes() {
     switch (status) {
       case 'Submitted':
         return 'Submitted';
-      case 'Graded':
-        return 'Grade';
-      case 'Missing':
-        return 'Missing';
+      case 'In Review':
+        return 'In Review';
+      case 'Incomplete':
+        return 'Incomplete';
       default: 
         return 'In Progress';
     }
   };
+
+  const getQuizDetails = async (quizId ) => {
+    try {
+        const response = await fetch(`http://localhost:4000/user/getStatus`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({quizId, username, course }) // Set the status to 'Graded'
+        });
+        if (response.ok) {
+            console.log('Submission updated successfully');
+            const {status, comments } = await response.json();
+            return { status, comments };
+        } else {
+            throw new Error('Failed to update submission');
+        }
+    } catch (error) {
+        console.error('Error updating submission:', error);
+    }
+};
 
   return (
     <> 
@@ -64,9 +86,10 @@ function StudentQuizzes() {
             <h2>{quiz.name}</h2>
             <p>{quiz.description}</p>
             <p className={getStatusClass(quiz.status)}>
-              {quiz.status !== 'Missing' ? `Grade: ${quiz.grade || 'Pending'}` : 'In Progress'}
+              {getQuizDetails(quiz._id).status !== 'Missing' ? `Grade: ${quiz.grade || 'Pending'}` : 'Incomplete'}
             </p>
             <p className="due-date">Due Date: {quiz.dueDate}</p>
+            <p className="due-date">Comments: {getQuizDetails(quiz._id).comments}</p>
           </div>
         ))}
       </div>

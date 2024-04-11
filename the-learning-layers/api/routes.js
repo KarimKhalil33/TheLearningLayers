@@ -366,8 +366,8 @@ router.post('/saveGradedQuiz', async (req, res) => {
   try {
     // Extract data from the request body
     const { username, courseId, name, quizId, totalGrade, answers } = req.body;
-    console.log(username);
-    const quiz = Quiz.findOne({quizId});
+    const quiz = await Quiz.findOne({_id : quizId});
+    console.log(quiz);
     const student = await User.findOne({ username });
     
     const course = name + " " + courseId  
@@ -395,14 +395,14 @@ const result = "Question : " + parts[0] + " ?  Answer : " + parts[1];
         // If quizGrades array exists, push the new quiz grade
         grade.quizGrades.push({ studentNumber:studentNumber,  studentName:studentName, quizName: quiz.name, quizId: quizId, status: 'Submitted',  grade: parseInt(totalGrade), answers: result });
         console.log("Quiz updated");
-        grade.save();
+       await grade.save();
       } else {
         // If quizGrades array doesn't exist, update it with the new quiz grade
         await Grades.updateOne(
           {course: course},
           { $set: { 'quizGrades': [{studentNumber:studentNumber,studentName:studentName, quizName: quiz.name, quizId: quizId, status: 'Submitted',  grade: parseInt(totalGrade), answers: result }] } }
         );
-        grade.save();
+       await grade.save();
         console.log("New quiz grade added");
       }
     } else {
@@ -415,6 +415,10 @@ const result = "Question : " + parts[0] + " ?  Answer : " + parts[1];
       console.log("New document created with quiz grade");
     }
 
+ 
+      // Change quiz status to "In Review"
+      await Quiz.updateOne({ quizId }, { $set: { status: 'In Review' } });
+      quiz.save();
   
 
     res.status(200).json({ message: 'Graded quiz saved successfully' });
@@ -475,6 +479,57 @@ router.get('/checkStatus', async (req, res) => {
       return res.status(500).json({ error: 'Internal server error' });
   }
 });
+router.post('/getStatus', async (req, res) => {
+  console.log("Retriving status and comments");
+  try {
+    // Extract quizId, username, and course from the request body
+    const { quizId, username, course } = req.body;
+    const comments = "";
+    const status = "Graded"
+
+    // Find the student using the provided username
+    const student = await User.findOne({ username });
+
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    // Find the grade document that matches the course, quizId, and studentNumber
+    const grade = await Grades.findOne({
+      course,
+      'quizGrades.quizId': quizId,
+      'quizGrades.studentNumber': student.studentNumber
+    });
+
+    console.log("grade instance found");
+
+    // If the grade is found
+    if (grade) {
+      // Update the comments for the matching quiz
+      const quizIndex = grade.quizGrades.findIndex(quiz => quiz.quizId === quizId && quiz.studentNumber === student.studentNumber);
+      if (quizIndex !== -1) {
+        grade.quizGrades[quizIndex].comments = comments;
+        await grade.save(); // Save the changes to the database
+      }
+
+      console.log("comments found");
+      // Extract status and comments
+      const { status, comments } = ;
+      console.log(status);
+      console.log(comments);
+      // Return status and comments
+      return res.status(200).json({ status, comments });
+    } else {
+      // If the grade is not found
+      return res.status(404).json({ error: 'Grade not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching quiz details:', error);
+    return res.status(500).json({ error: 'Failed to fetch quiz details' });
+  }
+});
+
+
 module.exports=router;
 
 

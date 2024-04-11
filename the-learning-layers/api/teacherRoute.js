@@ -261,4 +261,23 @@ router.post('/storeGrades', async (req, res) => {
     }
 });
 
+// PUT endpoint to update submission
+router.put('/updateSubmission', async (req, res) => {
+    try {
+      // Extract data from the request body
+      const { quizId, studentNum, course, comments } = req.body;
+        // Update the submission in the database
+        await Grades.updateOne(
+            { course, 'quizGrades.studentNumber': studentNum, 'quizGrades.quizId': quizId }, // Query to find the document
+            { $set: { 'quizGrades.$.status': 'Graded', 'quizGrades.$.comments': comments } } // Fields to update
+        );
+
+      res.status(200).json({ message: 'Submission updated successfully' });
+    } catch (error) {
+      console.error('Error updating submission:', error);
+      res.status(500).json({ error: 'Failed to update submission' });
+    }
+  });
+  
+
 module.exports = router;

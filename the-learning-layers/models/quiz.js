@@ -20,11 +20,11 @@ const quizSchema = new mongoose.Schema({
     questions: [{ question: String, options: [String] }],
 
     description: {  type: String,
-        default: "Complete this quiz worth 5% by due date"
+        default: "Complete this quiz worth 5% of your grade by the given due date"
 
     },
 
-    status: { type: String,  ref: Grades, enum: ['Submitted', 'Missing', 'Pending', 'Graded', 'In Progress'] , default:'In Progress'},
+    status: { type: String,  ref: Grades, enum: ['Submitted', 'Missing', 'Pending', 'Graded', 'In Review', 'Incomplete'] , default:'Incomplete'},
 
     createdAt: {
         type: Date,

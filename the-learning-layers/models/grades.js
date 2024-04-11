@@ -15,9 +15,10 @@ const grades = new mongoose.Schema({
         studentName: String,
         quizName: String,
         quizId: String,
-        status: { type: String, default: 'Submitted' },
+        status: { type: String, default: 'Graded' },
         grade: Number,
         answers: String,
+        comments: {type: String, default: 'No Comment from Instructor'}
     }]
 }, { collection: 'grades' });
 
