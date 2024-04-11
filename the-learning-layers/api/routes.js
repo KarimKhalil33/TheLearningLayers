@@ -273,17 +273,20 @@ router.get('/getGrades', async (req, res) => {
 });
 
 
-router.post('/submitAssignment',upload.single('file'),async (req, res) => {
+router.post('/submitAssignment', upload.single('file'), async (req, res) => {
   try {
     const assignmentId = req.query.assignmentId;
     const studentNumber = req.body.studentNumber;
     const submissionDate = req.body.submissionDate;
     const submissionType = req.body.submissionType;
     const content = req.body.content;
-    console.log(assignmentId+""+studentNumber+""+submissionDate+""+submissionType+""+content)
+    console.log(assignmentId + "" + studentNumber + "" + submissionDate + "" + submissionType + "" + content)
+
     // Access uploaded file (if any)
-    const file = req.file.originalname;
+    const file = req.file ? req.file.originalname : null; // Check if file exists
+
     console.log(file);
+
     // Check if a submission exists for the given assignmentId and studentNumber
     let existingSubmission = await Submission.findOne({ assignmentId, 'submissions.studentNumber': studentNumber });
 
@@ -333,6 +336,7 @@ router.post('/submitAssignment',upload.single('file'),async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 router.get('/quizzes', async (req, res) => {
@@ -436,18 +440,18 @@ router.get('/checkStatus', async (req, res) => {
   try {
       // Ensure proper authentication before proceeding
       const studentNumber = req.headers.studentNum;
-
+      const assignmentId=req.query.assignmentId;
       // Query the submissions collection to check if a submission exists for the student
-      const submission = await Submission.findOne({ studentNumber });
-
+      const submission = await Submission.findOne({ studentNumber,assignmentId });
+      console.log(submission);
       if (submission) {
           // If a submission exists for the student, send a response indicating that the student has submitted
+          return res.status(200).json({ status: 'submitted' });
+      }
+       else {
+          // If no submission exists for the student, send a response indicating that the student has not submitted
           return res.status(200).json({ status: 'missing' });
       }
-      //  else {
-      //     // If no submission exists for the student, send a response indicating that the student has not submitted
-      //     return res.status(200).json({ status: 'missing' });
-      // }
   } catch (error) {
       // If an error occurs, send a 500 internal server error response
       console.error('Error checking submission status:', error);

@@ -12,7 +12,7 @@ function StudentAssignments() {
     const name = params.get('name');
     const courseId = params.get('courseId');
     const authenticationId=sessionStorage.getItem("authenticationId").replace(/"/g, "");
-    const [submissionStatus,setSubmissionStatus]=useState("");
+    const [submissionStatus,setSubmissionStatus]=useState([]);
     const [studentNum,setStudentNum]=useState("");
 
    
@@ -24,6 +24,7 @@ function StudentAssignments() {
             const response = await fetch(`http://localhost:4000/user/getAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
             const data = await response.json();
             setAssignments(data);
+            fetchSubmissionStatus(studentNum)
         } catch (error) {
             console.error('Error fetching assignments:', error);
         }
@@ -80,29 +81,36 @@ function StudentAssignments() {
 
     const fetchSubmissionStatus = async (studentNum) => {
         try {
-            const response = await fetch("http://localhost:4000/user/checkStatus", {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': studentNum
-                },
-            });
-            const data = await response.json();
-            setSubmissionStatus(data);
+            const submissionStatuses = await Promise.all(
+                assignments.map(async (assignment) => {
+                    const response = await fetch(`http://localhost:4000/user/checkStatus?assignmentId=${encodeURIComponent(assignment._id)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': studentNum
+                        },
+                    });
+                    const data = await response.json();
+                    return { assignmentId: assignment._id, status: data.status };
+                })
+            );
+            console.log(submissionStatuses)
+            setSubmissionStatus(submissionStatuses);
         } catch (error) {
             console.error('Error fetching user status:', error);
         }
     }
 
     const getStatusLabel = (assignment) => {
-        if (assignment=== "submitted") {
+        console.log(assignment);
+        if (assignment== "submitted") {
             return <span className="status submitted">Submitted</span>;
-        } else {
+        } else if(assignment=="missing") {
             return <span className="status missing">Missing</span>;
         } 
-        // else {
-        //     return <span className="status grade">{grades.grade}%</span>;
-        // }
+        else {
+            return <span className="status grade">{grades.grade}%</span>;
+        }
     };
     console.log(assignments);
 
@@ -125,15 +133,24 @@ function StudentAssignments() {
                     <div>No assignments</div>
                 ) : (
                     <div className="assignments-grid">
-                        {assignments.map((assignment, index) => (
-                            <div className="assignment-card" key={index} onClick={() => viewAssignment(assignment._id)}>
-                                <h2>{assignment.name}</h2>
-                                <p>Due Date: {assignment.dueDate}</p>
-                                <p>Grade: {grades &&grades.assignmentName==assignment.name ? grades.grade : 'Not graded'}</p>
-                                {getStatusLabel(grades.grade &&grades.assignmentName==assignment.name? "submitted" : submissionStatus) /*change to grades[index]*/}
-                            </div>
-                        ))}
-                    </div>
+    {assignments.map((assignment, index) => {
+        // Find the corresponding submission status for the current assignment
+        const status = submissionStatus.find(status => status.assignmentId === assignment._id);
+        
+        return (
+            <div className="assignment-card" key={index} onClick={() => viewAssignment(assignment._id)}>
+                <h2>{assignment.name}</h2>
+                <p>Due Date: {assignment.dueDate}</p>
+                <p>Grade: {grades && grades.assignmentName === assignment.name ? grades.grade : 'Not graded'}</p>
+                {status ? (
+                    <span className={`status ${status.status}`}>{status.status}</span>
+                ) : (
+                    <span className="status">Status not available</span>
+                )}
+            </div>
+        );
+    })}
+</div>
                 )}
             </div>
 
