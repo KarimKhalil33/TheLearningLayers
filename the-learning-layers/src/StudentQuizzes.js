@@ -33,13 +33,14 @@ function StudentQuizzes() {
   };
 
   const getStatusClass = (status) => {
+    console.log(status);
     switch (status) {
       case 'Submitted':
-        return 'grade Submitted';
-      case 'Pending':
-        return 'grade GradingPending';
+        return 'Submitted';
+      case 'Graded':
+        return 'Grade';
       case 'Missing':
-        return 'grade Missing';
+        return 'Missing';
       default: 
         return 'In Progress';
     }
@@ -63,7 +64,7 @@ function StudentQuizzes() {
             <h2>{quiz.name}</h2>
             <p>{quiz.description}</p>
             <p className={getStatusClass(quiz.status)}>
-              {quiz.status !== 'Missing' ? `Grade: ${quiz.grade || 'Pending'}` : 'Missed'}
+              {quiz.status !== 'Missing' ? `Grade: ${quiz.grade || 'Pending'}` : 'In Progress'}
             </p>
             <p className="due-date">Due Date: {quiz.dueDate}</p>
           </div>

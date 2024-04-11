@@ -196,7 +196,7 @@ function TeacherQuizes() {
                         {quiz.name}
                         <div className='assignActions'>
                             <Button variant='danger' onClick={() => deleteQuiz(quiz._id)}>Delete</Button>
-                            <Button variant='success' onClick={() => routeChange(`/gradeQuiz?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(courseName)}`)}>Grade</Button>
+                            <Button variant='success' onClick={() => routeChange(`/gradeQuiz?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(courseName)}&quizId=${encodeURIComponent(quiz._id)}`)}>Grade</Button>
                         </div>
                     </Row>
                 ))}

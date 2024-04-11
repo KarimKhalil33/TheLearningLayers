@@ -15,6 +15,8 @@ function QuizDetails() {
   const params = new URLSearchParams(location.search);
   const name = params.get('name');
   const courseId = params.get('courseId');
+    // Get the username from session storage
+    const username = JSON.parse(sessionStorage.getItem('authenticationId'));
 
   useEffect(() => {
     // Fetch quiz data from the backend API
@@ -80,8 +82,7 @@ function QuizDetails() {
 
   // Function to save the graded quiz
 const saveGradedQuiz = (totalGrade) => {
-  // Get the username from session storage
-  const username = JSON.parse(sessionStorage.getItem('authenticationId'));
+
 
   // Make a separate request to save the graded quiz
   fetch('http://localhost:4000/user/saveGradedQuiz', {
@@ -95,6 +96,7 @@ const saveGradedQuiz = (totalGrade) => {
       name,
       quizId,
       totalGrade,
+      answers
     }),
   })
     .then((response) => {
