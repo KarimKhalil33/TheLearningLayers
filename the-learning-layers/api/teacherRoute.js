@@ -48,7 +48,7 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
     console.log("Uploaded file info: ", req.file);
     console.log("Form data: ", req.body);
     const { name, course, weight, description, startDate, dueDate } = req.body;
-    const filepath = req.file.originalname;
+    const filepath = req.file.path;
   
     // add validation or checks here
     

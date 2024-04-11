@@ -90,7 +90,7 @@ function GradeAssignment() {
                     <h1><strong>{assignmentName}</strong></h1>
                 </header>
                 <div className='assignActions'>
-                    {students.message? (
+                    {students.message ? (
                         <p>No submission</p>
                     ) : (
                         students.map((student, index) => (
@@ -102,7 +102,12 @@ function GradeAssignment() {
                                             {student.content}
                                         </div>
                                         <span>
-                                        File: <a href={`http://localhost:4000/files/${student.file}`} download>{student.file.split('/').pop()}</a>
+                                            File: {student.file && (
+                                                <a href={`http://localhost:4000/files/${student.file}`} download>
+                                                    {student.file.split('/').pop()}
+                                                </a>
+                                            )}
+
                                         </span>
                                         <Form onSubmit={(e) => {
                                             e.preventDefault();
