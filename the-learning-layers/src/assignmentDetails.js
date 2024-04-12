@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { useNavigate, useParams,useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import './App.css'; // Update this to your stylesheet
 import StudentMenu from './StudentMenu';
 function AssignmentDetails() {
@@ -8,7 +8,7 @@ function AssignmentDetails() {
 
   const { assignmentId } = useParams();
   const location = useLocation();
-  
+
   // Extracting query parameters
   const queryParams = new URLSearchParams(location.search);
   const courseName = queryParams.get('name');
@@ -56,10 +56,17 @@ function AssignmentDetails() {
           <span>Due: {assignment.dueDate}</span>
           <span>Weight: {assignment.weight}</span>
           <span>Submitting: A file upload</span>
+
         </div>
         <article className="assignment-description">
           {assignment.description}
         </article>
+        <span>
+          Additional file: <a href={`http://localhost:4000/files/${assignment.filepath}`} download>
+            {assignment.filepath && assignment.filepath.split('/').pop()}
+          </a>
+        </span>
+
       </div>
     </>
   );

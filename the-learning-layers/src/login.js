@@ -142,7 +142,7 @@ function Login({ setAuthenticationId, setCollectionName }) { //pass a new proper
                 onClick={() => handleSubmit}>
                 Sign in
               </Button>
-              <a className="text-muted" href="#!">Forgot password?</a>
+              <a className="text-muted" onClick={() => navigate('/ForgotPassword')}>Forgot password?</a>
             </div>
           </Form>
 

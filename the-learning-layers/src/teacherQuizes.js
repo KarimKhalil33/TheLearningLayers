@@ -148,8 +148,8 @@ function TeacherQuizes() {
         <>
             <TeacherMenu />
             <TeacherCourseNavigation />
-            
-                <div className='newAssessments'>
+
+                <div className='newAssessment'>
                 <Button onClick={handleShow}>Create Quiz</Button>
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
