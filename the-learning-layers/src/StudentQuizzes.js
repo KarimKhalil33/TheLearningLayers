@@ -44,7 +44,7 @@ function StudentQuizzes() {
         return 'grade Submitted';
       case 'GradingPending':
         return 'grade GradingPending';
-      case 'Missing':
+      case 'no':
         return 'grade Missing';
       default:
         return '';
