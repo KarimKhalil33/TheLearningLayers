@@ -27,6 +27,7 @@ import AssignmentDetails from './assignmentDetails';
 import SubmitAssignment from './SubmitAssignment';
 import QuizDetails from './QuizDetails';
 import StudentQuizzes from './StudentQuizzes';
+import ForgotPassword from './forgotPassword';
 function setAuthenticationId(authenticationId) { //setauthenticationId which is username and store it in session, this keeps the user logged
   sessionStorage.setItem('authenticationId', JSON.stringify(authenticationId));
 }
@@ -104,7 +105,7 @@ function App() {
         {/* For people who are not logged in */}
         <Route element={<AnonymousRoute />}>
           <Route path="/CreateAccount" element={<CreateAccount />} />
-
+          <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
         </Route>
 
         {/* Anyone can access these pages if they are logged in or not */}
