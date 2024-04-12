@@ -27,6 +27,8 @@ function TeacherAssignments(){
     const courseId = params.get('courseId');
 
     const course = `${courseName} ${courseId}`;
+    
+
 
     TeacherCourseNavigation( courseName, courseId );
 

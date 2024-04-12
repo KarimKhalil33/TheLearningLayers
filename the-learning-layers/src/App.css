@@ -237,7 +237,7 @@ section{
 } 
 .existingAssignment Button{
   margin: 0.2em;
-  float: inline-end;
+  float: right;
   width: fit-content;
 }
 
@@ -263,6 +263,7 @@ section{
 }
 .newAssessments Button{
   margin: 0.5em;
+  float: inline-end;
 }
 .existingAssignment{
   border-bottom: grey solid 1px;
