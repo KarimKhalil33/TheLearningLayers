@@ -31,9 +31,13 @@ function StudentQuizzes() {
   }, [courseId, name]);
 
   const handleQuizSelection = (quizId) => {
-    navigate(`/quiz/${quizId}?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
+    if (quizDetails[quizId]?.status === 'Graded') {
+      alert('You have already completed this quiz.');
+    } else {
+      navigate(`/quiz/${quizId}?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
+    }
   };
-
+  
   const getStatusClass = (status) => {
     switch (status) {
       case 'Graded':
