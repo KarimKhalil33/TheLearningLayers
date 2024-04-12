@@ -19,17 +19,16 @@ function GradeQuiz() {
      // Access query parameters from window.location.search
      const params = new URLSearchParams(window.location.search);
     const name=params.get('name');
-    const courseId=params.get('courseId');
+    const courseId =params.get('courseId');
+    const course = name + " " + courseId;
     const quizId = params.get('quizId');
+    const [comments, setComments] = useState(''); // State to hold the comments
 
     const navigate = useNavigate();
 
-    const routeChange = (path) => {
-        navigate(path);
-    };
+      
 
-
-    const [grades, setGrades] = useState([]);
+    const [grades, setGrades] = useState(['']);
 
     useEffect(() => {
         const fetchQuizDetails = async () => {
@@ -44,6 +43,36 @@ function GradeQuiz() {
         fetchQuizDetails();
     }, [courseId, name, quizId]); // Added dependencies to the useEffect hook
 
+ // If no quiz submissions to grade, navigate to TeacherQuizes page
+ useEffect(() => {
+    if (grades.length === 0) {
+        alert('No submissions yet');
+        navigate(`/teacherQuizes?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}&success=true`);
+       
+    }
+}, [grades, name, courseId, navigate]);
+
+
+    const updateSubmission = async (quizId, studentNum,comments ) => {
+        try {
+            const response = await fetch(`http://localhost:4000/api/teacherRoute/updateSubmission`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ quizId, studentNum, course, comments}) // Set the status to 'Graded'
+            });
+            if (response.ok) {
+                console.log('Submission updated successfully');
+                alert('Quiz has been successfully graded!');
+            } else {
+                throw new Error('Failed to update submission');
+            }
+        } catch (error) {
+            console.error('Error updating submission:', error);
+        }
+    };
+
     return(
         <>
              <TeacherMenu></TeacherMenu>
@@ -54,7 +83,10 @@ function GradeQuiz() {
                     <h1><strong>Quizzes</strong></h1>
                 </header>
                     <div className='assignActions'>
-                    {grades.map((grade) => (
+                    {grades.length === 0 ? (
+                         <div className='submitted-assessment'>No quiz submissions to grade.</div>
+                    ) : (
+                    grades.map((grade) => (
                     <Accordion>
                         <Accordion.Item eventKey="0" className='students'>
                             <Accordion.Header>{grade.studentName} ~ {grade.studentNumber}</Accordion.Header>
@@ -62,12 +94,16 @@ function GradeQuiz() {
                             <div className='submitted-assessment'>
                                 {grade.answers}
                             </div>
-                            <Form>
+                            <Form onSubmit={(e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+    updateSubmission(quizId, grade.studentNumber, comments);
+}}>
+
                             <Row className="align-items-center">
                                 <Col xs="auto">
                                 <InputGroup>
                                     <InputGroup.Text>Comments</InputGroup.Text>
-                                    <Form.Control as="textarea" aria-label="Comments" />
+                                    <Form.Control as="textarea" aria-label="Comments" value={comments} onChange={(e) => setComments(e.target.value)} /> {/* Controlled textarea */}
                                 </InputGroup>
                                 </Col>
                                 <Col xs="auto">
@@ -89,7 +125,9 @@ function GradeQuiz() {
                             </Form>
                             </Accordion.Body>
                         </Accordion.Item>
-                        </Accordion>))}
+                        </Accordion>
+                        ))
+                        )}
                     </div>
             </article>   
         </>

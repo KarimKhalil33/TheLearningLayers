@@ -64,15 +64,27 @@ function QuizDetails() {
         return response.json();
       })
       .then((data) => {
-        // Parse the graded score JSON and extract the total grade and feedback
-        const { "Total Grade": totalGrade, "Feedback": feedback } = JSON.parse(data);
-
-        // Update state with graded score and feedback
-        setGradedScore(totalGrade);
-        setFeedback(feedback);
-        setGradingInProgress(false);
-         // Save the graded quiz
-      saveGradedQuiz(totalGrade);
+        console.log(data);
+        try {
+          
+          // Find the JSON object within the response text
+          const startIndex = data.indexOf('{');
+          const endIndex = data.lastIndexOf('}');
+          const jsonData = data.substring(startIndex, endIndex+1);
+    
+          // Parse the JSON object
+          const { "Total Grade": totalGrade, "Feedback": feedback } = JSON.parse(jsonData);
+    
+          // Update state with graded score and feedback
+          setGradedScore(totalGrade);
+          setFeedback(feedback);
+          setGradingInProgress(false);
+          // Save the graded quiz
+          saveGradedQuiz(totalGrade);
+        } catch (error) {
+          console.error('Error parsing JSON response:', error);
+          setGradingInProgress(false);
+        }
       })
       .catch((error) => {
         console.error('Error grading quiz:', error);
@@ -153,6 +165,7 @@ const saveGradedQuiz = (totalGrade) => {
           <div className="graded-score">
             <p>Results: Total Grade: {gradedScore}</p>
             <p>Feedback: {feedback}</p>
+            <p> Your Instructor will review and finalize your Results</p>
           </div>
         )}
       </div>

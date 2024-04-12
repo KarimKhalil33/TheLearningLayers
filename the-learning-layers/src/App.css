@@ -387,7 +387,6 @@ section{
 .assignment-card h2 {
   margin-top: 0;
 }
-
 .status {
   display: inline-block;
   padding: 5px 10px;
@@ -397,7 +396,7 @@ section{
   margin-top: 10px;
 }
 
-.status.submitted {
+.status.graded {
   background-color: #4CAF50;
 }
 
@@ -405,7 +404,7 @@ section{
   background-color: #f44336;
 }
 
-.status.grade {
+.status.pending {
   background-color: #2196F3;
 }
 

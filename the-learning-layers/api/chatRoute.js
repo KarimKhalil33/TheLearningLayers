@@ -11,7 +11,7 @@ const openai = new OpenAIApi({ apiKey: "sk-PaLcabLrXSSEU0ZMyaFVT3BlbkFJCB0DDhZsq
 // Endpoint to grade the quiz
 router.post('/gradeQuiz', async (req, res) => {
     try {
-        const { quizId, name, courseId, questions, answers } = req.body;
+        const {quizId, name, courseId, questions, answers } = req.body;
         const course = name + " " + courseId;
 
         // Find the document in the grades collection
@@ -21,7 +21,7 @@ router.post('/gradeQuiz', async (req, res) => {
         let prompt = [
             {
                 role: 'system',
-                content: `Grade this quiz with 100% accuracy and give brief feedback. Generate the total grade representing the quiz grade out of 100. Return response in the following parsable JSON format:
+                content: `Grade this quiz with 100% accuracy and give brief feedback. Generate the total grade representing the quiz grade out of 100. Only return your review in the following parsable JSON format:
 
         {
             "Total Grade": "grade",
@@ -41,7 +41,7 @@ router.post('/gradeQuiz', async (req, res) => {
         const response = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: prompt,
-            max_tokens: 1000
+            max_tokens: 200
         });
 
         console.log(response.choices[0].message);
