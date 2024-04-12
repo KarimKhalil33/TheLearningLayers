@@ -63,12 +63,12 @@ function CreateAccount() {
         } else {
           const responseData = await response.json();
 
-          if (responseData.status === 'FAILED') {
+          // if (responseData.status === 'FAILED') {
             // Display an error message to the user
             alert(responseData.message);
-          } else {
-            console.error('Error creating user:', response.statusText);
-          }
+          // } else {
+          //   console.error('Error creating user:', response.statusText);
+          // }
         }
       } catch (error) {
         console.error('Error creating user:', error.message);

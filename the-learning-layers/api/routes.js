@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const mongoose = require('mongoose');
 const User = require("../models/student");
 const Teacher = require("../models/teacher");
@@ -8,8 +9,20 @@ const Admin = require("../models/admin");
 const Assignment = require('../models/assignments');
 const Grades = require('../models/grades');
 const Submission = require('../models/submissions');
-const Quiz = require('../models/quiz'); // Assuming you have a Quiz model
+const Quiz = require('../models/quiz'); 
 
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+      console.log("Destination function called");
+      cb(null, '../Files'); // Save files in the 'Files' directory
+  },
+  filename: function(req, file, cb) {
+      console.log("Filepath log check");
+      cb(null, file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
 router.post('/createAccount', async (req, res) => {
   const userData = req.body;
 
@@ -196,7 +209,7 @@ router.post('/teacherPage', async (req, res) => {
 });
 
 router.get('/studentNum', async (req, res) => {
-  const authenticationId = req.headers.authorization; // Assuming the authentication ID is sent in the Authorization header
+  const authenticationId = req.query.authenticationId; // Assuming the authentication ID is sent in the Authorization header
   try {
     let student = await User.findOne({ username: authenticationId });
     if (!student) {
@@ -241,20 +254,38 @@ router.get('/getGrades', async (req, res) => {
     const name = req.query.name;
     const courseId = req.query.courseId;
     const course = name + " " + courseId;
-    const studentNum = req.body.studentNum;
-
-    const grades = await Grades.findOne({ course, studentNum });
-    res.json(grades);
-  }
-  catch (error) {
+    const studentNum = req.query.studentNum;
+    console.log(course);
+    const grades = await Grades.findOne({ course }); // Only query based on 'course'
+    if (!grades) {
+      return res.status(404).json({ error: 'Grades not found' });
+    }
+    const assignmentGrades = grades.assignmentGrades.find(grade => grade.studentNum == studentNum);
+    if (!assignmentGrades) {
+      return res.status(404).json({ error: 'Grades for student not found' });
+    }
+    console.log(assignmentGrades);
+    res.json(assignmentGrades);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
-})
+});
 
-router.post('/submitAssignment', async (req, res) => {
+
+router.post('/submitAssignment', upload.single('file'), async (req, res) => {
   try {
     const assignmentId = req.query.assignmentId;
-    const { studentNumber, submissionDate, submissionType, content } = req.body;
+    const studentNumber = req.body.studentNumber;
+    const submissionDate = req.body.submissionDate;
+    const submissionType = req.body.submissionType;
+    const content = req.body.content;
+    console.log(assignmentId + "" + studentNumber + "" + submissionDate + "" + submissionType + "" + content)
+
+    // Access uploaded file (if any)
+    const file = req.file ? req.file.originalname : null; // Check if file exists
+
+    console.log(file);
 
     // Check if a submission exists for the given assignmentId and studentNumber
     let existingSubmission = await Submission.findOne({ assignmentId, 'submissions.studentNumber': studentNumber });
@@ -267,7 +298,8 @@ router.post('/submitAssignment', async (req, res) => {
           $set: {
             'submissions.$.submissionDate': submissionDate,
             'submissions.$.submissionType': submissionType,
-            'submissions.$.content': content
+            'submissions.$.content': content,
+            'submissions.$.file': file
           }
         }
       );
@@ -290,7 +322,8 @@ router.post('/submitAssignment', async (req, res) => {
               studentNumber,
               submissionDate,
               submissionType,
-              content
+              content,
+              file
             }
           }
         },
@@ -303,6 +336,7 @@ router.post('/submitAssignment', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 router.get('/quizzes', async (req, res) => {
@@ -351,6 +385,124 @@ router.get('/liveQuiz', async (req, res) => {
 });
 
 
+// Endpoint to save graded quiz
+router.post('/saveGradedQuiz', async (req, res) => {
+  console.log("trying to save  QUIZ GRADE");
+  try {
+    // Extract data from the request body
+    const { username, courseId, name, quizId, totalGrade, answers } = req.body;
+    console.log(username);
+    const quiz = Quiz.findOne({quizId});
+    const student = await User.findOne({ username });
+    
+    const course = name + " " + courseId  
+    const studentName =  student.firstName + " " + student.lastName;
+    const studentNumber = student.studentNum;
+
+    const answer = JSON.stringify(answers);
+    
+    //Trim answer string 
+    // Remove {} and "" from the string
+const trimmedString = answer.replace(/[{}"]/g, '');
+
+// Split the string by colon (:)
+const parts = trimmedString.split(':');
+
+// Concatenate "Question" at the beginning and "Answer" after the semi colon
+const result = "Question : " + parts[0] + " ?  Answer : " + parts[1];
 
 
-module.exports = router;
+    console.log("student and quiz found");
+
+    const grade = await Grades.findOne({course});
+    if (grade) {
+      if (grade.quizGrades) {
+        // If quizGrades array exists, push the new quiz grade
+        grade.quizGrades.push({ studentNumber:studentNumber,  studentName:studentName, quizName: quiz.name, quizId: quizId, status: 'Submitted',  grade: parseInt(totalGrade), answers: result });
+        console.log("Quiz updated");
+        grade.save();
+      } else {
+        // If quizGrades array doesn't exist, update it with the new quiz grade
+        await Grades.updateOne(
+          {course: course},
+          { $set: { 'quizGrades': [{studentNumber:studentNumber,studentName:studentName, quizName: quiz.name, quizId: quizId, status: 'Submitted',  grade: parseInt(totalGrade), answers: result }] } }
+        );
+        grade.save();
+        console.log("New quiz grade added");
+      }
+    } else {
+      // If the document doesn't exist, create a new one
+      const newGrade = new Grades({
+        course: course,
+        quizGrades: [{studentNumber:studentNumber, studentName:studentName, quizName: quiz.name, quizId: quizId, status: 'Submitted',  grade: parseInt(totalGrade), answers: result }] 
+      });
+      await newGrade.save();
+      console.log("New document created with quiz grade");
+    }
+
+  
+
+    res.status(200).json({ message: 'Graded quiz saved successfully' });
+  } catch (error) {
+    console.error('Error saving graded quiz:', error);
+    res.status(500).json({ error: 'Failed to save graded quiz' });
+  }
+});
+
+router.get('/getQuizDetails', async (req, res) => {
+  console.log("Im in getting quiz details");
+
+  const {courseId, courseName, quizId } = req.query;
+  const course = courseName + " " + courseId;
+
+
+  try {
+      const grade = await Grades.findOne({ course: course });
+      const quizData = grade.quizGrades;
+
+      console.log("found the grade for the course");
+      console.log(grade);
+
+      if (quizData) {
+          const filteredGrade = grade.quizGrades.filter(quizGrade => quizGrade.quizId == quizId);
+          console.log("Got the quiz grades:", filteredGrade);
+          res.json(filteredGrade);
+      } else {
+          res.status(404).json({ message: 'Quiz grades not found' });
+      }
+  } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
+router.get('/checkStatus', async (req, res) => {
+  try {
+      // Ensure proper authentication before proceeding
+      const studentNumber = req.headers.studentNum;
+      const assignmentId=req.query.assignmentId;
+      // Query the submissions collection to check if a submission exists for the student
+      const submission = await Submission.findOne({ studentNumber,assignmentId });
+      console.log(submission);
+      if (submission) {
+          // If a submission exists for the student, send a response indicating that the student has submitted
+          return res.status(200).json({ status: 'submitted' });
+      }
+       else {
+          // If no submission exists for the student, send a response indicating that the student has not submitted
+          return res.status(200).json({ status: 'missing' });
+      }
+  } catch (error) {
+      // If an error occurs, send a 500 internal server error response
+      console.error('Error checking submission status:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+module.exports=router;
+
+
+
+
+

@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const crypto = require('crypto');
+const OpenAI = require('openai');
 
 // Generate a random string of length 32 bytes (256 bits)
 const key = crypto.randomBytes(32).toString('hex');
@@ -34,6 +35,7 @@ const userRouter = require('./api/routes'); //  handles user-related routes
 const pendingEnrollmentsRoutes = require('./api/enrollmentRoute'); 
 const adminRoute = require('./api/adminRoute'); 
 const teacherRoute = require('./api/teacherRoute');
+const chatRouter = require('./api/chatRoute.js');
 
 // Using bodyParser middleware to parse incoming JSON requests
 app.use(bodyParser());
@@ -48,6 +50,11 @@ app.use('/api/adminRoute', adminRoute);
 app.use('/api/enrollmentRoute', pendingEnrollmentsRoutes);
 
 app.use('/api/teacherRoute', teacherRoute);
+
+// Mount the chatRouter for routes starting with '/api/chat'
+app.use('/api/chat', chatRouter);
+
+app.use('/files', express.static('../Files'));
 
 // Start the Express server and listen on the specified port
 app.listen(port, () => {
