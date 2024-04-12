@@ -89,7 +89,7 @@ function SubmitAssignment() {
           </div>
           <div className="form-group">
             <label htmlFor="assignmentFile">Or upload a file:</label>
-            <input type="file" id='assignmentFile' required onChange={e => setFile(e.target.files[0])}  />
+            <input type="file" id='assignmentFile' onChange={e => setFile(e.target.files[0])}  />
           </div>
           <button type="submit">Submit</button>
         </form>
