@@ -15,7 +15,7 @@ const grades = new mongoose.Schema({
         studentName: String,
         quizName: String,
         quizId: String,
-        status: { type: String, default: 'Graded' },
+        status: { type: String, enum: ['Submitted', 'Missing', 'Pending', 'Graded', 'In Review', 'Incomplete'] , default:'Submitted'},
         grade: Number,
         answers: String,
         comments: {type: String, default: 'No Comment from Instructor'}
