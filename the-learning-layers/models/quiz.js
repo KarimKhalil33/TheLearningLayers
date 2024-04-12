@@ -1,6 +1,7 @@
 
 const mongoose = require('mongoose');
 const Course = require('./courses');
+const Grades = require('../models/grades');
 
 // Define the Quiz schema
 const quizSchema = new mongoose.Schema({
@@ -19,11 +20,11 @@ const quizSchema = new mongoose.Schema({
     questions: [{ question: String, options: [String] }],
 
     description: {  type: String,
-        default: "Complete this quiz by due date"
+        default: "Complete this quiz worth 5% by due date"
 
     },
 
-    status: { type: String, enum: ['Submitted', 'Missing', 'Pending', 'Graded', 'In Progress'] , default:'Pending'},
+    status: { type: String,  ref: Grades, enum: ['Submitted', 'Missing', 'Pending', 'Graded', 'In Progress'] , default:'In Progress'},
 
     createdAt: {
         type: Date,

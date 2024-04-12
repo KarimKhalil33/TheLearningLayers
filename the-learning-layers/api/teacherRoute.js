@@ -48,7 +48,7 @@ router.post('/teacherAssignments', upload.single('file'), async (req, res) => {
     console.log("Uploaded file info: ", req.file);
     console.log("Form data: ", req.body);
     const { name, course, weight, description, startDate, dueDate } = req.body;
-    const filepath = req.file.originalname;
+    const filepath = req.file.path;
   
     // add validation or checks here
     
@@ -207,58 +207,67 @@ router.get('/getSubmissions',async(req,res)=>{
 
 router.post('/storeGrades', async (req, res) => {
     try {
-        const { courseName,assignmentName, studentGrades } = req.body;
+        const { courseName, assignmentName, studentGrades } = req.body;
 
-        // Find the document for the assignment
-        let assignment = await Grades.findOne({ 'assignmentGrades.assignmentName': assignmentName });
+        // Check if the course exists in the grades database
+        let course = await Grades.findOne({ course: courseName });
 
-        // If the assignment exists, update the grades for each student
-        if (assignment) {
-            studentGrades.forEach(async (studentGrade) => {
-                // Find the index of the student in the assignmentGrades array
-                const index = assignment.assignmentGrades.findIndex((grade) => grade.assignmentName === assignmentName && grade.studentNum === studentGrade.studentNum);
-                
-                // If the student is already graded for this assignment, update the grade and comment
-                if (index !== -1) {
-                    assignment.assignmentGrades[index].grade = studentGrade.grade;
-                    assignment.assignmentGrades[index].status = 'graded';
-                    assignment.assignmentGrades[index].comment = studentGrade.comment; // Update the comment
-                } else {
-                    // If the student is not graded for this assignment, add a new grade
-                    assignment.assignmentGrades.push({
-                        assignmentName: assignmentName,
-                        studentNum: studentGrade.studentNum,
-                        grade: studentGrade.grade,
-                        status: 'graded',
-                        comment: studentGrade.comment // Add the comment
-                    });
-                }
-            });
+        // If the course exists, proceed with updating or creating grades
+        if (course) {
+            // Find the document for the assignment within the course
+            let assignment = course.assignmentGrades.find(grade => grade.assignmentName === assignmentName);
 
-            // Save the updated assignment document
-            await assignment.save();
-        } else {
-            // If the assignment does not exist, create a new document
-            const newAssignment = new Grades({
-                course: courseName,
-                assignmentGrades: studentGrades.map((studentGrade) => ({
+            // If the assignment exists, update the grades for each student
+            if (assignment) {
+                studentGrades.forEach(studentGrade => {
+                    // Find the student in the assignmentGrades array
+                    let existingStudentGrade = assignment.assignmentGrades.find(grade => grade.studentNum === studentGrade.studentNum);
+                    
+                    // If the student is already graded for this assignment, update the grade and comment
+                    if (existingStudentGrade) {
+                        existingStudentGrade.grade = studentGrade.grade;
+                        existingStudentGrade.status = 'graded';
+                        existingStudentGrade.comment = studentGrade.comment; // Update the comment
+                    } else {
+                        // If the student is not graded for this assignment, add a new grade
+                        assignment.assignmentGrades.push({
+                            studentNum: studentGrade.studentNum,
+                            assignmentName: assignmentName,
+                            grade: studentGrade.grade,
+                            status: 'missing', // Default status
+                            comment: studentGrade.comment // Add the comment
+                        });
+                    }
+                });
+            } else {
+                // If the assignment does not exist within the course, create a new assignment grade
+                course.assignmentGrades.push({
                     assignmentName: assignmentName,
-                    studentNum: studentGrade.studentNum,
-                    grade: studentGrade.grade,
-                    status: 'graded',
-                    comment: studentGrade.comment // Add the comment
-                }))
-            });
+                    assignmentGrades: studentGrades.map(studentGrade => ({
+                        studentNum: studentGrade.studentNum,
+                        assignmentName: assignmentName,
+                        grade: studentGrade.grade,
+                        status: 'missing', // Default status
+                        comment: studentGrade.comment // Add the comment
+                    }))
+                });
+            }
 
-            // Save the new assignment document
-            await newAssignment.save();
+            // Save the updated course document
+            await course.save();
+
+            res.status(200).json({ message: 'Grades stored successfully' });
+        } else {
+            // If the course does not exist, return an error response
+            res.status(404).json({ message: 'Course not found in the grades database' });
         }
-        
-        res.status(200).json({ message: 'Grades stored successfully' });
     } catch (error) {
         console.error('Error storing grades:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+
+
 
 module.exports = router;

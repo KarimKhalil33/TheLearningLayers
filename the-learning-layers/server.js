@@ -54,6 +54,7 @@ app.use('/api/teacherRoute', teacherRoute);
 // Mount the chatRouter for routes starting with '/api/chat'
 app.use('/api/chat', chatRouter);
 
+app.use('/files', express.static('../Files'));
 
 // Start the Express server and listen on the specified port
 app.listen(port, () => {

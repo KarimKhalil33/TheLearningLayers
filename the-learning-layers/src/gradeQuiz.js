@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -8,31 +8,42 @@ import { useNavigate } from "react-router-dom";
 import dark from './images/1.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
- import TeacherMenu from './TeacherMenu';
+import TeacherMenu from './TeacherMenu';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
-import AppFooter from './appFooter';
+import { useParams } from 'react-router-dom';
 import InputGroup from 'react-bootstrap/InputGroup';
 import TeacherCourseNavigation from './teacherCourseNavigation';
 import Accordion from 'react-bootstrap/Accordion';
-function GradeQuiz(){
-    const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+function GradeQuiz() {
+     // Access query parameters from window.location.search
+     const params = new URLSearchParams(window.location.search);
+    const name=params.get('name');
+    const courseId=params.get('courseId');
+    const quizId = params.get('quizId');
 
-    const params = new URLSearchParams(window.location.search);
-    const courseName = params.get('name');
-    const courseId = params.get('courseId');
+    const navigate = useNavigate();
 
- 
-     let navigate = useNavigate();
-     const routeChange = (path) => {
-         navigate(path);
-     };
+    const routeChange = (path) => {
+        navigate(path);
+    };
 
-    const students = ["Student 1","Student 2","Student 3","Student 4"];
-    TeacherCourseNavigation("/teacherAssignment");
+
+    const [grades, setGrades] = useState([]);
+
+    useEffect(() => {
+        const fetchQuizDetails = async () => {
+            try {
+                const quizResponse = await fetch(`http://localhost:4000/user/getQuizDetails?courseId=${encodeURIComponent(courseId)}&courseName=${encodeURIComponent(name)}&quizId=${encodeURIComponent(quizId)}`);
+                const quizData = await quizResponse.json();
+                setGrades(quizData); // Corrected to setGrades
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchQuizDetails();
+    }, [courseId, name, quizId]); // Added dependencies to the useEffect hook
+
     return(
         <>
              <TeacherMenu></TeacherMenu>
@@ -43,19 +54,13 @@ function GradeQuiz(){
                     <h1><strong>Quizzes</strong></h1>
                 </header>
                     <div className='assignActions'>
-                    {students.map((student) => (
+                    {grades.map((grade) => (
                     <Accordion>
                         <Accordion.Item eventKey="0" className='students'>
-                            <Accordion.Header>{student}</Accordion.Header>
+                            <Accordion.Header>{grade.studentName} ~ {grade.studentNumber}</Accordion.Header>
                             <Accordion.Body>
                             <div className='submitted-assessment'>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum.
+                                {grade.answers}
                             </div>
                             <Form>
                             <Row className="align-items-center">
@@ -67,11 +72,11 @@ function GradeQuiz(){
                                 </Col>
                                 <Col xs="auto">
                                 <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                                    Grade
+                                {grade.grade}
                                 </Form.Label>
                                 <InputGroup className="mb-2">
                                     
-                                    <Form.Control id="inlineFormInputGroup" placeholder="Grade" />
+                                    <Form.Control id="inlineFormInputGroup" placeholder={grade.grade} />
                                     <InputGroup.Text>%</InputGroup.Text>
                                 </InputGroup>
                                 </Col>

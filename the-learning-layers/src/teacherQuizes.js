@@ -148,7 +148,8 @@ function TeacherQuizes() {
         <>
             <TeacherMenu />
             <TeacherCourseNavigation />
-            <Container className='newAssessments'>
+            
+                <div className='newAssessments'>
                 <Button onClick={handleShow}>Create Quiz</Button>
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -185,8 +186,8 @@ function TeacherQuizes() {
                         </Form>
                     </Modal.Body>
                 </Modal>
-            </Container>
-            <Container className='main'>
+                </div>
+            <div className='main'>
                 <header>
                     <h1><strong>Quizzes</strong></h1>
                 </header>
@@ -195,11 +196,11 @@ function TeacherQuizes() {
                         {quiz.name}
                         <div className='assignActions'>
                             <Button variant='danger' onClick={() => deleteQuiz(quiz._id)}>Delete</Button>
-                            <Button variant='success' onClick={() => routeChange(`/gradeQuiz?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(courseName)}`)}>Grade</Button>
+                            <Button variant='success' onClick={() => routeChange(`/gradeQuiz?courseId=${encodeURIComponent(courseId)}&name=${encodeURIComponent(courseName)}&quizId=${encodeURIComponent(quiz._id)}`)}>Grade</Button>
                         </div>
                     </Row>
                 ))}
-            </Container>
+            </div>
         </>
     );
 }
