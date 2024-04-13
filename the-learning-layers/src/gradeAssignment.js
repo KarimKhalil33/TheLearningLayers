@@ -55,6 +55,7 @@ function GradeAssignment() {
     }, [assignmentId]);
 
     const handleGradeSubmit = async (studentNum, grade, comment) => {
+        console.log(studentNum+" "+grade+" "+comment);
         try {
             const response = await fetch('http://localhost:4000/api/teacherRoute/storeGrades', {
                 method: 'POST',
@@ -62,13 +63,11 @@ function GradeAssignment() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    courseName: courseName,
+                    course: courseName,
                     assignmentName: assignmentName,
-                    studentGrades: [{
                         studentNum: studentNum,
-                        grade: grade,
+                        gradeValue: grade,
                         comment: comment
-                    }]
                 }),
             });
             const data = await response.json();
