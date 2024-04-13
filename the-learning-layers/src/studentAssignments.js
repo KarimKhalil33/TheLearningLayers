@@ -24,7 +24,7 @@ function StudentAssignments() {
             const response = await fetch(`http://localhost:4000/user/getAssignments?name=${encodeURIComponent(name)}&courseId=${encodeURIComponent(courseId)}`);
             const data = await response.json();
             setAssignments(data);
-            // fetchSubmissionStatus(studentNum)
+            fetchSubmissionStatus(studentNum)
         } catch (error) {
             console.error('Error fetching assignments:', error);
         }
