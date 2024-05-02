@@ -3,11 +3,11 @@
 
 
 Group Members:
-Oluwadabira Omotoso (84518448)
-Afua Frempong (90434176)
-Karim Khalil (38485272)
-Peter Idoko (89385496)
-Atharva Jagtap (39283783)
+Oluwadabira Omotoso
+Afua Frempong 
+Karim Khalil
+Peter Idoko
+Atharva Jagtap
 ## Description
 Learning Layers is an innovative e-learning platform designed to transform the traditional classroom experience into a dynamic, interactive, and AI-enhanced learning environment. Leveraging AI technology, it offers a personalized learning process that sets it apart from other platforms such as iClicker, with its advanced functionalities.
 
