@@ -8,6 +8,10 @@ Afua Frempong
 Karim Khalil
 Peter Idoko
 Atharva Jagtap
+
+## Project Demo
+Click [here](https://www.youtube.com/watch?v=MFnMqnQ4tLM) to view a demo of our project
+
 ## Description
 Learning Layers is an innovative e-learning platform designed to transform the traditional classroom experience into a dynamic, interactive, and AI-enhanced learning environment. Leveraging AI technology, it offers a personalized learning process that sets it apart from other platforms such as iClicker, with its advanced functionalities.
 
